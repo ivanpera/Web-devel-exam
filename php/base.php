@@ -22,6 +22,7 @@
     </header>
     <main>
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, mollitia ex eaque dolore molestias fugit quidem exercitationem, quibusdam eveniet ipsum quos adipisci. Quibusdam deserunt, quam eveniet qui perferendis quaerat non!</p>
+      <?php if(isset($baseParams["currentPage"])) { require($baseParams["currentPage"]); }?>
     </main>
     <footer>
       <h4>Contatti</h4>
