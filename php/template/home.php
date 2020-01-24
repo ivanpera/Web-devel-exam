@@ -9,7 +9,7 @@
         <div class="find_event_text_hover"> Cerca eventi </div>
     </a>
 
-    <a href="events.php">
+    <a href="create_event.php">
         <img src="" alt="image_create_event"/>
         <div class="create_event_text_hover"> Crea eventi </div>
     </a>
