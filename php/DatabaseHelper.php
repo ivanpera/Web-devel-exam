@@ -11,7 +11,7 @@ class DatabaseHelper{
     }
 
     public function checkLogin($username, $password){
-        $query = "SELECT email, nomeCompleto, password FROM utente WHERE email = ? AND password = ?";
+        $query = "SELECT email, nomeCompleto, userPassword FROM utente WHERE email = ? AND userPassword = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('ss',$username, $password);
         $stmt->execute();
@@ -168,6 +168,11 @@ class DatabaseHelper{
     }
     */
     
+    private function getHashedPassword($username, $password) {
+        $salt = hash('sha512', $username);
+        $hashedPass = hash('sha512', $password.$username);
+        return $hashedPass;
+    }
 
 }
 
