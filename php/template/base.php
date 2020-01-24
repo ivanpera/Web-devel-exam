@@ -28,7 +28,7 @@
 
     <main>
       <?php 
-        if(isset($templateParams["name"])) { 
+        if(isset($templateParams["name"])) {
           require(TEMPLATE_DIR.$templateParams["name"]); 
         }
       ?>
@@ -43,7 +43,7 @@
           <img src="" alt="home"/>
         </a>
         <ul>
-          To be filled through js depending on the type of user 
+          To be filled through js depending on the type of user
               Possible list items:
                 -profilo
                 -calendario

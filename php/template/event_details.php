@@ -14,4 +14,6 @@
 
     <!--php check, if the the user is not logged in, display the "log in first to purchase", else display the "proceed to check out" -> disable it if no tickets are selected -->
 
+    Biglietti disponibili
+
 </section>
