@@ -1,6 +1,6 @@
 <?php
     require_once('bootstrap.php');
-    $baseParams["currentPage"] = "login_content.php";
+    $templateParams["name"] = "login.php";
     $loginFailed = false;
-    require("php/base.php");
+    require(TEMPLATE_DIR."base.php");
 ?>

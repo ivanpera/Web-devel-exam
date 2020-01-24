@@ -1,5 +1,5 @@
 <?php
     require_once('bootstrap.php');
-    $templateParams["name"] = "home.php";
+    $templateParams["name"] = "signup.php";
     require(TEMPLATE_DIR."base.php");
 ?>

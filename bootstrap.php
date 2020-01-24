@@ -1,5 +1,6 @@
 <?php
     session_start();
-    require_once("DatabaseHelper.php");
+    define("TEMPLATE_DIR", "php/template/");
+    //require_once("DatabaseHelper.php");
     //$dbh = new DatabaseHelper()
 ?>
