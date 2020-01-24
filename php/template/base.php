@@ -14,15 +14,17 @@
     <header>  <!-- Perhaps should we use a nav?-->
     <!-- NOTE: currently, in the mockup, the sidebar button and login icon
          are not present in the login page, should we make a special case?-->
-      <!--<button id="btn_open_sidebar" type="button">
+      <!--
+        If the user has logged in display the button sidebar/aside section for the desktop version
+        <button id="btn_open_sidebar" type="button">
         <img src="" alt="apri_sidebar"/>
       </button> -->
-      <a href="index.php">
-        <img src="" alt="home"/>
-      </a>
-      <!-- TODO: php: if use is logged in, change href and "alt" to "user_area" -->
+      <!--Else, display login icon -->
       <a href="login.php">
         <img src="" alt="login"/>
+      </a>
+      <a href="index.php">
+        <img src="" alt="home"/>
       </a>
     </header>
 
@@ -49,6 +51,7 @@
                 -calendario
                 -statistiche
                 -messaggi (promemoria/avvisi)
+                -gestione eventi (moderazione)
                 -???
         </ul>
         <a href="login.php">
