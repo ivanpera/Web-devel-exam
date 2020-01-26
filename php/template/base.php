@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="it">
   <head>
-    <title>Titolo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <?php if(isset($templateParams["title"])) {
+        echo("<title>".$templateParams["title"]."</title>");
+      } else {
+        echo("<title> Bad Title </title>");
+      }
+    ?>
     <!--
     <script
 			  src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -12,20 +18,19 @@
   </head>
   <body>
     <header>  <!-- Perhaps should we use a nav?-->
-    <!-- NOTE: currently, in the mockup, the sidebar button and login icon
-         are not present in the login page, should we make a special case?-->
-      <!--
-        If the user has logged in display the button sidebar/aside section for the desktop version
-        <button id="btn_open_sidebar" type="button">
-        <img src="" alt="apri_sidebar"/>
-      </button> -->
-      <!--Else, display login icon -->
-      <a href="login.php">
-        <img src="" alt="login"/>
-      </a>
-      <a href="index.php">
-        <img src="" alt="home"/>
-      </a>
+      <!-- NOTE: currently, in the mockup, the sidebar button and login icon
+          are not present in the login page, should we make a special case?-->
+        <!--
+          If the user has logged in display the button sidebar/aside section for the desktop version
+          <button id="btn_open_sidebar" type="button">
+          <img src="" alt="apri_sidebar"/>
+        </button> -->
+        <!--Else, display login icon -->
+        <a href="login.php">
+          <img src="img/login_icon.png" alt="login" class="login"/>
+        </a><a href="index.php">
+          <img src="img/logo.png" alt="home" class="logo"/>
+        </a>
     </header>
 
     <main>
