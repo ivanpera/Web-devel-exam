@@ -35,10 +35,10 @@ create table EVENTO (
      emailOrganizzatore varchar(30) not null,
      constraint ID_EVENTO_ID primary key (codEvento));
 
-create table evento_ha_categoria (
+create table EVENTO_HA_CATEGORIA (
      codCategoria int not null,
      codEvento int not null,
-     constraint ID_evento_ha_categoria_ID primary key (codEvento, codCategoria));
+     constraint ID_EVENTO_HA_CATEGORIA_ID primary key (codEvento, codCategoria));
 
 create table LUOGO (
      codLuogo int not null,
@@ -48,10 +48,10 @@ create table LUOGO (
      capienzaMassima int not null,
      constraint ID_LUOGO_ID primary key (codLuogo));
 
-create table moderazione (
+create table MODERAZIONE (
      emailModeratore varchar(30) not null,
      codEvento int not null,
-     constraint ID_moderazione_ID primary key (codEvento, emailModeratore));
+     constraint ID_MODERAZIONE_ID primary key (codEvento, emailModeratore));
 
 create table NOTIFICA (
      codEvento int not null,
@@ -63,10 +63,10 @@ create table NOTIFICA (
      emailUtente varchar(30) not null,
      constraint ID_NOTIFICA_ID primary key (codEvento, codNotificaEvento));
 
-create table osserva (
+create table OSSERVA (
      codEvento int not null,
      emailUtente varchar(30) not null,
-     constraint ID_osserva_ID primary key (codEvento, emailUtente));
+     constraint ID_OSSERVA_ID primary key (codEvento, emailUtente));
 
 create table POSTO (
      codEvento int not null,
@@ -101,13 +101,12 @@ create table TIPOLOGIA_POSTO (
 create table UTENTE (
      email varchar(30) not null,
      userPassword varchar(64) not null,
-     nomeCompleto varchar(60) not null,
+     nome varchar(30) not null,
+     cognome varchar(30) not null,
      dataNascita date not null,
      genere char(1) not null,
      dataIscrizione date not null,
-     dataEOraUltimoControlloNotifiche DATETIME not null,
      constraint ID_UTENTE_ID primary key (email),
-     constraint SID_UTENTE_ID unique (nomeCompleto));
 
 
 -- Constraints Section
@@ -115,8 +114,8 @@ create table UTENTE (
 
 -- Not implemented
 -- alter table EVENTO add constraint ID_EVENTO_CHK
---     check(exists(select * from evento_ha_categoria
---                  where evento_ha_categoria.codEvento = codEvento)); 
+--     check(exists(select * from EVENTO_HA_CATEGORIA
+--                  where EVENTO_HA_CATEGORIA.codEvento = codEvento)); 
 
 alter table EVENTO add constraint REF_EVENT_LUOGO_FK
      foreign key (codLuogo)
@@ -126,19 +125,19 @@ alter table EVENTO add constraint REF_EVENT_UTENT_FK
      foreign key (emailOrganizzatore)
      references UTENTE (email);
 
-alter table evento_ha_categoria add constraint EQU_event_EVENT
+alter table EVENTO_HA_CATEGORIA add constraint EQU_event_EVENT
      foreign key (codEvento)
      references EVENTO (codEvento);
 
-alter table evento_ha_categoria add constraint REF_event_CATEG_FK
+alter table EVENTO_HA_CATEGORIA add constraint REF_event_CATEG_FK
      foreign key (codCategoria)
      references CATEGORIA_EVENTO (codCategoria);
 
-alter table moderazione add constraint REF_moder_EVENT
+alter table MODERAZIONE add constraint REF_moder_EVENT
      foreign key (codEvento)
      references EVENTO (codEvento);
 
-alter table moderazione add constraint REF_moder_UTENT_FK
+alter table MODERAZIONE add constraint REF_moder_UTENT_FK
      foreign key (emailModeratore)
      references UTENTE (email);
 
@@ -150,11 +149,11 @@ alter table NOTIFICA add constraint REF_NOTIF_UTENT_FK
      foreign key (emailUtente)
      references UTENTE (email);
 
-alter table osserva add constraint REF_osser_UTENT_FK
+alter table OSSERVA add constraint REF_osser_UTENT_FK
      foreign key (emailUtente)
      references UTENTE (email);
 
-alter table osserva add constraint REF_osser_EVENT
+alter table OSSERVA add constraint REF_osser_EVENT
      foreign key (codEvento)
      references EVENTO (codEvento);
 
@@ -203,20 +202,20 @@ create index REF_EVENT_LUOGO_IND
 create index REF_EVENT_UTENT_IND
      on EVENTO (emailOrganizzatore);
 
-create unique index ID_evento_ha_categoria_IND
-     on evento_ha_categoria (codEvento, codCategoria);
+create unique index ID_EVENTO_HA_CATEGORIA_IND
+     on EVENTO_HA_CATEGORIA (codEvento, codCategoria);
 
 create index REF_event_CATEG_IND
-     on evento_ha_categoria (codCategoria);
+     on EVENTO_HA_CATEGORIA (codCategoria);
 
 create unique index ID_LUOGO_IND
      on LUOGO (codLuogo);
 
-create unique index ID_moderazione_IND
-     on moderazione (codEvento, emailModeratore);
+create unique index ID_MODERAZIONE_IND
+     on MODERAZIONE (codEvento, emailModeratore);
 
 create index REF_moder_UTENT_IND
-     on moderazione (emailModeratore);
+     on MODERAZIONE (emailModeratore);
 
 create unique index ID_NOTIFICA_IND
      on NOTIFICA (codEvento, codNotificaEvento);
@@ -224,11 +223,11 @@ create unique index ID_NOTIFICA_IND
 create index REF_NOTIF_UTENT_IND
      on NOTIFICA (emailUtente);
 
-create unique index ID_osserva_IND
-     on osserva (codEvento, emailUtente);
+create unique index ID_OSSERVA_IND
+     on OSSERVA (codEvento, emailUtente);
 
 create index REF_osser_UTENT_IND
-     on osserva (emailUtente);
+     on OSSERVA (emailUtente);
 
 create unique index ID_POSTO_IND
      on POSTO (codEvento, codPosto);
@@ -256,7 +255,3 @@ create unique index ID_TIPOLOGIA_POSTO_IND
 
 create unique index ID_UTENTE_IND
      on UTENTE (email);
-
-create unique index SID_UTENTE_IND
-     on UTENTE (nomeCompleto);
-
