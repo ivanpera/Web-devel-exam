@@ -11,7 +11,9 @@
 
 <section>
     Non ancora registrato?<br/>
-    <button type="button">
-        <a href="signup.php">Registrati</a>
-    </button>
+    <a href="signup.php">
+        <button type="button">
+            Registrati
+        </button>
+    </a>
 </section>

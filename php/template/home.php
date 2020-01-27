@@ -4,13 +4,16 @@
     </h3>
 </div>
 <section> <!-- Is section here useful? -->
-    <a href="events.php">
-        <img src="" alt="image_find_event"/>
-        <div class="find_event_text_hover"> Cerca eventi </div>
-    </a>
-
-    <a href="create_event.php">
-        <img src="" alt="image_create_event"/>
-        <div class="create_event_text_hover"> Crea eventi </div>
-    </a>
+    <div class="text_hover_container">
+        <a href="events.php">
+            <img src="img/home_find.jpg" alt="image_find_event"/>
+            <div class="text_hover"> Cerca eventi </div> <!-- Perhaps use h4 instead of div? -->
+        </a>
+    </div>
+    <div class="text_hover_container">
+        <a href="create_event.php">
+            <img src="img/home_create.jpg" alt="image_create_event"/>
+            <div class="text_hover"> Crea eventi </div>
+        </a>
+    </div>
 </section>
