@@ -1,0 +1,30 @@
+.headline_text > h3 {
+    color: white;
+    text-shadow: 2px 2px grey;
+    text-align: center;
+    margin: 0px;
+    line-height: 500%;
+}
+
+.text_hover_container {
+    /* display: inline-block;  ->> On a larger/horizontal device, show the two buttons side by side (these values are not the correct ones, and you may also need to alter other things such as margins)
+    width: 25%; */
+    position: relative;
+    text-align: center;
+    margin: 1vh 5% 3vh;
+}
+
+.text_hover_container img {
+    opacity: 85%;
+    border-radius: 10%;
+}
+
+.text_hover {
+    color: white;
+    text-shadow: 2px 2px grey;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
