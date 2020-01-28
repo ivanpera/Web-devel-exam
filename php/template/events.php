@@ -1,7 +1,6 @@
 <!-- I'm following the template at https://www.w3schools.com/howto/howto_js_tabs.asp -->
 <div class="tab">
-    <button class="tablinks" onclick="showTopEvents()">Top</button>
-    <button class="tablinks" onclick="showSearchForm()">Cerca</button>
+    <button class="tablinks" onclick="showTopEvents()">Top</button><button class="tablinks" onclick="showSearchForm()">Cerca</button>
 </div>
 
 <div id="top_events" class="tabcontent">
