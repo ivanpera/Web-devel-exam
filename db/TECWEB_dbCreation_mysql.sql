@@ -28,7 +28,7 @@ create table EVENTO (
      codEvento int not null,
      nomeEvento varchar(60) not null,
      dataEOra DATETIME not null,
-     NSFC char not null,
+     NSFC BIT(1) not null,
      descrizione varchar(150) not null,
      nomeImmagine varchar(30) not null,
      codLuogo int not null,
@@ -57,7 +57,7 @@ create table NOTIFICA (
      codEvento int not null,
      codNotificaEvento int not null,
      descrizione varchar(128) not null,
-     letta char not null,
+     letta BIT(1) not null,
      dataEOraInvio DATETIME not null,
      differenzaGiorni int,
      emailUtente varchar(30) not null,
@@ -89,7 +89,7 @@ create table RECENSIONE (
      emailUtente varchar(30) not null,
      voto int not null,
      testo varchar(500) not null,
-     anonima char not null,
+     anonima BIT(1) not null,
      dataScrittura date not null,
      constraint ID_RECENSIONE_ID primary key (emailUtente, codEvento));
 
@@ -106,6 +106,8 @@ create table UTENTE (
      dataNascita date not null,
      genere char(1) not null,
      dataIscrizione date not null,
+     organizzatore BIT(1) not null,
+     amministratore BIT(1) not null,
      constraint ID_UTENTE_ID primary key (email),
 
 
