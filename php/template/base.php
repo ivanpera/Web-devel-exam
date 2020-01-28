@@ -2,12 +2,31 @@
 <html lang="it">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+    <?php
+      if(isset($templateParams["css"])):
+          foreach($templateParams["css"] as $stylesheet):
+      ?>
+          <link rel="stylesheet" type="text/css" href=<?php echo CSS_DIR.$stylesheet?> />
+      <?php
+          endforeach;
+      endif;
+    ?>
     <?php if(isset($templateParams["title"])) {
         echo("<title>".$templateParams["title"]."</title>");
       } else {
         echo("<title> Bad Title </title>");
       }
+    ?>
+
+    <?php
+      if(isset($templateParams["js"])):
+          foreach($templateParams["js"] as $script):
+      ?>
+            <script src="<?php echo $script; ?>"></script>
+      <?php
+          endforeach;
+      endif;
     ?>
     <!--
     <script
