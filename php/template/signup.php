@@ -1,3 +1,9 @@
+<?php
+    if(isset($_GET["registrationFailed"])) {
+        echo "<p>The registration process has encountered a problem.</p>";
+    }
+
+?>
 <form action="php/signup_process.php" method="POST">
     <label for="email">Email: <br/><input type="email" id="email" name="email" required></input></label><br/>
     <label for="password">Password: <br/><input type="password" id="password" name="password" required></input></label><br/>
