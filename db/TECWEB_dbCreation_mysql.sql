@@ -108,7 +108,7 @@ create table UTENTE (
      dataIscrizione date not null,
      organizzatore BIT(1) not null,
      amministratore BIT(1) not null,
-     constraint ID_UTENTE_ID primary key (email),
+     constraint ID_UTENTE_ID primary key (email));
 
 
 -- Constraints Section
