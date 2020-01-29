@@ -1,15 +1,10 @@
 <?php
 
     require_once('DatabaseHelper.php');
-    /*
-    if ($_GET["email"] == "a") {
-        header("location: login.php?loginFailed=true");
+    $result = $dbh->checkLogin($_POST["email"], $_POST["password"]);
+    if (!empty($result)) {
+        //Add a variable to $_SESSION
     } else {
-        header("location: /index.php");
-    }*/
-
-    //Controlla che esista un utente con lamail specificata
-    //Crea sale e hasha password passata, controlla che corrisponda
-    //Il sale per la password è hash('sha512', email);
-    //La password hashata è hash('sha512', password.salt);
+        header("Location: ../login.php?loginFailed=1");
+    }
 ?>
