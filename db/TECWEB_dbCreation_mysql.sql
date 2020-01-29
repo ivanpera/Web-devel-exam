@@ -12,8 +12,8 @@
 -- Database Section
 -- ________________ 
 
-create database DB;
-use DB;
+create database projtecweb;
+use projtecweb;
 
 
 -- Tables Section
