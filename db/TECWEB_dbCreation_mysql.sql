@@ -100,7 +100,7 @@ create table TIPOLOGIA_POSTO (
 
 create table UTENTE (
      email varchar(30) not null,
-     userPassword varchar(64) not null,
+     userPassword varchar(128) not null,
      nome varchar(30) not null,
      cognome varchar(30) not null,
      dataNascita date not null,
