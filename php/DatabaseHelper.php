@@ -36,6 +36,38 @@ class DatabaseHelper{
         return $stmt->insert_id != 0;
     }
 
+    /* TO BE IMPROVED */
+    public function getMostPopularEvents( $NSFC = 0, $limit = -1) {
+        $query = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.codLuogo, E.emailOrganizzatore,
+                         L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                         CE.nomeCategoria,
+                         (COUNT(P.codPosto)/L.capienzaMassima * 100) as percPostiOccupati
+                  FROM EVENTO E, LUOGO L, CATEGORIA_EVENTO CE, POSTO P, EVENTO_HA_CATEGORIA EHC
+                  WHERE E.codEvento = EHC.codEvento AND EHC.codCategoria = CE.codCategoria -- Join tra evento e categoria
+                    AND E.codLuogo = L.codLuogo -- Join tra evento e luogo
+                    AND P.codEvento = E.codEvento -- Join tra evento e posto
+                    AND P.codPrenotazione IS NOT NULL
+                    AND E.NSFC = ?
+                  -- GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.codLuogo, E.emailOrganizzatore,
+                  --       L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                  --       CE.nomeCategoria
+                  HAVING percPostiOccupati >= 75 AND percPostiOccupati < 100
+                  ORDER BY percPostiOccupati DESC
+                  ";
+        if ($limit != -1) {
+            $query = $query." LIMIT ?";
+        }
+
+        $stmt = $this->db->prepare($query);
+        if (limit != -1 ) {
+            $stmt->bind_param("ii", $NSFC, $limit);
+        } else {
+            $stmt->bind_param("i", $NSFC);
+        }
+        $stmt_>execute();
+        return $stmt->get_result()->fetch_all(MYSQL_ASSOC);
+    }
+
     /*
     public function getPosts($n=-1){
         $query = "SELECT idarticolo, titoloarticolo, imgarticolo, anteprimaarticolo, dataarticolo, nome FROM articolo, autore WHERE autore=idautore ORDER BY dataarticolo DESC";
