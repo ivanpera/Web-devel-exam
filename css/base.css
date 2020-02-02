@@ -5,7 +5,7 @@ img {
     max-height: 100%;
 }
 
-body, header, h1, h2, h5, ul{
+body, header {
     margin: 0;
     padding: 0;
 }
@@ -13,19 +13,20 @@ body, header, h1, h2, h5, ul{
 body{
     background-color: #aec8ffb2;
     overflow-y: auto;
+    font-size: 100%;
 }
 
 body > header {
-    height: 6vh; /*cambialo a viewport width (vh) quando il device è orizzontale (utile anche per desktop)*/
+    height: 6vmax;
     width: 100%;
     position: fixed;
-    top:0px;
+    top: 0px;
     background-color: white;
     z-index: 1;
 }
 
 main, footer, aside {
-    margin-top: 6vh;
+    margin-top: 6vmax;
     z-index: 0;
 }
 
@@ -298,45 +299,17 @@ aside > section > ul > li > a:hover{
 
 body > footer > p{
     font-family: 'Courier New', Courier, monospace;
-}
+} */
 
 
+/* 
+@media screen and (min-width:600px){
 
-@media screen and (min-width:768px){
-    nav{
-        margin: 0 10%;
-    }
-    nav ul li{
-        width: 19%;
+    body > header {
+        height: 6vw;
     }
 
-    nav ul li:not(:last-child){
-        margin-right: 8%;
-    }
-
-    main, aside{
-        display: inline-block;
-        vertical-align: top;
-    }
-
-    main{
-        width: 50%;
-        margin: 20px 5% 0 10%;
-    }
-
-    aside{
-        width: 25%;
-        margin: 20px 10% 0 0;
-
-    }
-
-    form ul{
-        width: 50%;
-        margin: 0 25%;
-    }
-
-    table{
-        width: 80%;
-        margin: 0 10%;    
+    main, footer, aside {
+        margin-top: 6vw;
     }
 } */

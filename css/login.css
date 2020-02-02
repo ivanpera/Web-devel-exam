@@ -16,8 +16,10 @@ button, form > input:last-child {
     color: white;
     border-color: blueviolet;
     box-shadow: 2px 2px black; /*meh*/
+    padding: .25em;
 }
 
 button {
     width: 40%;
+    padding: .25em;
 }
