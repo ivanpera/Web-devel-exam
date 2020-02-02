@@ -12,8 +12,8 @@
 -- Database Section
 -- ________________ 
 
-create database DB;
-use DB;
+create database projtecweb;
+use projtecweb;
 
 
 -- Tables Section
@@ -100,7 +100,7 @@ create table TIPOLOGIA_POSTO (
 
 create table UTENTE (
      email varchar(30) not null,
-     userPassword varchar(64) not null,
+     userPassword varchar(128) not null,
      nome varchar(30) not null,
      cognome varchar(30) not null,
      dataNascita date not null,
@@ -108,7 +108,7 @@ create table UTENTE (
      dataIscrizione date not null,
      organizzatore BIT(1) not null,
      amministratore BIT(1) not null,
-     constraint ID_UTENTE_ID primary key (email),
+     constraint ID_UTENTE_ID primary key (email));
 
 
 -- Constraints Section

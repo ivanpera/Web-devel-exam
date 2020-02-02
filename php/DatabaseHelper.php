@@ -10,52 +10,65 @@ class DatabaseHelper{
         }        
     }
 
-    public function checkLogin($username, $password){
-        $query = "SELECT email, nomeCompleto, userPassword FROM utente WHERE email = ? AND userPassword = ?";
+    public function checkLogin($email, $password){
+        $storedPassword = $this->getHashedPassword($email, $password);
+        $query = "SELECT email, userPassword FROM utente WHERE email = ? AND userPassword =  ?";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ss',$username, $password);
+        $stmt->bind_param('ss', $email, $storedPassword);
         $stmt->execute();
         $result = $stmt->get_result();
 
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function registerNewUser($email, $password, $name, $surname, $birthdate, $gender, $organizer) {
+        if( $this->checkUsername($email) != 0) {
+            return 1;
+        }
+        $storedPassword = $this->getHashedPassword($email, $password);
+        $registrationDate = date("Y-m-d");
+        $administrator = 0;
+
+        $query = "INSERT INTO utente (email, userPassword, nome, cognome, dataNascita, genere, dataIscrizione, organizzatore, amministratore) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('sssssssii', $email, $storedPassword, $name, $surname, $birthdate, $gender, $registrationDate, $organizer, $administrator);
+        $stmt->execute();
+        return $stmt->insert_id != 0;
+    }
+
+    /* TO BE IMPROVED */
+    public function getMostPopularEvents( $NSFC = 0, $limit = -1) {
+        $query = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.codLuogo, E.emailOrganizzatore,
+                         L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                         CE.nomeCategoria,
+                         (COUNT(P.codPosto)/L.capienzaMassima * 100) as percPostiOccupati
+                  FROM EVENTO E, LUOGO L, CATEGORIA_EVENTO CE, POSTO P, EVENTO_HA_CATEGORIA EHC
+                  WHERE E.codEvento = EHC.codEvento AND EHC.codCategoria = CE.codCategoria -- Join tra evento e categoria
+                    AND E.codLuogo = L.codLuogo -- Join tra evento e luogo
+                    AND P.codEvento = E.codEvento -- Join tra evento e posto
+                    AND P.codPrenotazione IS NOT NULL
+                    AND E.NSFC = ?
+                  -- GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.codLuogo, E.emailOrganizzatore,
+                  --       L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                  --       CE.nomeCategoria
+                  HAVING percPostiOccupati >= 75 AND percPostiOccupati < 100
+                  ORDER BY percPostiOccupati DESC
+                  ";
+        if ($limit != -1) {
+            $query = $query." LIMIT ?";
+        }
+
+        $stmt = $this->db->prepare($query);
+        if (limit != -1 ) {
+            $stmt->bind_param("ii", $NSFC, $limit);
+        } else {
+            $stmt->bind_param("i", $NSFC);
+        }
+        $stmt_>execute();
+        return $stmt->get_result()->fetch_all(MYSQL_ASSOC);
     }
 
     /*
-    public function getRandomPosts($n){
-        $stmt = $this->db->prepare("SELECT idarticolo, titoloarticolo, imgarticolo FROM articolo ORDER BY RAND() LIMIT ?");
-        $stmt->bind_param('i',$n);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getCategories(){
-        $stmt = $this->db->prepare("SELECT * FROM categoria");
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getCategoryById($idcategory){
-        $stmt = $this->db->prepare("SELECT nomecategoria FROM categoria WHERE idcategoria=?");
-        $stmt->bind_param('i',$idcategory);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getCategoryByPostId($idpost){
-        $stmt = $this->db->prepare("SELECT categoria FROM articolo_ha_categoria WHERE articolo=?");
-        $stmt->bind_param('i',$idpost);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
     public function getPosts($n=-1){
         $query = "SELECT idarticolo, titoloarticolo, imgarticolo, anteprimaarticolo, dataarticolo, nome FROM articolo, autore WHERE autore=idautore ORDER BY dataarticolo DESC";
         if($n > 0){
@@ -65,46 +78,6 @@ class DatabaseHelper{
         if($n > 0){
             $stmt->bind_param('i',$n);
         }
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getPostById($id){
-        $query = "SELECT idarticolo, titoloarticolo, imgarticolo, anteprimaarticolo, testoarticolo, dataarticolo, nome FROM articolo, autore WHERE idarticolo=? AND autore=idautore";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i',$id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getPostByCategory($idcategory){
-        $query = "SELECT idarticolo, titoloarticolo, imgarticolo, anteprimaarticolo, dataarticolo, nome FROM articolo, autore, articolo_ha_categoria WHERE categoria=? AND autore=idautore AND idarticolo=articolo";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i',$idcategory);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getPostByIdAndAuthor($id, $idauthor){
-        $query = "SELECT idarticolo, anteprimaarticolo, titoloarticolo, imgarticolo, testoarticolo, dataarticolo, (SELECT GROUP_CONCAT(categoria) FROM articolo_ha_categoria WHERE articolo=idarticolo GROUP BY articolo) as categorie FROM articolo WHERE idarticolo=? AND autore=?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ii',$id, $idauthor);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getPostByAuthorId($id){
-        $query = "SELECT idarticolo, titoloarticolo, imgarticolo FROM articolo WHERE autore=?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i',$id);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -136,44 +109,30 @@ class DatabaseHelper{
         var_dump($stmt->error);
         return true;
     }
-
-    public function insertCategoryOfArticle($articolo, $categoria){
-        $query = "INSERT INTO articolo_ha_categoria (articolo, categoria) VALUES (?, ?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ii',$articolo, $categoria);
-        return $stmt->execute();
-    }
-
-    public function deleteCategoryOfArticle($articolo, $categoria){
-        $query = "DELETE FROM articolo_ha_categoria WHERE articolo = ? AND categoria = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ii',$articolo, $categoria);
-        return $stmt->execute();
-    }
-
-    public function deleteCategoriesOfArticle($articolo){
-        $query = "DELETE FROM articolo_ha_categoria WHERE articolo = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i',$articolo);
-        return $stmt->execute();
-    }
-
-    public function getAuthors(){
-        $query = "SELECT username, nome, GROUP_CONCAT(DISTINCT nomecategoria) as argomenti FROM categoria, articolo, autore, articolo_ha_categoria WHERE idarticolo=articolo AND categoria=idcategoria AND autore=idautore AND attivo=1 GROUP BY username, nome";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
     */
     
-    private function getHashedPassword($username, $password) {
-        $salt = hash('sha512', $username);
-        $hashedPass = hash('sha512', $password.$username);
+    private function getHashedPassword($email, $password) {
+        $salt = hash('sha512', $email);
+        $hashedPass = hash('sha512', $password.$salt);
         return $hashedPass;
     }
 
+    private function checkUsername($email) {
+        $query = "SELECT COUNT(email) FROM UTENTE WHERE email = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all()[0][0];
+    }
+
 }
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "projTecWeb";
+
+$dbh = new DatabaseHelper($servername, $username, $password, $dbname);
 
 ?>
