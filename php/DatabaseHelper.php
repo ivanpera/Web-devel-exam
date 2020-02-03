@@ -37,35 +37,38 @@ class DatabaseHelper{
     }
 
     /* TO BE IMPROVED */
-    public function getMostPopularEvents( $NSFC = 0, $limit = -1) {
-        $query = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.codLuogo, E.emailOrganizzatore,
-                         L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima,
-                         CE.nomeCategoria,
-                         (COUNT(P.codPosto)/L.capienzaMassima * 100) as percPostiOccupati
-                  FROM EVENTO E, LUOGO L, CATEGORIA_EVENTO CE, POSTO P, EVENTO_HA_CATEGORIA EHC
-                  WHERE E.codEvento = EHC.codEvento AND EHC.codCategoria = CE.codCategoria -- Join tra evento e categoria
-                    AND E.codLuogo = L.codLuogo -- Join tra evento e luogo
-                    AND P.codEvento = E.codEvento -- Join tra evento e posto
-                    AND P.codPrenotazione IS NOT NULL
-                    AND E.NSFC = ?
-                  -- GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.codLuogo, E.emailOrganizzatore,
-                  --       L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima,
-                  --       CE.nomeCategoria
-                  HAVING percPostiOccupati >= 75 AND percPostiOccupati < 100
-                  ORDER BY percPostiOccupati DESC
+    public function getPopularEvents( $NSFC = 0, $limit = -1) {
+        $query = "SELECT *
+                  FROM (SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
+                               L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                               COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati
+                        FROM evento E, luogo L, posto P
+                        WHERE E.codLuogo = L.codLuogo
+                        AND p.codEvento = E.codEvento
+                        AND E.NSFC = ?
+                        GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
+                                 L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
+                        HAVING percPostiOccupati < 100
+                       ) AS tabEventi,
+              
+                       (SELECT EHC.codEvento, GROUP_CONCAT(ce.nomeCategoria SEPARATOR ', ') AS categorie
+                        FROM evento_ha_categoria EHC, categoria_evento CE
+                        WHERE EHC.codCategoria = ce.codCategoria
+                        GROUP BY EHC.codEvento) AS tabCategorie
+                  WHERE tabEventi.codEvento = tabCategorie.codEvento
                   ";
         if ($limit != -1) {
             $query = $query." LIMIT ?";
         }
 
         $stmt = $this->db->prepare($query);
-        if (limit != -1 ) {
+        if ($limit != -1) {
             $stmt->bind_param("ii", $NSFC, $limit);
         } else {
             $stmt->bind_param("i", $NSFC);
         }
-        $stmt_>execute();
-        return $stmt->get_result()->fetch_all(MYSQL_ASSOC);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
     /*
