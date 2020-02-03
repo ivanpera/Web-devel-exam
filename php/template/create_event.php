@@ -6,7 +6,7 @@
     <div class="tab"> Informazioni di Base:
         <p><input type="text" placeholder="Nome dell'evento..." oninput="this.className = ''"/></p>
         <p><input type="text" placeholder="Luogo..." oninput="this.className=''"/></p>
-        <p><input type="date" placeholder="Data..." oninput="this.className=''"/></p>
+        <p><input type="date" placeholder="Data..." oninput="this.className=''"/><input type="time" placeholder="Ora..." oninput="this.className=''" /></p>
         <p><textarea name="description" form="createForm" placeholder="Descrizione dell'evento..." oninput="this.className = ''"></textarea></p>
     </div>
 
