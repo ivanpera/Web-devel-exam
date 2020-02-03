@@ -5,6 +5,24 @@
 
 <div id="top_events" class="tabcontent">
     <section>
+    <?php
+        foreach ($templateParams["events"] as $event):
+    ?>
+    <article>
+            <img src="<?php if (file_exists("img/".$event["emailOrganizzatore"].$event["nomeImmagine"])) {
+                echo "img/".$event["emailOrganizzatore"].$event["nomeImmagine"];
+                } else {
+                    echo "img/image-not-available.jpg";
+                }?>" alt=""/>
+            <h4><?php echo $event["nomeEvento"];?></h4>
+            <p><?php echo $event["dataEOra"];?></p>
+            <span>Luogo</span>
+            <span>Descrizione</span>
+            <span>Posti rimanenti: <?php echo $event["postiOccupati"]."/".$event["capienzaMassima"]." (".$event["percPostiOccupati"]."%)"?></span>
+            <span>Categorie: <?php echo $event["categorie"];?></span>
+            <span>Organizzatore: <?php echo $event["emailOrganizzatore"]; ?></span>
+    </article>
+    <?php endforeach;?>
     </section>
 </div>
 
