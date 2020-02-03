@@ -1,30 +1,28 @@
 <!-- I'm following the template at https://www.w3schools.com/howto/howto_js_tabs.asp -->
 <div class="tab">
-    <button class="tablinks" onclick="showTopEvents()">Top</button><button class="tablinks" onclick="showSearchForm()">Cerca</button>
+    <button id="top_btn" class="tablinks">Top</button><button id="form_btn" class="tablinks">Cerca</button>
 </div>
 
-<div id="top_events" class="tabcontent">
-    <section>
+<section id="top_events" class="tabcontent">
     <?php
         foreach ($templateParams["events"] as $event):
     ?>
-    <article>
-            <img src="<?php if (file_exists("img/".$event["emailOrganizzatore"].$event["nomeImmagine"])) {
+    <a href="event_details.php?codEvento=<?php echo $event["codEvento"];?>">
+        <article>
+            <!-- <img src="<?php /*if (file_exists("img/".$event["emailOrganizzatore"].$event["nomeImmagine"])) {
                 echo "img/".$event["emailOrganizzatore"].$event["nomeImmagine"];
                 } else {
                     echo "img/image-not-available.jpg";
-                }?>" alt=""/>
+                }?>" alt=""/> */?>-->
             <h4><?php echo $event["nomeEvento"];?></h4>
-            <p><?php echo $event["dataEOra"];?></p>
-            <span>Luogo</span>
-            <span>Descrizione</span>
-            <span>Posti rimanenti: <?php echo $event["postiOccupati"]."/".$event["capienzaMassima"]." (".$event["percPostiOccupati"]."%)"?></span>
-            <span>Categorie: <?php echo $event["categorie"];?></span>
-            <span>Organizzatore: <?php echo $event["emailOrganizzatore"]; ?></span>
-    </article>
+            <span><?php echo "Data: ".$event["dataEOra"];?></span><br/>
+            <span><?php echo $event["nomeLuogo"]." @ ".$event["indirizzo"];?></span><br/>
+            <span class="description_span"><?php echo $event["descrizione"];?></span>
+            <span>Posti: <?php echo $event["postiOccupati"]."/".$event["capienzaMassima"]." (".$event["percPostiOccupati"]."%)"?></span><br/>
+        </article>
+    </a>
     <?php endforeach;?>
-    </section>
-</div>
+</section>
 
 <div id="search_form" class="tabcontent">
     <form action="/search_results.php" method="get"> <!-- should we have a search_results page or should we reuse this one, hiding the form and showing the result after an ajax query? -->
