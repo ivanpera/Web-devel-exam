@@ -7,3 +7,32 @@ div.tab > button {
     width: 25%;
     margin: auto 1%;
 }
+
+section#top_events > a > article  {
+    height: 30%;
+    margin: 1%;
+    border: thin solid black;
+    width: 98%;
+    box-sizing: border-box;
+    padding: 2px;
+}
+
+section#top_events > article  h4 {
+    text-align: center;
+    margin: 0;
+    padding: 5px;
+}
+
+section#top_events > article > span {
+    width: 100%;
+}
+
+section#top_events > article > span.description_span {
+    display: block;
+    height: 3rem;
+    overflow: hidden;
+}
+
+div#search_form {
+    display: none;
+}
