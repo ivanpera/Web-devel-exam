@@ -58,7 +58,8 @@
       ?>
     </main>
 
-
+<!-- Maybe add an overlay which blocks input on the page below the 
+     aside and which appears and disappears with the aside        -->
     <aside id=sidebar>
         <button id="closeside_btn" onclick=closeSidebar() type="button">
           <img src="img/closeSidebarIcon.png" alt="Close sidebar"/>
