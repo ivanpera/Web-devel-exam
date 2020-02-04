@@ -39,15 +39,13 @@
     <header>  <!-- Perhaps should we use a nav?-->
       <!-- NOTE: currently, in the mockup, the sidebar button and login icon
           are not present in the login page, should we make a special case?-->
-        <!--
-          If the user has logged in display the button sidebar/aside section for the desktop version
-          <button id="btn_open_sidebar" type="button">
-          <img src="" alt="apri_sidebar"/>
-        </button> -->
-        <!--Else, display login icon -->
-        <a href="login.php">
+        <?php 
+        if (!isset($_SESSION["sessUser"])) { 
+          echo '<a href="login.php">
           <img src="img/login_icon.png" alt="login" class="login"/>
-        </a><a href="index.php">
+          </a>'; } else {
+            echo '<button id="openside_btn" type="button" onclick="openSidebar()"><img src="img/openSidebarIcon.png" alt="Open sidebar" /> </button>';
+        } ?><a href="index.php">
           <img src="img/logo.png" alt="home" class="logo"/>
         </a>
     </header>
@@ -60,6 +58,20 @@
       ?>
     </main>
 
+
+    <aside id=sidebar>
+        <button id="closeside_btn" onclick=closeSidebar() type="button">
+          <img src="img/closeSidebarIcon.png" alt="Close sidebar"/>
+        </button>
+        <ul>
+          <li>Profilo</li>
+          <li>Calendario</li>
+          <li>Statistiche</li>
+          <li>Messaggi</li>
+          <li>Moderazione</li>
+          <li><a href="php/logout_process.php">Logout</a></li>
+        </ul>
+    </aside>
     <!-- <aside id="sidebar">
           These elements are identical to the ones used in the header section, might be better to generate them through js?
         <button id="btn_close_sidebar" type="button">
