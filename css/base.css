@@ -53,6 +53,17 @@ body > header > a > img {
     transform: translateY(-50%);
 }
 
+body > header > button#openside_btn {
+    width: 10%;
+    height: 100%;
+    display: inline-block;
+}
+
+body > header > button#openside_btn > img {
+    box-sizing: border-box;
+    position: relative;
+}
+
 /* Basic form */
 form {
     width: 80%;
@@ -68,6 +79,25 @@ form input:not([type="submit"]):not([type="date"]) {
 form > input:last-child {
     width: 50%;
     margin-left: 25%;
+}
+
+
+/* Sidebar */
+
+aside#sidebar {
+    display: none;
+    width: 80%;
+    position: fixed;
+    top: -6vmax;
+    left: -80%;
+    z-index: 2;
+    background-color: #aec8ff;
+}
+
+aside#sidebar > button#closeside_btn {
+    box-sizing: border-box;
+    width: 20%;
+    padding: 0;
 }
 
 /*
