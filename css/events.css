@@ -1,11 +1,30 @@
 div.tab {
     margin-top: 20%;
     text-align: center;
+    border-bottom: 3px solid black;
 }
 
 div.tab > button {
-    width: 25%;
-    margin: auto 1%;
+    width: 48%;
+    margin: 0 1%;
+    height: 3rem;
+    border: none;
+    outline: none;
+    background-color: cornflowerblue;
+    cursor: pointer;
+}
+
+div.tab > button:hover {
+    background-color: #3977e9;
+    color: white;
+}
+
+div.tab > button.active {
+    background-color: #3977e9;
+    color: white;
+    border-top: thin solid black;
+    border-left: thin solid black;
+    border-right: thin solid black;
 }
 
 section#top_events > a > article  {
@@ -35,4 +54,12 @@ section#top_events > article > span.description_span {
 
 div#search_form {
     display: none;
+    margin: 1%;
+    
+    box-sizing: border-box;
+    padding: 2px;
+}
+
+div#search_form > form {
+    margin-top: 2%;
 }
