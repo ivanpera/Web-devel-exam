@@ -1,10 +1,18 @@
 <?php
-
-    require_once('DatabaseHelper.php');
+    
+    require_once('../bootstrap.php');
     $result = $dbh->checkLogin($_POST["email"], $_POST["password"]);
     if (!empty($result)) {
-        //Add a variable to $_SESSION
+        $_SESSION["sessUser"] = $_POST["email"];
+        session_write_close();
+        header("Location: ../index.php");
+        die();
     } else {
+        if(isset($_SESSION["sessUser"])) {
+            unset($_SESSION["sessUser"]);
+        }
+        session_write_close();
         header("Location: ../login.php?loginFailed=1");
+        die();
     }
 ?>
