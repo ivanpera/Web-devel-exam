@@ -5,7 +5,11 @@
     if (!empty($result)) {
         $_SESSION["sessUser"] = $_POST["email"];
         session_write_close();
-        header("Location: ../index.php");
+        $redirectPage = "index.php";
+        if (isset($_SESSION["previousPage"])) {
+            $redirectPage = $_SESSION["previousPage"];
+        }
+        header("Location: ../".$redirectPage);
         die();
     } else {
         if(isset($_SESSION["sessUser"])) {
