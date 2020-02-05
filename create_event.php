@@ -13,5 +13,6 @@
     $templateParams["js"] = array("https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js", "js/base.js", "js/create_event.js");
     $templateParams["categories"] = $dbh->getCategories();
     $templateParams["tipoPosti"] = $dbh->getSeatTypes();
+    $templateParams["luoghi"] = $dbh->getPlaces();
     require(TEMPLATE_DIR."base.php");
 ?>
