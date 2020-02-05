@@ -108,6 +108,19 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getPlaces() {
+        $stmt = $this->db->prepare("SELECT * FROM luogo");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function insertEvent() {
+        //Inserimento evento
+        //inserimento evento_ha_categoria
+        //inserimento posti
+        //inserimento moderazione
+    }
+
     /*
     public function getPosts($n=-1){
         $query = "SELECT idarticolo, titoloarticolo, imgarticolo, anteprimaarticolo, dataarticolo, nome FROM articolo, autore WHERE autore=idautore ORDER BY dataarticolo DESC";
@@ -164,6 +177,12 @@ class DatabaseHelper{
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all()[0][0];
+    }
+
+    private function getLastEventId(){
+        $stmt = $this->db->prepare("SELECT IFNULL(MAX(codEvento), 0) FROM evento");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0];
     }
 
 }
