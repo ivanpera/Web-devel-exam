@@ -71,7 +71,7 @@ form {
     margin-top: 10%;
 }
 
-form input:not([type="submit"]):not([type="date"]) {
+form input:not([type="submit"]):not([type="date"]):not([type="checkbox"]) {
     width: 100%;
     box-sizing: border-box;
 }
