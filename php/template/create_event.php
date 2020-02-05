@@ -19,15 +19,15 @@
 
     <section class="tab"> Biglietti:
         <div class="ticket_creator">
-            <select required>
+            <select name="ticket_type[]" required>
                 <option value="" disabled selected hidden>Seleziona una categoria...</option>
                 <!-- Fill trough php-->
                 <?php foreach ($templateParams["tipoPosti"] as $tipoPosto): ?>
                     <option value="<?php echo $tipoPosto["codTipologia"]; ?>"><?php echo $tipoPosto["nomeTipologia"];?></option>
                 <?php endforeach; ?>
             </select>
-            <label>Costo per biglietto (in centesimi di Euro): <input type="number" min="0" step="1"/></label>
-            <label for="num_tickets"> Numero biglietti: <input type="number" min="1" name="num_tickets" id="num_tickets"/></label>
+            <label>Costo per biglietto (in centesimi di Euro): <input name="ticket_cost[]" type="number" min="0" step="1"/></label>
+            <label for="num_tickets"> Numero biglietti: <input type="number" min="1" name="num_tickets[]" id="num_tickets"/></label>
             <button class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button> <!-- classden for the first ticket type -->
             <button class="add_ticket_btn" type="button" onclick=addNewTicket()> + </button> <!-- Juclass a placeholder: adds another ticket to edit (todo with js) -->
         </div>
