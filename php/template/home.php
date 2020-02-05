@@ -11,10 +11,7 @@
         </a>
     </div>
     <div class="text_hover_container">
-        <a href="<?php if(isset($_SESSION["sessUser"]["email"])) { echo 'create_event.php'; }
-                        else {
-                            $_SESSION["previousPage"] = "create_event.php";
-                            echo 'login.php'; }?>">
+        <a href="create_event.php">
             <img src="img/home_create.jpg" alt="image_create_event"/>
             <div class="text_hover"> Crea eventi </div>
         </a>
