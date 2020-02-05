@@ -1,5 +1,6 @@
 <?php
     require_once('bootstrap.php');
+    $_SESSION["previousPage"] = "index.php";
     $templateParams["name"] = "home.php";
     $templateParams["title"] = "Home";
     $templateParams["css"] = array("base.css", "home.css");
