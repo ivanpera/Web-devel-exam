@@ -1,7 +1,7 @@
 <?php
     require_once('bootstrap.php');
     //This check is present to prevent accessing the page without being logged in and by changing the browser address
-    if(!isset($_SESSION["sessUser"])) {
+    if(!isset($_SESSION["sessUser"]["email"])) {
         $_SESSION["previousPage"] = "create_event.php";
         session_write_close();
         header("Location: login.php");

@@ -11,7 +11,7 @@
         </a>
     </div>
     <div class="text_hover_container">
-        <a href="<?php if(isset($_SESSION["sessUser"])) { echo 'create_event.php'; }
+        <a href="<?php if(isset($_SESSION["sessUser"]["email"])) { echo 'create_event.php'; }
                         else {
                             $_SESSION["previousPage"] = "create_event.php";
                             echo 'login.php'; }?>">

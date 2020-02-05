@@ -40,7 +40,7 @@
       <!-- NOTE: currently, in the mockup, the sidebar button and login icon
           are not present in the login page, should we make a special case?-->
         <?php 
-        if (!isset($_SESSION["sessUser"])) { 
+        if (!isset($_SESSION["sessUser"]["email"])) { 
           echo '<a href="login.php">
           <img src="img/login_icon.png" alt="login" class="login"/>
           </a>'; } else {
