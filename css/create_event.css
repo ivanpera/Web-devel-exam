@@ -18,3 +18,8 @@ form > section > div.moderator_adder:not(:last-child) > button:first-of-type,
 form > section > div.moderator_adder:first-of-type > button:first-of-type {
     display: none;
 }
+
+form > section > div.ticket_creator:not(:last-child) > button:last-of-type,
+form > section > div.moderator_adder:not(:last-child) > button:last-of-type {
+    display:none;
+}
