@@ -71,6 +71,18 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getCategories() {
+        $stmt = $this->db->prepare("SELECT codCategoria, nomeCategoria FROM categoria_evento");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getSeatTypes() {
+        $stmt = $this->db->prepare("SELECT codTipologia, nomeTipologia FROM tipologia_posto");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
     /*
     public function getPosts($n=-1){
         $query = "SELECT idarticolo, titoloarticolo, imgarticolo, anteprimaarticolo, dataarticolo, nome FROM articolo, autore WHERE autore=idautore ORDER BY dataarticolo DESC";
