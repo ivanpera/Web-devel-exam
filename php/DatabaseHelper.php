@@ -12,7 +12,7 @@ class DatabaseHelper{
 
     public function checkLogin($email, $password){
         $storedPassword = $this->getHashedPassword($email, $password);
-        $query = "SELECT email, userPassword FROM utente WHERE email = ? AND userPassword =  ?";
+        $query = "SELECT email, userPassword, dataNascita FROM utente WHERE email = ? AND userPassword =  ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('ss', $email, $storedPassword);
         $stmt->execute();
@@ -36,7 +36,6 @@ class DatabaseHelper{
         return $stmt->insert_id != 0;
     }
 
-    /* TO BE IMPROVED */
     public function getPopularEvents( $NSFC = 0, $limit = -1) {
         $query = "SELECT *
                   FROM (SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
@@ -45,7 +44,7 @@ class DatabaseHelper{
                         FROM evento E, luogo L, posto P
                         WHERE E.codLuogo = L.codLuogo
                         AND p.codEvento = E.codEvento
-                        AND E.NSFC = ?
+                        AND E.NSFC <= ?
                         GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
                                  L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
                         HAVING percPostiOccupati < 100
@@ -79,6 +78,32 @@ class DatabaseHelper{
 
     public function getSeatTypes() {
         $stmt = $this->db->prepare("SELECT codTipologia, nomeTipologia FROM tipologia_posto");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getEvent($codEvent) {
+        $query = "SELECT *
+                  FROM (SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
+                               L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                               COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati
+                        FROM evento E, luogo L, posto P
+                        WHERE E.codLuogo = L.codLuogo
+                        AND p.codEvento = E.codEvento
+                        AND E.codEvento = ?
+                        GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
+                                 L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
+                       ) AS tabEventi,
+              
+                       (SELECT EHC.codEvento, GROUP_CONCAT(ce.nomeCategoria SEPARATOR ', ') AS categorie
+                        FROM evento_ha_categoria EHC, categoria_evento CE
+                        WHERE EHC.codCategoria = ce.codCategoria
+                          AND EHC.codEvento = ?
+                        GROUP BY EHC.codEvento) AS tabCategorie
+                  WHERE tabEventi.codEvento = tabCategorie.codEvento
+                  ";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ii", $codEvent, $codEvent);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
