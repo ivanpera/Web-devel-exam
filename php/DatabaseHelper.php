@@ -86,7 +86,7 @@ class DatabaseHelper{
         $query = "SELECT *
                   FROM (SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
                                L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
-                               COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati
+                               COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
                         FROM evento E, luogo L, posto P
                         WHERE E.codLuogo = L.codLuogo
                         AND p.codEvento = E.codEvento
@@ -114,11 +114,45 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function insertEvent() {
+    public function insertEvent($nomeEvento, $dataEOra, $NSFC, $descrizione, $nomeImmagine, $codLuogo, $emailOrganizzatore, $categorie, $tickets, $emailModeratori) {
         //Inserimento evento
+        $queryEvento = "INSERT INTO evento(codEvento, nomeEvento, dataEOra, NSFC, descrizione, nomeImmagine, codLuogo, emailOrganizzatore) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $this->db->prepare($queryEvento);
+        $codEvento = $this->getLastEventId() + 1;
+        $stmt->bind_param("ississis", $codEvento, $nomeEvento, $dataEOra, $NSFC, $descrizione, $nomeImmagine, $codLuogo, $emailOrganizzatore);
+        $stmt->execute();
+
         //inserimento evento_ha_categoria
+        $queryCategorie = "INSERT INTO evento_ha_categoria(codCategoria, codEvento) VALUES (?, ".$codEvento.")";
+        $stmt = $this->db->prepare($queryCategorie);
+        foreach ($categorie as $codCategoria) {
+            $stmt->bind_param("i", $codCategoria);
+            $stmt->execute();
+        }
+
         //inserimento posti
+        for($i = 0; $i < count($tickets["type"]); $i++) {
+            $lastSeatId = $this->getLastSeatId($codEvento);
+            for($j = 1; $j <= intval($tickets["num"][$i]); $j++){
+                $this->insertSeat($codEvento, $lastSeatId + $j, intval($tickets["cost"][$i]), intval($tickets["type"][$i]));
+            }
+        }
+
         //inserimento moderazione
+        $queryModeratori = "INSERT INTO moderazione(emailModeratore, codEvento) VALUES (?, ".$codEvento.")";
+        $stmt = $this->db->prepare($queryModeratori);
+        foreach ($emailModeratori as $emailMod) {
+            $stmt->bind_param("s", $emailMod);
+            $stmt->execute();
+        }
+
+        return $codEvento;
+    }
+
+    public function getEventModerators($codEvento) {
+        $stmt = $this->db->prepare("SELECT emailModeratore FROM moderazione WHERE codEvento = ".$codEvento);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
     /*
@@ -182,7 +216,19 @@ class DatabaseHelper{
     private function getLastEventId(){
         $stmt = $this->db->prepare("SELECT IFNULL(MAX(codEvento), 0) FROM evento");
         $stmt->execute();
-        return $stmt->get_result()->fetch_all()[0];
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
+
+    private function insertSeat($codEvento, $codPosto, $costo, $codTipologia) {
+        $query = "INSERT INTO posto(codEvento, codPosto, costo, codTipologia, codPrenotazione) VALUES (".$codEvento.", ".$codPosto.", ".$costo.", ".$codTipologia.", NULL)";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+    }
+
+    private function getLastSeatId($codEvento) {
+        $stmt = $this->db->prepare("SELECT IFNULL(MAX(codPosto), 0) FROM posto WHERE codEvento =".$codEvento);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
     }
 
 }
