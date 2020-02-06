@@ -25,3 +25,16 @@ function addNewMod() {
         </div> \
     ');
 }
+
+$(document).ready(function(){
+    $("input[type=\"submit\"]").click(function() {
+        checked = $("input[type=\"checkbox\"][name=\"categories[]\"]:checked").length;
+
+      if(!checked) {
+        alert("You must check at least one category.");
+        return false;
+      } else {
+          $("#createForm").submit();
+      }
+    })
+});
