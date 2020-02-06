@@ -10,15 +10,11 @@
             $redirectPage = $_SESSION["previousPage"];
             unset($_SESSION["previousPage"]);
         }
-        session_write_close();
-        header("Location: ../".$redirectPage);
-        die();
+        safeHeader("Location: ../".$redirectPage);
     } else {
         if(isset($_SESSION["sessUser"]["email"])) {
             unset($_SESSION["sessUser"]);
         }
-        session_write_close();
-        header("Location: ../login.php?loginFailed=1");
-        die();
+        safeHeader("Location: ../login.php?loginFailed=1");
     }
 ?>

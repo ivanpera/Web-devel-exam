@@ -3,7 +3,5 @@
     if(isset($_SESSION["sessUser"]["email"])) {
         unset($_SESSION["sessUser"]);
     }
-    session_write_close();
-    header("Location: ../index.php");
-    die();
+    safeHeader("Location: ../index.php");
 ?>
