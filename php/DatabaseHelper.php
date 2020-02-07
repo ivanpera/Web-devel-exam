@@ -155,6 +155,64 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    /* $searchParameters deve essere un'array associativo
+       parametri controllati:
+        0. NSFC ("NSFC") - obbligatorio
+        1. nome evento ("nomeEvento")
+        2. luogo ("codLuogo")
+        3. data "minima" ("fromData")
+        4. data "massima" ("toData")
+       */
+    public function searchEvent(array $searchParameters) {
+        $queryEvento = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
+                               L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                               COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati
+                        FROM evento E, luogo L, posto P
+                        WHERE E.codLuogo = L.codLuogo
+                          AND p.codEvento = E.codEvento
+                          AND E.NSFC <= ".$searchParameters["NSFC"];
+        if(isset($searchParameters["nomeEvento"])) {
+            $queryEvento .= " AND E.nomeEvento LIKE %".$searchParameters["nomeEvento"]."%";
+        }
+        if(isset($searchParameters["codLuogo"])) {
+            $queryEvento .= " AND E.codLuogo = ".$searchParameters["codLuogo"];
+        }
+        if(isset($searchParameters["fromData"])) {
+            $queryEvento .= " AND E.dataEOra >= " .$searchParameters["fromData"];
+        }
+        if(isset($searchParameters["toData"])) {
+            $queryEvento .= " AND E.dataEOra <= ".$searchParameters["toData"];
+        }
+        $queryEvento .= " GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
+                                 L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
+                        HAVING percPostiOccupati < 100";
+        
+        $queryCategorie = "SELECT EHC.codEvento, GROUP_CONCAT(ce.nomeCategoria SEPARATOR ', ') AS categorie
+                           FROM evento_ha_categoria EHC, categoria_evento CE
+                           WHERE EHC.codCategoria = ce.codCategoria";
+
+        //Aggiungere categorie selezionate
+        //Fonte esterna dice OR
+        if(isset($searchParameters["categories"]) && count($searchParameters["categories"]) > 0) {
+            $queryCategorie .= " AND ( 0 ";
+            foreach ($searchParameters["categories"] as $cat) {
+                $queryCategorie .= " OR " . " CE.codCategoria = ".$cat;
+            }
+            $queryCategorie .= " )";
+        }
+
+        $queryCategorie .= " GROUP BY EHC.codEvento";
+
+        $queryCompleta = "SELECT *
+                          FROM (".$queryEvento.") AS tabEventi,
+                               (".$queryCategorie.") AS tabCategorie
+                          WHERE tabEventi.codEvento = tabCategorie.codEvento";
+
+        $stmt = $this->db->prepare($queryCompleta);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
     /*
     public function getPosts($n=-1){
         $query = "SELECT idarticolo, titoloarticolo, imgarticolo, anteprimaarticolo, dataarticolo, nome FROM articolo, autore WHERE autore=idautore ORDER BY dataarticolo DESC";
