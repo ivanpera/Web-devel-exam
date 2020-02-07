@@ -64,6 +64,7 @@
         <button id="closeside_btn" onclick=closeSidebar() type="button">
           <img src="img/closeSidebarIcon.png" alt="Close sidebar"/>
         </button>
+        <p><?php echo $_SESSION["sessUser"]["email"];?></p>
         <ul>
           <li>Profilo</li>
           <li>Calendario</li>
