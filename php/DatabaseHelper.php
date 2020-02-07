@@ -162,6 +162,7 @@ class DatabaseHelper{
         2. luogo ("codLuogo")
         3. data "minima" ("fromData")
         4. data "massima" ("toData")
+        5. categorie ("categories")
        */
     public function searchEvent(array $searchParameters) {
         $queryEvento = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
@@ -172,16 +173,16 @@ class DatabaseHelper{
                           AND p.codEvento = E.codEvento
                           AND E.NSFC <= ".$searchParameters["NSFC"];
         if(isset($searchParameters["nomeEvento"])) {
-            $queryEvento .= " AND E.nomeEvento LIKE %".$searchParameters["nomeEvento"]."%";
+            $queryEvento .= " AND E.nomeEvento LIKE '%".$searchParameters["nomeEvento"]."%'";
         }
         if(isset($searchParameters["codLuogo"])) {
             $queryEvento .= " AND E.codLuogo = ".$searchParameters["codLuogo"];
         }
         if(isset($searchParameters["fromData"])) {
-            $queryEvento .= " AND E.dataEOra >= " .$searchParameters["fromData"];
+            $queryEvento .= " AND DATEDIFF(E.dataEOra, '" .$searchParameters["fromData"]."') >= 0";
         }
         if(isset($searchParameters["toData"])) {
-            $queryEvento .= " AND E.dataEOra <= ".$searchParameters["toData"];
+            $queryEvento .= " AND DATEDIFF(E.dataEOra, '".$searchParameters["toData"]."') <= 0";
         }
         $queryEvento .= " GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
                                  L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
@@ -191,8 +192,6 @@ class DatabaseHelper{
                            FROM evento_ha_categoria EHC, categoria_evento CE
                            WHERE EHC.codCategoria = ce.codCategoria";
 
-        //Aggiungere categorie selezionate
-        //Fonte esterna dice OR
         if(isset($searchParameters["categories"]) && count($searchParameters["categories"]) > 0) {
             $queryCategorie .= " AND ( 0 ";
             foreach ($searchParameters["categories"] as $cat) {
