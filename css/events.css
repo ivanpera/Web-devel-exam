@@ -63,3 +63,11 @@ div#search_form {
 div#search_form > form {
     margin-top: 2%;
 }
+
+#search_form > form > ul {
+    list-style: none;
+}
+
+#search_form > form label {
+    display: block;
+}
