@@ -5,13 +5,26 @@ img {
     max-height: 100%;
 }
 
-body, header {
+body, header, p, h1, h2, h3, h4, h5, h6 {
     margin: 0;
     padding: 0;
 }
 
+main, footer {
+    margin-top: 6vmax;
+    z-index: 0;
+}
+
+
+main {
+    height: 100%;
+}
+
 body{
-    background-color: #aec8ffb2;
+    height: 100vh;
+    background-image: url("../img/home_bkg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
     overflow-y: auto;
     font-size: 100%;
 }
@@ -25,43 +38,49 @@ body > header {
     z-index: 1;
 }
 
-main, footer, aside {
-    margin-top: 6vmax;
-    z-index: 0;
-}
-
-body > header > a {
-    width: 10%;
-    vertical-align: top;
-    display: inline-block;
-    height: 100%;
-    text-align: center;
-}
-
-body > header > a:nth-child(2) {
-    width: 80%;
-}
-
 body > header > a > img.login {
     box-sizing: border-box;
     padding: 10%;
 }
 
-body > header > a > img {
+body > header > button {
+    width: 15%;
+}
+
+body > header > button > img {
+    box-sizing: border-box;
+    padding: 10%;
+}
+
+/*Common main and sidebar header properties */
+
+header > * {
+    vertical-align: top;
+}
+
+header > a {
+    width: 15%;
+    display: inline-block;
+    height: 100%;
+    text-align: center;
+}
+
+header > a:last-child {
+    width: 70%;
+}
+
+header > a > img {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
 }
 
-body > header > button#openside_btn {
-    width: 10%;
-    height: 100%;
-    display: inline-block;
-}
-
-body > header > button#openside_btn > img {
+header > button {
     box-sizing: border-box;
-    position: relative;
+    height: 100%;
+    padding: 0px;
+    background-color: transparent; 
+    border-style:none;
 }
 
 /* Basic form */
@@ -81,265 +100,107 @@ form > input:last-child {
     margin-left: 25%;
 }
 
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0%;
+    z-index: 2;
+}
 
 /* Sidebar */
 
-aside#sidebar {
+aside {
     display: none;
-    width: 80%;
+    /* keep it until we add the overlay */
+    border-right: ridge;
+    border-right-color: black;
+    /**/
+    height: 100%;
+    top: 0px;
+    width: 50%;
     position: fixed;
-    top: -6vmax;
-    left: -80%;
-    z-index: 2;
+    z-index: 3;
     background-color: #aec8ff;
 }
 
-aside#sidebar > button#closeside_btn {
+aside > ul {
+    margin-top: 10vmax;
+    list-style: none;
+    padding-left: 6%;
+}
+
+aside > header > button {
+    width: 30%
+}
+
+aside > header > button > img  {
     box-sizing: border-box;
-    width: 20%;
-    padding: 0;
+    padding: 10%;
 }
 
-/*
-body > header, body > footer{
-    background-color: rgb(54,54,54);
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
-}
-
-body > header > h1{
-    font-family: 'Courier New', Courier, monospace;
-}
-
-nav{
-    margin: 0 5%;
-}
-
-nav ul{
-    list-style: none;
-}
-
-nav ul li{
-    display: inline-block;
-    width: 45%;
-    margin: 10px 0 0;
-    text-align: center;
-    background-color:rgb(54,54,54);
-}
-
-nav ul li:nth-child(odd){
-    margin-right: 10%;
-}
-
-nav ul li a{
-    display: inline-block;
-    width:100%;
-    height: 100%;
-    padding: 5px 0;
-    color: #fff;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    text-decoration: none;
-}
-
-nav ul li:hover a, nav ul li a.active{
-    color:rgb(219, 69,83);
-}
-
-main{
-    margin: 20px 5% 0;
-}
-article, form, main > section{
-    background-color: #fff;
-    border: 1px solid #cacaca;
-    margin-bottom: 20px;
-    min-height: 400px;
-}
-
-article > p{
-    padding: 0 5%;
-    text-align: center;
-}
-
-article > header > div{
-    height: 200px;
-    text-align: center;
-}
-
-article > header > div > img{
-    max-height: 100%;
-    max-width: 100%;
-}
-
-article > header > h2, article > header > p{
-    padding: 0 5%;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-
-article > header > p{
-    font-size: 12px;    
-}
-
-article > section{
-    padding: 0 5%;
-    font: 12px Verdana, Geneva, Tahoma, sans-serif;
-}
-
-article > footer{
-    padding: 20px 5% 5%;
-    text-align: right;
-}
-
-article > footer > a, form ul li input[type="submit"], form ul li a{
-    padding: 5px 10px;
-    background-color: rgb(221, 221, 221);
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    color: #000;
-    font-size: 12px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-
-article > footer > a:hover{
-    color:rgb(219, 69,83);
-}
-
-form{
-    padding: 20px 5%;
-}
-
-form h2, main > section > h2{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    margin: 0 0 20px;
-}
-
-form ul{
-    list-style: none;
-    width: 80%;
-    margin: 0 10%;
-}
-
-form ul li{
-    margin-bottom: 20px;
-}
-
-form ul li:last-child{
-    text-align: right;
-}
-
-form ul li label{
-    display: inline-block;
+aside > header {
     width: 50%;
+    height: 6vmax;
+    position: fixed;
+    top: 0px;
+    background-color: white;
 }
 
-form ul li input:not([type="submit"]){
-    width: 50%;
-    box-sizing: border-box;
-}
+@media screen and (min-width:450px) {
 
-form ul li input[type="checkbox"]{
-    margin: 0;
-}
-
-form ul li input[type="submit"]:hover{
-    cursor: pointer;
-    color:rgb(219, 69,83);
-}
-
-form ul li textarea{
-    width: 100%;
-    height: 150px;
-}
-
-form ul li img{
-    width: 50px;
-}
-
-main > section{
-    padding: 20px 5%;
-}
-
-table{
-    width: 100%;
-    border-spacing: 0;
-    border-collapse: collapse;
-}
-
-table td, table th{
-    border: 1px solid #000;
-    padding: 5px 0;
-}
-
-table th{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-
-table td{
-    text-align: center;
-}
-
-table td img{
-    max-width: 50px;
-    max-height: 50px;
-}
-
-aside{
-    margin: 0 5% 20px;
-    background-color:#fff;
-    border: 1px solid #cacaca;
-    box-sizing: border-box;
-}
-
-aside > section{
-    padding: 20px 5%;
-}
-
-aside > section > h2{
-    font: bold 16px 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    margin: 0 0 15px;
-}
-
-aside > section > ul{
-    list-style: none;
-}
-
-aside > section > ul > li{
-    margin-bottom: 10px;
-}
-
-aside > section > ul > li > img{
-    width: 50px;
-    float: left;
-    margin-right: 5px;
-}
-
-aside > section > ul > li > a{
-    font: bold 12px 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    text-decoration: none;
-}
-
-aside > section > ul > li > a:visited{
-    color: #000;
-}
-
-aside > section > ul > li > a:hover{
-    color:rgb(219, 69,83);
-}
-
-body > footer > p{
-    font-family: 'Courier New', Courier, monospace;
-} */
-
-
-/* 
-@media screen and (min-width:600px){
-
-    body > header {
-        height: 6vw;
+    aside > header > a:last-child {
+        width: 84%;
     }
 
-    main, footer, aside {
-        margin-top: 6vw;
+    aside > header > button {
+        width: 16%
     }
-} */
+
+    body > header > a:first-child {
+        width: 8%;
+    }
+
+    body > header > a:last-child {
+        width: 84%;
+    }
+
+    body > header > button {
+        width: 8%;
+    }
+}
+
+@media screen and (min-width:800px) {
+    
+    aside {
+        width: 35%;
+    }
+
+    aside > header {
+        width: 35%;
+    }
+
+    aside > header > a:last-child {
+        width: 77%;
+    }
+
+    aside > header > button {
+        width: 23%
+    }
+
+    body > header > a:first-child {
+        width: 6%;
+    }
+
+    body > header > a:last-child {
+        width: 88%;
+    }
+
+    body > header > button {
+        width: 6%;
+    }
+}
