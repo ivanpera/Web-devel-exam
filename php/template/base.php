@@ -58,6 +58,7 @@
             <img src="img/logo.png" alt="home" class="logo"/>
           </a>
       </header>
+        <p><?php echo $_SESSION["sessUser"]["email"];?></p>
         <ul>
           <li>Profilo</li>
           <li>Calendario</li>

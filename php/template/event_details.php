@@ -13,10 +13,21 @@
     </label>
 
     <p>
-        Biglietti: <?php echo $templateParams["evento"]["postiOccupati"]." occupati su ".$templateParams["evento"]["capienzaMassima"]?>
+        Biglietti: <?php echo $templateParams["evento"]["postiOccupati"]." occupati su ".min($templateParams["evento"]["capienzaMassima"],$templateParams["evento"]["maxPostiDisponibili"])?>
     </p>
     <p> Organizzatore: <?php echo $templateParams["evento"]["emailOrganizzatore"] ?> </p>
-    <p> Moderatori: </p>
     
+    <?php
+        if (!empty($templateParams["moderatori"])) {
+            echo "<p> Moderatori: </p>";
+            foreach ($templateParams["moderatori"] as $moderatore){
+                echo "<p>".$moderatore["emailModeratore"]."</p>";
+            }
+        }
+    ?>
+    <!-- Stampa le recensioni -->
     <!--php check, if the the user is not logged in, display the "log in first to purchase", else display the "proceed to check out" -> disable it if no tickets are selected -->
+
+
+    <!-- php check, if the user is the organizer, they can modify the event -->
 </section>

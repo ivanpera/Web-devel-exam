@@ -116,10 +116,8 @@ form > input:last-child {
 
 aside {
     display: none;
-    /* keep it until we add the overlay */
     border-right: ridge;
     border-right-color: black;
-    /**/
     height: 100%;
     top: 0px;
     width: 50%;
@@ -129,8 +127,13 @@ aside {
 }
 
 aside > ul {
-    margin-top: 10vmax;
+    margin-top: .3em;
     list-style: none;
+    padding-left: 6%;
+}
+
+aside > p {
+    margin-top: 8vmax;
     padding-left: 6%;
 }
 
@@ -190,17 +193,5 @@ aside > header {
 
     aside > header > button {
         width: 23%
-    }
-
-    body > header > a:first-child {
-        width: 6%;
-    }
-
-    body > header > a:last-child {
-        width: 88%;
-    }
-
-    body > header > button {
-        width: 6%;
     }
 }
