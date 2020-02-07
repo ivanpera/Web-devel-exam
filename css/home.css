@@ -1,59 +1,92 @@
 .headline_text {
     color: white;
-    font-size: 0.5em;
+    font-size: 0.7em;
     text-shadow: 2px 2px grey;
     text-align: center;
-    line-height: 10vmin;
+    line-height: 14vmax;
     padding: 2vmin 5vmin;
 }
 
-.text_hover_container {
-    /* display: inline-block;  ->> On a larger/horizontal device, show the two buttons side by side (these values are not the correct ones, and you may also need to alter other things such as margins)
-    width: 25%; */
-    position: relative;
-    text-align: center;
-    margin: 1vmin 25% 3vmin;
-    width: 50%;
-
-    /* margin: 1vmin 10% 3vmin;
-    padding: 0px 15%;
-    width: 50%; */
+.composed_button_container {
+    text-decoration: none;
+    display: inline-block;
+    margin: 1vmin 21.5% 3vmin;
+    padding: 2%;
+    width: 57%;
+    box-sizing: border-box;
+    background-color: red;
 }
 
-.text_hover_container img {
-    opacity: 85%;
-    border-radius: 10%;
+.composed_button_container img {
+    display: block;
+    width: 18%;
+    margin-left: 41%;
+    margin-top: 1%;
+    box-sizing: border-box;
+    background-color: purple;
+    border-radius: 50%;
 }
 
-.text_hover {
+.composed_button_container > section {
+    display: block;
+    box-sizing: border-box;
+    width: 80%;
+    height: 100%;
+    margin-left: 10%;
+}
+
+.composed_button_container > section > h2 {
+    font-size: 1.2em;
     color: white;
-    text-shadow: 2px 2px grey;
     font-weight: bold;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: .7em;
-    transform: translate(-50%, -50%);
+    text-align: center;
+    margin: 2% auto;
+}
+
+.composed_button_container > section > p {
+    font-size: 0.8em;
+    color: white;
 }
 
 @media screen and (min-width:450px) {
-    
     .headline_text {
         font-size: .75em;
     }
 
-    .text_hover {
-        font-size: 1em;
+    .composed_button_container > section > h2 {
+        font-size: 1.5em;
+    }
+
+    .composed_button_container > section > p {
+        font-size: 1.2em;
     }
 }
 
 @media screen and (min-width:800px) {
     
+    .composed_button_container {
+        margin-left: 0px;
+        margin-right: 0px;
+        width: 28.5%;
+        background-color: red;
+    }
+
+    .composed_button_container:first-child {
+        margin-left: 20%;
+        margin-right: 3%;
+        width: 28.5%;
+        background-color: red;
+    }
+
+    .composed_button_container > section > p {
+        font-size: 1.45em;
+    }
+
     .headline_text {
         font-size: 1.25em;
     }
 
-    .text_hover {
-        font-size: 1.5em;
+    .composed_button_container > section > h2 {
+        font-size: 1.75em;
     }
 }
