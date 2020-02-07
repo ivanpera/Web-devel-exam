@@ -27,8 +27,8 @@ div.tab > button.active {
     border-right: thin solid black;
 }
 
-section#top_events > a > article  {
-    height: 30%;
+
+section#top_events > a > article, section#result_events > a > article  {
     margin: 1%;
     border: thin solid black;
     width: 98%;
@@ -36,21 +36,22 @@ section#top_events > a > article  {
     padding: 2px;
 }
 
-section#top_events > article  h4 {
+section#top_events > article > h4, section#result_events > article > h4 {
     text-align: center;
     margin: 0;
     padding: 5px;
 }
 
-section#top_events > article > span {
+section#top_events > article > span, section#result_events > article > span {
     width: 100%;
 }
 
-section#top_events > article > span.description_span {
+section#top_events > article > span.description_span, section#result_events > article > span.description_span {
     display: block;
     height: 3rem;
     overflow: hidden;
 }
+
 
 div#search_form {
     display: none;
