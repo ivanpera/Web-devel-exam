@@ -31,16 +31,26 @@
             <input type="text" id="event_name" name="event_name"><br/>
         </label>
         <label for="city_name">
-            Città: <br/>
-            <input type="text" id="city_name" name="city_name"><br/>
+            Luogo: <br/>
+            <select name="luogo">
+                <option value="" disabled selected hidden>Seleziona un luogo...</option>
+                <?php foreach ($templateParams["luoghi"] as $luogo): ?>
+                    <option value=<?php echo $luogo["codLuogo"];?>><?php echo $luogo["nome"]?></option>
+                <?php endforeach;?>
+            </select>
         </label>
         <label for="date"> <!-- NOTE: The date input type is not supported in all browsers. Please be sure to test, and consider using a polyfill. We just have to choose which one -->
-            Data inizio evento: <br/>
-            <input type="date" id="date" name="date"><br/> <!--TODO: Add min and max attributes defined using php -->
+            Dal: <br/>
+            <input type="date" id="date" name="fromDate"><br/> <!--TODO: Add min and max attributes defined using php -->
+            Al: <br/> 
+            <input type="date" id="date" name="toDate"><br/> <!--TODO: Add min and max attributes defined using php -->
         </label>
         Categorie: <br/>
+        <!-- Volendo si può mettere una serie di radio button per far scegliere all'utente se vuole usare le categorie devono esserci tutte o ne basta almeno una (AND o OR) -->
         <ul>
-            <!--to be filled with checkboxes -->
+        <?php foreach ($templateParams["categories"] as $cat): ?>
+            <li><label><input type="checkbox" name="categories[]" value="<?php echo $cat["codCategoria"]?>"/><?php echo $cat["nomeCategoria"]?></label></li>
+        <?php endforeach; ?>
         </ul>
         <input type="submit" name="btn_search" value="Cerca"/>
     </form>
