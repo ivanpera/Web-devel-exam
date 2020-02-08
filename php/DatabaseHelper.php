@@ -212,6 +212,22 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function updateEvent($codEvento, $nomeEvento, $dataEOra, $NSFC, $descrizione, $nomeImmagine, $codLuogo, $categorie, $tickets, $emailModeratori) {
+        //Query evento
+
+        //Update evento
+
+        //Update posti
+
+        //Update moderatori
+        $stmtModeratori = $this->db->prepare("SELECT emailModeratore FROM moderazione WHERE codEvento = ".$codEvento);
+        $stmtModeratori->execute();
+        $resultModeratori = array_column($stmtModeratori->get_result()->fetch_all(MYSQLI_ASSOC), "emailModeratore");
+        $newModerators = array_diff($emailModeratori, $resultModeratori);
+        $removedModerators = array_diff($resultModeratori, $emailModeratori);
+        
+    }
+
     /*
     public function getPosts($n=-1){
         $query = "SELECT idarticolo, titoloarticolo, imgarticolo, anteprimaarticolo, dataarticolo, nome FROM articolo, autore WHERE autore=idautore ORDER BY dataarticolo DESC";
