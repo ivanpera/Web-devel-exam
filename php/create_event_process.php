@@ -13,6 +13,7 @@
     $NSFC = isset($_POST["NSFC"]) ? 1 : 0;
     $categories = $_POST["categories"];
     $biglietti["type"] = $_POST["ticket_type"];
+    //Moltiplicare tutti i costi per 100 per farli diventare in centesimi
     $biglietti["cost"] = $_POST["ticket_cost"];
     $biglietti["num"] = $_POST["num_tickets"];
     $emailOrganizzatore = $_SESSION["sessUser"]["email"];
