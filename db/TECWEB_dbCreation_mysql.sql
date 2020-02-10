@@ -70,7 +70,7 @@ create table OSSERVA (
 
 create table POSTO (
      codEvento int not null,
-     codPosto varchar(10) not null,
+     codPosto int not null,
      costo int not null,
      codTipologia int not null,
      codPrenotazione int,
