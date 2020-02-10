@@ -7,9 +7,11 @@ function addNewTicket() {
     <div class="ticket_creator"> \
     </div>');
 
-    $.each($("div.ticket_creator:not(:first-of-type)"), function (i, item) {
-        item.innerHTML = $("div.ticket_creator:first-of-type").html();
-    });
+    $(".ticket_creator").last().html($(".ticket_creator").first().html());
+    if ($(".ticket_creator:last-child > button.rm_ticket_btn").length == 0) {
+        $(".ticket_creator:last-child > button.add_ticket_btn").before('<button class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button>');
+        $(".ticket_creator").last().html($(".ticket_creator").last().html().replace("readonly", "").replace("disabled", ""));
+    }
 }
 
 function removeLastMod() {
