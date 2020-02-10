@@ -213,11 +213,34 @@ class DatabaseHelper{
     }
 
     public function updateEvent($codEvento, $nomeEvento, $dataEOra, $NSFC, $descrizione, $nomeImmagine, $codLuogo, $categorie, $tickets, $emailModeratori) {
-        //Query evento
-
         //Update evento
+        $queryEvento = "UPDATE evento
+                        SET nomeEvento = ".$nomeEvento.", dataEOra = ".$dataEOra.", NSFC = ".$NSFC.", descrizione = ".$descrizione.", codLuogo = ".$codLuogo;
+        if(!empty($nomeImmagine)){
+            $queryEvento.=", nomeImmagine = ".$nomeImmagine;
+        }
+        $queryEvento.=" WHERE codEvento = ".$codEvento;
+        $stmtEvento = $this->db->prepare($queryEvento);
+        $stmtEvento->execute();
 
         //Update posti
+
+        //Update categorie
+        $stmtCategorie = $this->db->prepare("SELECT codCategoria FROM evento_ha_categoria WHERE codEvento = ".$codEvento);
+        $stmtCategorie->execute();
+        $resultCategorie = array_column($stmtCategorie->get_result()->fetch_all(MYSQLI_ASSOC), "codCategoria");
+        $newCat = array_diff($categorie, $resultCategorie);
+        $removedCat = array_diff($resultCategorie, $categorie);
+        $stmtAddCat = $this->db->prepare("INSERT INTO evento_ha_categoria(codCategoria, codEvento) VALUES ( ?, ".$codEvento.")");
+        foreach($newCat as $new) {
+            $stmtAddCat->bind_param("i", $new);
+            $stmtAddCat->execute();
+        }
+        $stmtRmCat = $this->db->prepare("DELETE FROM evento_ha_categoria WHERE codEvento = ".$codEvento." AND codCategoria = ?");
+        foreach($removedCat as $rmCat) {
+            $stmtRmCat->bind_param("i", $rmCat);
+            $stmtRmCat->execute();
+        }
 
         //Update moderatori
         $stmtModeratori = $this->db->prepare("SELECT emailModeratore FROM moderazione WHERE codEvento = ".$codEvento);
@@ -225,7 +248,43 @@ class DatabaseHelper{
         $resultModeratori = array_column($stmtModeratori->get_result()->fetch_all(MYSQLI_ASSOC), "emailModeratore");
         $newModerators = array_diff($emailModeratori, $resultModeratori);
         $removedModerators = array_diff($resultModeratori, $emailModeratori);
+        $stmtAddMod = $this->db->prepare("INSERT INTO moderazione (emailModeratore, codEvento) VALUES (?, ".$codEvento.")");
+        foreach ($newModerators as $newMod) {
+            $stmtAddMod->bind_param("s", $newMod);
+            $stmtAddMod->execute();
+        }
+        $stmtRmMod = $this->db->prepare("DELETE FROM moderazione WHERE emailModeratore = ? AND codEvento = ".$codEvento);
+        foreach ($removedModerators as $rmMod) {
+            $stmtRmMod->bind_param("s", $rmMod);
+            $stmtRmMod->execute();
+        }
+        //Aggiungi notifiche a utenti che osservano e ad utenti che hanno una prenotazione per l'evento
         
+        //ottieni tutti gli utenti interessati dalla modifica
+        
+    }
+
+    public function getSeatNumByTypeAndCost($codEvento) {
+        $query = "SELECT posto.codTipologia, nomeTipologia, costo, COUNT(codPosto) AS numTotPosti, SUM(IF(codPrenotazione IS NOT NULL, 1, 0)) AS postiPrenotati
+                  FROM posto, tipologia_posto
+                  WHERE codEvento = ? 
+                  AND posto.codTipologia = tipologia_posto.codTipologia
+                  GROUP BY codTipologia, costo
+                  ";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $codEvento);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function updateSeatsOfEvent($codEvento, $codTipologia, $costo, $numToMod) {
+        $query = "UPDATE posto
+                  SET codTipologia = ?, costo = ?
+                  WHERE codEvento = ? AND codPrenotazione IS NULL
+                  LIMIT ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("iiii", $codTipologia, $costo, $codEvento, $numToMod);
+        $stmt->execute();
     }
 
     /*
