@@ -34,20 +34,20 @@
     </section>
 
     <section class="tab"> Biglietti:
-        <div class="ticket_creator">
-            <?php foreach($templateParams["biglietti"] as $biglietto): ?>
-                <select name="ticket_type[]" required <?php //if($biglietto["postiPrenotati"] > 0) {echo "readonly";}?>>
+        <?php foreach($templateParams["biglietti"] as $biglietto): ?>
+            <div class="ticket_creator">
+                <select name="ticket_type[]" required>
                     <?php foreach ($templateParams["tipoPosti"] as $tipoPosto): ?>
                         <option value="<?php echo $tipoPosto["codTipologia"]; ?>" <?php if($biglietto["codTipologia"] == $tipoPosto["codTipologia"]) { echo "selected";} elseif ($biglietto["postiPrenotati"] > 0) {echo "disabled";}?> ><?php echo $tipoPosto["nomeTipologia"];?></option>
                     <?php endforeach; ?>
                 </select>
-                <label>Costo per biglietto: <input name="ticket_cost[]" type="number" min="0.01" step="0.01" required value="<?php echo $biglietto["costo"]?>" <?php if($biglietto["postiPrenotati"] > 0){echo "readonly";}?>/></label>
+                <label>Costo per biglietto: <input name="ticket_cost[]" type="number" min="0.01" step="0.01" required value="<?php printf("%.2f",$biglietto["costo"]/100)?>" <?php if($biglietto["postiPrenotati"] > 0){echo "readonly";}?>/></label>
                 <label for="num_tickets"> Numero biglietti: <input type="number" min="<?php echo $biglietto["postiPrenotati"];?>" name="num_tickets[]" id="num_tickets" required value="<?php echo $biglietto["numTotPosti"]?>"/></label>
-                <button class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button> <!-- classden for the first ticket type -->
+                <? if($biglietto["postiPrenotati"] == 0) {echo  '<button class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button>'; }  ?><!-- classden for the first ticket type -->
                 <button class="add_ticket_btn" type="button" onclick=addNewTicket()> + </button>
                 <br/> <!-- TO BE IMPROVED -->
-            <?php endforeach; ?>
-        </div>
+            </div>
+        <?php endforeach; ?>
     </section>
 
     <section class="tab"> Moderatori (un indirizzo email di un utente non registrato non verrà considerato):
