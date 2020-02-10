@@ -215,7 +215,7 @@ class DatabaseHelper{
     public function updateEvent($codEvento, $nomeEvento, $dataEOra, $NSFC, $descrizione, $nomeImmagine, $codLuogo, $categorie, $tickets, $emailModeratori) {
         //Update evento
         $queryEvento = "UPDATE evento
-                        SET nomeEvento = ".$nomeEvento.", dataEOra = ".$dataEOra.", NSFC = ".$NSFC.", descrizione = ".$descrizione.", codLuogo = ".$codLuogo;
+                        SET nomeEvento = '".$nomeEvento."', dataEOra = '".$dataEOra."', NSFC = ".$NSFC.", descrizione = '".$descrizione."', codLuogo = ".$codLuogo;
         if(!empty($nomeImmagine)){
             $queryEvento.=", nomeImmagine = ".$nomeImmagine;
         }
@@ -224,6 +224,50 @@ class DatabaseHelper{
         $stmtEvento->execute();
 
         //Update posti
+        $oldSeats = $this->getSeatNumByTypeAndCost($codEvento);
+        for ($i=0; $i < count($tickets["type"]); $i++) { 
+            $seatIndex = $this->indexOfSeatByTypeAndCostFromDB($oldSeats, $tickets["type"][$i], $tickets["cost"][$i]);
+            //Ticket type found, insert or delete difference between numPosti
+            if ($seatIndex >= 0) {
+                $seatNumDiff = $tickets["num"][$i] - $oldSeats[$seatIndex]["numTotPosti"];
+                //Devo aggiungere posti
+                if ( $seatNumDiff > 0) {
+                    $queryPosti = "INSERT INTO posto(codEvento, codPosto, costo, codTipologia, codPrenotazione) VALUES (".$codEvento.", ?, ".$tickets["cost"][$i].", ".$tickets["type"][$i].", NULL)";
+                    $stmtAddPosti = $this->db->prepare($queryPosti);
+                    for ($j=0; $j < $seatNumDiff; $j++) { 
+                        $newCodPosto = $this->getLastSeatId($codEvento) + 1;
+                        $stmtAddPosti->bind_param("i", $newCodPosto);
+                        $stmtAddPosti->execute();
+                    }
+                } elseif ($seatNumDiff < 0) {
+                    //Tolgo posti
+                    $queryPosti = "DELETE FROM posto WHERE codTipologia = ".$tickets["type"][$i]." AND costo = ".$tickets["cost"][$i]." AND codPrenotazione IS NULL LIMIT ".$seatNumDiff;
+                    $stmtRmPosti = $this->db->prepare($queryPosti);
+                    $stmtRmPosti->execute();
+                }
+            } else {
+                //Ticket type not found, insert the number of tickets
+                $queryPosti = "INSERT INTO posto(codEvento, codPosto, costo, codTipologia, codPrenotazione) VALUES (".$codEvento.", ?, ".$tickets["cost"][$i].", ".$tickets["type"][$i].", NULL)";
+                $stmtAddPosti = $this->db->prepare($queryPosti);
+                for ($j=0; $j < $tickets["num"][$i]; $j++) { 
+                    $newCodPosto = $this->getLastSeatId($codEvento) + 1;
+                    $stmtAddPosti->bind_param("i", $newCodPosto);
+                    $stmtAddPosti->execute();
+                }
+            }
+        }
+
+        //Controllo se sono stati eliminati dei posti (dovrebbero essere sicuramente non prenotati)
+        for ($i=0; $i < count($oldSeats); $i++) {
+            $oldSeatIndex = $this->indexOfSeatByTypeAndCostFromList($tickets, $oldSeats[$i]["codTipologia"], $oldSeats[$i]["costo"]);
+            //devo eliminare i posti corrisondenti
+            if ($oldSeatIndex == -1) {
+                $queryPosti = "DELETE FROM posto WHERE codTipologia = ".$oldSeats[$i]["codTipologia"]." AND costo = ".$oldSeats[$i]["costo"];
+                $stmtRmPosti = $this->db->prepare($queryPosti);
+                $stmtRmPosti->execute();
+            }
+            //Se è stato trovato è già stato gestito nel ciclo precedente
+        }
 
         //Update categorie
         $stmtCategorie = $this->db->prepare("SELECT codCategoria FROM evento_ha_categoria WHERE codEvento = ".$codEvento);
@@ -261,7 +305,6 @@ class DatabaseHelper{
         //Aggiungi notifiche a utenti che osservano e ad utenti che hanno una prenotazione per l'evento
         
         //ottieni tutti gli utenti interessati dalla modifica
-        
     }
 
     public function getSeatNumByTypeAndCost($codEvento) {
@@ -276,59 +319,6 @@ class DatabaseHelper{
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
-
-    public function updateSeatsOfEvent($codEvento, $codTipologia, $costo, $numToMod) {
-        $query = "UPDATE posto
-                  SET codTipologia = ?, costo = ?
-                  WHERE codEvento = ? AND codPrenotazione IS NULL
-                  LIMIT ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("iiii", $codTipologia, $costo, $codEvento, $numToMod);
-        $stmt->execute();
-    }
-
-    /*
-    public function getPosts($n=-1){
-        $query = "SELECT idarticolo, titoloarticolo, imgarticolo, anteprimaarticolo, dataarticolo, nome FROM articolo, autore WHERE autore=idautore ORDER BY dataarticolo DESC";
-        if($n > 0){
-            $query .= " LIMIT ?";
-        }
-        $stmt = $this->db->prepare($query);
-        if($n > 0){
-            $stmt->bind_param('i',$n);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function insertArticle($titoloarticolo, $testoarticolo, $anteprimaarticolo, $dataarticolo, $imgarticolo, $autore){
-        $query = "INSERT INTO articolo (titoloarticolo, testoarticolo, anteprimaarticolo, dataarticolo, imgarticolo, autore) VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('sssssi',$titoloarticolo, $testoarticolo, $anteprimaarticolo, $dataarticolo, $imgarticolo, $autore);
-        $stmt->execute();
-        
-        return $stmt->insert_id;
-    }
-
-    public function updateArticleOfAuthor($idarticolo, $titoloarticolo, $testoarticolo, $anteprimaarticolo, $imgarticolo, $autore){
-        $query = "UPDATE articolo SET titoloarticolo = ?, testoarticolo = ?, anteprimaarticolo = ?, imgarticolo = ? WHERE idarticolo = ? AND autore = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ssssii',$titoloarticolo, $testoarticolo, $anteprimaarticolo, $imgarticolo, $idarticolo, $autore);
-        
-        return $stmt->execute();
-    }
-
-    public function deleteArticleOfAuthor($idarticolo, $autore){
-        $query = "DELETE FROM articolo WHERE idarticolo = ? AND autore = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ii',$idarticolo, $autore);
-        $stmt->execute();
-        var_dump($stmt->error);
-        return true;
-    }
-    */
     
     private function getHashedPassword($email, $password) {
         $salt = hash('sha512', $email);
@@ -361,6 +351,26 @@ class DatabaseHelper{
         $stmt = $this->db->prepare("SELECT IFNULL(MAX(codPosto), 0) FROM posto WHERE codEvento =".$codEvento);
         $stmt->execute();
         return $stmt->get_result()->fetch_all()[0][0];
+    }
+
+    private function indexOfSeatByTypeAndCostFromList(array $ticketList, $codTipo, $costo) {
+        for ($i=0; $i < count($ticketList["type"]); $i++) { 
+            if($ticketList["type"][$i] == $codTipo && $ticketList["cost"][$i] == $costo) {
+                return $i;
+            }
+        }
+        //If the pair (type, cost) is not found, the function returns -1
+        return -1;
+    }
+
+    private function indexOfSeatByTypeAndCostFromDB(array $ticketList, $codTipo, $costo) {
+        for ($i=0; $i < count($ticketList); $i++) { 
+            if($ticketList[$i]["codTipologia"] == $codTipo && $ticketList[$i]["costo"] == $costo) {
+                return $i;
+            }
+        }
+        //If the pair (type, cost) is not found, the function returns -1
+        return -1;
     }
 
 }
