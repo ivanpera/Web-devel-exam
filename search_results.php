@@ -17,7 +17,7 @@
         $searchTerms["categories"] = $_GET["categories"];
     }
     var_dump($searchTerms);
-    $templateParams["name"] = "search_result.php";
+    $templateParams["name"] = "search_results.php";
     $templateParams["title"] = "Risultati della ricerca";
     $templateParams["css"] = array("base.css", "events.css");
     $templateParams["js"] = array("https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js", "js/base.js");
