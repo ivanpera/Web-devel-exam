@@ -14,6 +14,9 @@
 
     <p>
         Biglietti: <?php echo $templateParams["evento"]["postiOccupati"]." occupati su ".min($templateParams["evento"]["capienzaMassima"],$templateParams["evento"]["maxPostiDisponibili"])?>
+        <!-- Tabella posti
+            | Categoria | costo | posti (x/y) |
+         -->
     </p>
     <p> Organizzatore: <?php echo $templateParams["evento"]["emailOrganizzatore"] ?> </p>
     
@@ -30,4 +33,7 @@
 
 
     <!-- php check, if the user is the organizer, they can modify the event -->
+    <?php if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] == $_SESSION["sessUser"]["email"]) {
+        echo '<a href="modify_event.php?codEvento='.$templateParams["evento"]["codEvento"].'">Modifica evento</a>';
+    } ?>
 </section>
