@@ -12,14 +12,14 @@ form > section > label > input[type="checkbox"] {
     width: 10%;
 }
 
-form > section > div.ticket_creator:not(:last-child) > button:first-of-type,
-form > section > div.ticket_creator:first-of-type > button:first-of-type,
-form > section > div.moderator_adder:not(:last-child) > button:first-of-type,
-form > section > div.moderator_adder:first-of-type > button:first-of-type {
+div.ticket_creator:not(:last-child) > button.rm_ticket_btn,
+div.ticket_creator:first-of-type > button.rm_ticket_btn,
+div.moderator_adder:not(:last-child) > button.rm_ticket_btn,
+div.moderator_adder:first-of-type > button.rm_ticket_btn {
     display: none;
 }
 
-form > section > div.ticket_creator:not(:last-child) > button:last-of-type,
-form > section > div.moderator_adder:not(:last-child) > button:last-of-type {
+div.ticket_creator:not(:last-child) > button.add_ticket_btn,
+div.moderator_adder:not(:last-child) > button.add_ticket_btn {
     display:none;
 }
