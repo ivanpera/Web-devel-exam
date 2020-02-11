@@ -35,5 +35,9 @@
     <!-- php check, if the user is the organizer, they can modify the event -->
     <?php if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] == $_SESSION["sessUser"]["email"]) {
         echo '<a href="modify_event.php?codEvento='.$templateParams["evento"]["codEvento"].'">Modifica evento</a>';
-    } ?>
+    }
+    if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] != $_SESSION["sessUser"]["email"]) {
+        echo '<button class="observe_btn" onclick="toggleObserveStatus('.$templateParams["evento"]["codEvento"].', \''.$_SESSION["sessUser"]["email"].'\')"></button>';
+    }
+    ?>
 </section>
