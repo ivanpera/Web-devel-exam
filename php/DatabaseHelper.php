@@ -213,6 +213,12 @@ class DatabaseHelper{
     }
 
     public function updateEvent($codEvento, $nomeEvento, $dataEOra, $NSFC, $descrizione, $nomeImmagine, $codLuogo, $categorie, $tickets, $emailModeratori) {
+
+        //Query vecchio nome (per notifiche)
+        $stmtOldName =$this->db->prepare("SELECT nomeEvento FROM evento WHERE codEvento = ".$codEvento);
+        $stmtOldName->execute();
+        $oldEventName = $stmtOldName->get_result()->fetch_all(MYSQLI_ASSOC)[0]["nomeEvento"];
+
         //Update evento
         $queryEvento = "UPDATE evento
                         SET nomeEvento = '".$nomeEvento."', dataEOra = '".$dataEOra."', NSFC = ".$NSFC.", descrizione = '".$descrizione."', codLuogo = ".$codLuogo;
@@ -302,9 +308,24 @@ class DatabaseHelper{
             $stmtRmMod->bind_param("s", $rmMod);
             $stmtRmMod->execute();
         }
+
         //Aggiungi notifiche a utenti che osservano e ad utenti che hanno una prenotazione per l'evento
-        
-        //ottieni tutti gli utenti interessati dalla modifica
+        $descrizioneNotifica = "";
+        if ($oldEventName != $nomeEvento) {
+            $descrizioneNotifica .= "L'evento '".$oldEventName."' è stato rinominato in '".$nomeEvento."' e ha subito variazioni. Controlla i dettagli dell'evento!";
+        } else {
+            $descrizioneNotifica .= "L'evento '".$oldEventName."' ha subito variazioni. Controlla i dettagli dell'evento!";
+        }
+        $interestedUsers = $this->getInterestedUsers($codEvento);
+        $codNotifica = $this->getLastNotificationId($codEvento) + 1;
+        $queryAddNot = "INSERT INTO notifica(codEvento, codNotificaEvento, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES (".$codEvento.", ?, '".$descrizioneNotifica."', 0, '".date("Y-m-d H:i:s")."', NULL, ?)";
+        $stmtNotifiche = $this->db->prepare($queryAddNot);
+        foreach ($interestedUsers as $user) {
+            $stmtNotifiche->bind_param("is", $codNotifica, $user["emailUtente"]);
+            $stmtNotifiche->execute();
+            $codNotifica++;
+        }
+
     }
 
     public function getSeatNumByTypeAndCost($codEvento) {
@@ -371,6 +392,28 @@ class DatabaseHelper{
         }
         //If the pair (type, cost) is not found, the function returns -1
         return -1;
+    }
+
+    private function getInterestedUsers($codEvento) {
+        $queryPrenotazione = "SELECT DISTINCT PR.emailUtente
+                              FROM prenotazione PR, posto P
+                              WHERE P.codPrenotazione = PR.codPrenotazione
+                              AND P.codEvento = ".$codEvento;
+        $queryOsserva = "SELECT emailUtente
+                         FROM osserva 
+                         WHERE codEvento = ".$codEvento;
+
+        $queryCompleta = $queryPrenotazione." UNION DISTINCT ".$queryOsserva;
+        $stmt = $this->db->prepare($queryCompleta);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    private function getLastNotificationId($codEvento) {
+        $query = "SELECT IFNULL(MAX(codNotificaEvento), 0) FROM notifica WHERE codEvento = ".$codEvento;
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
     }
 
 }
