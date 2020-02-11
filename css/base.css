@@ -1,5 +1,9 @@
 /*Mobile first css*/
 
+html, body {
+    height: 100%;
+}
+
 img {
     max-width: 100%;
     max-height: 100%;
@@ -11,20 +15,32 @@ body, header, p, h1, h2, h3, h4, h5, h6 {
 }
 
 main, footer {
-    margin-top: 6vmax;
     z-index: 0;
 }
 
-
-main {
-    height: 100%;
+footer {
+    background-color: grey;
+    flex-shrink: 0;
 }
 
-body{
-    height: 100vh;
+main {
+    margin-top: 6vmax;
+    flex: 1 0 auto;
+}
+
+#bg-image {
     background-image: url("../img/home_bkg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    position: fixed;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
     font-size: 100%;
 }
@@ -38,18 +54,26 @@ body > header {
     z-index: 1;
 }
 
+body > header > a:first-child {
+    width: 8%;
+}
+
 body > header > a > img.login {
     box-sizing: border-box;
     padding: 10%;
 }
 
-body > header > button {
-    width: 15%;
-}
-
 body > header > button > img {
     box-sizing: border-box;
     padding: 10%;
+}
+
+body > header > a:last-child {
+    width: 84%;
+}
+
+body > header > button {
+    width: 8%;
 }
 
 /*Common main and sidebar header properties */
@@ -84,13 +108,17 @@ header > button {
 }
 
 /* Basic form */
+
 form {
-    width: 80%;
-    margin-left: 10%;
-    margin-top: 10%;
+    background-color: #aec8ff;
+    width: 85%;
+    margin-left: 7.5%;
+    margin-top: 5%;
+    padding: 3% 5%;
+    box-sizing: border-box;
 }
 
-form input:not([type="submit"]):not([type="date"]):not([type="checkbox"]) {
+form input:not([type="submit"]):not([type="date"]):not([type="time"]):not([type="checkbox"]) {
     width: 100%;
     box-sizing: border-box;
 }
@@ -120,7 +148,7 @@ aside {
     border-right-color: black;
     height: 100%;
     top: 0px;
-    width: 50%;
+    width: 45%;
     position: fixed;
     z-index: 3;
     background-color: #aec8ff;
@@ -129,39 +157,58 @@ aside {
 aside > ul {
     margin-top: .3em;
     list-style: none;
-    padding-left: 6%;
+    padding-left: 20%;
+    line-height: 1.7em;
+}
+
+aside > ul > li {
+    font-size: 1.2em;
 }
 
 aside > p {
+    font-size: 1.1em;
     margin-top: 8vmax;
     padding-left: 6%;
 }
 
 aside > header > button {
-    width: 30%
-}
-
-aside > header > button > img  {
-    box-sizing: border-box;
-    padding: 10%;
+    width: 16%;
+    padding: 2%;
 }
 
 aside > header {
-    width: 50%;
+    width: 45%;
     height: 6vmax;
     position: fixed;
     top: 0px;
     background-color: white;
 }
 
-@media screen and (min-width:450px) {
+aside > header > a:last-child {
+    width: 84%;
+}
+
+aside > p {
+    font-size: 1.3em;
+}
+
+@media screen and (min-width:650px) {
+
+    aside {
+        width: 35%;
+    }
+
+    aside > header {
+        width: 35%;
+    }
 
     aside > header > a:last-child {
         width: 84%;
     }
 
     aside > header > button {
-        width: 16%
+        width: 16%;
+        padding: 2%;
     }
 
     body > header > a:first-child {
@@ -175,23 +222,58 @@ aside > header {
     body > header > button {
         width: 8%;
     }
+
+    aside > ul > li {
+        font-size: 1.2em;
+    }
+
+    aside > p {
+        font-size: 1.3em;
+    }
+
+    aside > ul {
+        line-height: 2.2em;
+    }
+
+    form {
+        width: 70%;
+        margin-left: 15%;
+    }
 }
 
-@media screen and (min-width:800px) {
+@media screen and (min-width:820px) {
     
     aside {
-        width: 35%;
+        width: 20%;
     }
 
     aside > header {
-        width: 35%;
+        width: 20%;
     }
 
     aside > header > a:last-child {
-        width: 77%;
+        width: 67%;
     }
 
     aside > header > button {
-        width: 23%
+        width: 33%;
+        padding: 5%;
+    }
+
+    aside > ul > li {
+        font-size: 1.3em;
+    }
+
+    aside > p {
+        font-size: 1.4em;
+    }
+
+    aside > ul {
+        line-height: 2.4em;
+    }
+
+    form {
+        width: 60%;
+        margin-left: 20%;
     }
 }
