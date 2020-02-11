@@ -340,7 +340,25 @@ class DatabaseHelper{
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
-    
+
+    public function getObserveState($codEvento, $emailUtente) {
+        $stmt = $this->db->prepare("SELECT COUNT(codEvento) FROM osserva WHERE codEvento = ? AND emailUtente = ?");
+        $stmt->bind_param("is", $codEvento, $emailUtente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
+
+    public function toggleObserveState($codEvento, $emailUtente) {
+        if($this->getObserveState($codEvento, $emailUtente) == 0){
+            $stmtAdd = $this->db->prepare("INSERT INTO osserva(codEvento, emailUtente) VALUES (".$codEvento.", '".$emailUtente."')");
+            $stmtAdd->execute();
+        } else {
+            $stmtRm = $this->db->prepare("DELETE FROM osserva WHERE codEvento = ? AND emailUtente = ?");
+            $stmtRm->bind_param("is", $codEvento, $emailUtente);
+            $stmtRm->execute();
+        }
+    }
+
     private function getHashedPassword($email, $password) {
         $salt = hash('sha512', $email);
         $hashedPass = hash('sha512', $password.$salt);
