@@ -1,3 +1,44 @@
+let currentTab = 0;
+
+$(document).ready(function() {
+    showTab(currentTab);
+});
+
+function showTab(n) {
+    const tabs = document.getElementsByClassName("tab");
+    tabs[n].style.display = "block";
+    
+    document.getElementById("prevBtn").style.display = n <= 0 ? "none" : "inline";
+    document.getElementById("nextBtn").innerHTML = n >= (tabs.length - 1) ? "Fine" : "Successivo";
+}
+
+function validateForm() {
+    let valid = true;
+    const tabs = document.getElementsByClassName("tab");
+    let currInputs = tabs[currentTab].querySelectorAll(".required");
+    for (let i = 0; i < currInputs.length; i++) {
+        if(currInputs[i].value == "") {
+            currInputs[i].className += " invalid";
+            valid = false;
+        } else {
+            currInputs[i].className -= " invalid";
+        }
+    }
+    return valid;
+}
+
+function changeTab(step) {
+    const tabs = document.getElementsByClassName("tab");
+    if (step == 1 && !validateForm()) return false;
+    tabs[currentTab].style.display = "none";
+    currentTab += step;
+    if(currentTab >= tabs.length) {
+        document.getElementById("createForm").submit();
+        return false;
+    }
+    showTab(currentTab);
+}
+
 function removeLastTicket() {
     $(".ticket_creator").last().remove();
 }
@@ -7,11 +48,9 @@ function addNewTicket() {
     <div class="ticket_creator"> \
     </div>');
 
-    $(".ticket_creator").last().html($(".ticket_creator").first().html());
-    if ($(".ticket_creator:last-child > button.rm_ticket_btn").length == 0) {
-        $(".ticket_creator:last-child > button.add_ticket_btn").before('<button class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button>');
-        $(".ticket_creator").last().html($(".ticket_creator").last().html().replace("readonly", "").replace("disabled", ""));
-    }
+    $.each($("div.ticket_creator:not(:first-of-type)"), function (i, item) {
+        item.innerHTML = $("div.ticket_creator:first-of-type").html();
+    });
 }
 
 function removeLastMod() {
@@ -27,16 +66,3 @@ function addNewMod() {
         </div> \
     ');
 }
-
-$(document).ready(function(){
-    $("input[type=\"submit\"]").click(function() {
-        checked = $("input[type=\"checkbox\"][name=\"categories[]\"]:checked").length;
-
-      if(!checked) {
-        alert("You must check at least one category.");
-        return false;
-      } else {
-          $("#createForm").submit();
-      }
-    })
-});
