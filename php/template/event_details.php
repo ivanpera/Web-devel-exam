@@ -12,11 +12,24 @@
         </button>
     </label>
 
-    <p>
+    <p id="tickets">
         Biglietti: <?php echo $templateParams["evento"]["postiOccupati"]." occupati su ".min($templateParams["evento"]["capienzaMassima"],$templateParams["evento"]["maxPostiDisponibili"])?>
-        <!-- Tabella posti
-            | Categoria | costo | posti (x/y) |
-         -->
+        <?php if(!isset($_SESSION["sessUser"])) {
+            $_SESSION["previousPage"] = "event_details.php?codEvento=".$_GET["codEvento"]."#tickets";
+            echo '<p>Per aggiungere biglietti al carrello devi essere autenticato. <a href="login.php">Autenticati</a></p>';
+        }?>
+        <?php foreach ($templateParams["tickets"] as $biglietto):?>
+        <div>
+            <p>Tipo: <?php echo $biglietto["nomeTipologia"];?></p>
+            <p>Prezzo: <?php printf("%.2f", $biglietto["costo"]/100)?></p>
+            <p>Disponibili: <?php echo $biglietto["numTotPosti"] - $biglietto["postiPrenotati"];?></p>
+            <?php
+            if (isset($_SESSION["sessUser"])) {
+                echo '<label>Numero biglietti:<input type="number" value="1" min="0" max="'.($biglietto["numTotPosti"] - $biglietto["postiPrenotati"]).'"/><button onclick="addToCart('.$_GET["codEvento"].','.$biglietto["codTipologia"].','.$biglietto["costo"].')">Aggiungi al carrello</button></label>';
+            }
+            ?>
+        </div>
+        <?php endforeach;?>
     </p>
     <p> Organizzatore: <?php echo $templateParams["evento"]["emailOrganizzatore"] ?> </p>
     
@@ -29,10 +42,6 @@
         }
     ?>
     <!-- Stampa le recensioni -->
-    <!--php check, if the the user is not logged in, display the "log in first to purchase", else display the "proceed to check out" -> disable it if no tickets are selected -->
-
-
-    <!-- php check, if the user is the organizer, they can modify the event -->
     <?php if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] == $_SESSION["sessUser"]["email"]) {
         echo '<a href="modify_event.php?codEvento='.$templateParams["evento"]["codEvento"].'">Modifica evento</a>';
     }
