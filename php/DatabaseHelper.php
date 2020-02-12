@@ -359,6 +359,39 @@ class DatabaseHelper{
         }
     }
 
+    public function getObservedEvents($emailUtente){
+        $query = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
+                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                         COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
+                  FROM evento E, luogo L, posto P, osserva O
+                  WHERE E.codLuogo = L.codLuogo
+                  AND p.codEvento = E.codEvento
+                  AND E.codEvento = O.codEvento
+                  AND O.emailUtente = ?
+                  GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione, 
+                           L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $emailUtente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getOrganizedEvents($emailOrganizzatore) {
+        $query = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
+                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                         COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
+                  FROM evento E, luogo L, posto P
+                  WHERE E.codLuogo = L.codLuogo
+                  AND p.codEvento = E.codEvento
+                  AND E.emailOrganizzatore = ?
+                  GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione, 
+                           L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $emailOrganizzatore);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
     private function getHashedPassword($email, $password) {
         $salt = hash('sha512', $email);
         $hashedPass = hash('sha512', $password.$salt);
