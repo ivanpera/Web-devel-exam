@@ -45,6 +45,7 @@ class DatabaseHelper{
                         WHERE E.codLuogo = L.codLuogo
                         AND p.codEvento = E.codEvento
                         AND E.NSFC <= ?
+                        AND E.dataEOra > ?
                         GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
                                  L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
                         HAVING percPostiOccupati < 100
@@ -62,9 +63,9 @@ class DatabaseHelper{
 
         $stmt = $this->db->prepare($query);
         if ($limit != -1) {
-            $stmt->bind_param("ii", $NSFC, $limit);
+            $stmt->bind_param("isi", $NSFC, date("Y-m-d H:i:s"), $limit);
         } else {
-            $stmt->bind_param("i", $NSFC);
+            $stmt->bind_param("is", $NSFC, date("Y-m-d H:i:s"));
         }
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -390,6 +391,50 @@ class DatabaseHelper{
         $stmt->bind_param("s", $emailOrganizzatore);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getModeratedEvents($emailModeratore) {
+        $query = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
+                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                         COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
+                  FROM evento E, luogo L, posto P, moderazione M
+                  WHERE E.codLuogo = L.codLuogo
+                  AND p.codEvento = E.codEvento
+                  AND E.codEvento = M.codEvento
+                  AND M.emailModeratore = ?
+                  GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione, 
+                           L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $emailModeratore);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getBookedEvents($emailUtente) {
+        $query = "SELECT DISTINCT E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
+                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                         COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
+                  FROM evento E, luogo L, posto P, prenotazione PR
+                  WHERE E.codLuogo = L.codLuogo
+                    AND P.codEvento = E.codEvento
+                    AND P.codPrenotazione = PR.codPrenotazione
+                    AND PR.emailUtente = ?
+                  GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
+                           L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $emailUtente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getUserData($emailUtente) {
+        $query = "SELECT nome, cognome, genere, dataNascita, dataIscrizione
+                  FROM utente
+                  WHERE email = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $emailUtente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC)[0];
     }
 
     private function getHashedPassword($email, $password) {
