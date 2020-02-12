@@ -60,12 +60,12 @@ class DatabaseHelper{
         if ($limit != -1) {
             $query = $query." LIMIT ?";
         }
-
+        $currentDate = date("Y-m-d H:i:s");
         $stmt = $this->db->prepare($query);
         if ($limit != -1) {
-            $stmt->bind_param("isi", $NSFC, date("Y-m-d H:i:s"), $limit);
+            $stmt->bind_param("isi", $NSFC, $currentDate, $limit);
         } else {
-            $stmt->bind_param("is", $NSFC, date("Y-m-d H:i:s"));
+            $stmt->bind_param("is", $NSFC, $currentDate);
         }
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
