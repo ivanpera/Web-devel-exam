@@ -40,6 +40,7 @@ function addToCart(codEvento, codTipologia, costo) {
   xhttp.onreadystatechange = function () {
     if(this.readyState == 4 && this.status == 200) {
       $('button[onclick="addToCart('+codEvento+','+codTipologia+','+ costo+')"]').first().html((xhttp.response == "OK" ? "Aggiunto al carrello!" : "Errore!"));
+      $('button[onclick="addToCart('+codEvento+','+codTipologia+','+ costo+')"]').first().prop("disabled", true);
     }
   };
   xhttp.open("POST", "php/ajax_response/cart_handler.php", true);
