@@ -60,7 +60,7 @@
       </header>
         <p><?php echo $_SESSION["sessUser"]["email"];?></p>
         <ul>
-          <li>Profilo</li>
+          <li><a href="user_area.php">Profilo</a></li>
           <li>Calendario</li>
           <li>Statistiche</li>
           <li>Messaggi</li>
