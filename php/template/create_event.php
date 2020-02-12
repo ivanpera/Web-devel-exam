@@ -37,7 +37,7 @@
                     <option value="<?php echo $tipoPosto["codTipologia"]; ?>"><?php echo $tipoPosto["nomeTipologia"];?></option>
                 <?php endforeach; ?>
             </select>
-            <label>Costo per biglietto (in centesimi di Euro): <input name="ticket_cost[]" type="number" min="0" step="1" required class="required"/></label>
+            <label>Costo per biglietto: <input name="ticket_cost[]" type="number" min="0" step="1" required class="required"/></label>
             <label for="num_tickets"> Numero biglietti: <input type="number" min="1" name="num_tickets[]" id="num_tickets" required class="required"/></label>
             <button class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button> <!-- classden for the first ticket type -->
             <button class="add_ticket_btn" type="button" onclick=addNewTicket()> + </button> <!-- Juclass a placeholder: adds another ticket to edit (todo with js) -->
