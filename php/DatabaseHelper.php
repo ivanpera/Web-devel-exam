@@ -437,6 +437,25 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC)[0];
     }
 
+    public function getRemainingSeats($codEvento, $codTipologia, $costo) {
+        $stmt = $this->db->prepare("SELECT COUNT(codPosto) 
+         FROM posto
+         WHERE codEvento = ?
+         AND codTipologia = ?
+         AND costo = ?
+         AND codPrenotazione IS NULL");
+        $stmt->bind_param("iii", $codEvento, $codTipologia, $costo);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
+
+    public function getSeatType($codTipologia) {
+        $stmt = $this->db->prepare("SELECT * FROM tipologia_posto WHERE codTipologia = ?");
+        $stmt->bind_param("i", $codTipologia);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC)[0];
+    }
+
     private function getHashedPassword($email, $password) {
         $salt = hash('sha512', $email);
         $hashedPass = hash('sha512', $password.$salt);
@@ -512,6 +531,11 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all()[0][0];
     }
 
+    private function getLastBookId(){
+        $stmt = $this->db->prepare("SELECT IFNULL(MAX(codPrenotazione), 0) FROM prenotazione");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
 }
 
 $servername = "localhost";
