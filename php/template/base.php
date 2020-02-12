@@ -30,6 +30,7 @@
     ?>
   </head>
   <body>
+    <div id="bg-image"></div>
     <header>
         <?php 
         if (!isset($_SESSION["sessUser"]["email"])) { 
@@ -70,8 +71,6 @@
     </aside>
     <div id="overlay"></div>
 
-    <footer>
-      Contatti
-    </footer>
+    <footer>Contatti</footer>
   </body>
 </html>
