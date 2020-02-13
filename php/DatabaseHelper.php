@@ -312,6 +312,7 @@ class DatabaseHelper{
 
         //Aggiungi notifiche a utenti che osservano e ad utenti che hanno una prenotazione per l'evento
         $descrizioneNotifica = "";
+        $titoloNotifica = "Un evento che ti interessa è stato modificato!";
         if ($oldEventName != $nomeEvento) {
             $descrizioneNotifica .= "L'evento '".$oldEventName."' è stato rinominato in '".$nomeEvento."' e ha subito variazioni. Controlla i dettagli dell'evento!";
         } else {
@@ -319,10 +320,10 @@ class DatabaseHelper{
         }
         $interestedUsers = $this->getInterestedUsers($codEvento);
         $codNotifica = $this->getLastNotificationId($codEvento) + 1;
-        $queryAddNot = "INSERT INTO notifica(codEvento, codNotificaEvento, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES (".$codEvento.", ?, '".$descrizioneNotifica."', 0, '".date("Y-m-d H:i:s")."', NULL, ?)";
+        $queryAddNot = "INSERT INTO notifica(codEvento, codNotificaEvento, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES (".$codEvento.", ?, ?, '".$descrizioneNotifica."', 0, '".date("Y-m-d H:i:s")."', NULL, ?)";
         $stmtNotifiche = $this->db->prepare($queryAddNot);
         foreach ($interestedUsers as $user) {
-            $stmtNotifiche->bind_param("is", $codNotifica, $user["emailUtente"]);
+            $stmtNotifiche->bind_param("iss", $codNotifica, $titoloNotifica, $user["emailUtente"]);
             $stmtNotifiche->execute();
             $codNotifica++;
         }
@@ -413,7 +414,7 @@ class DatabaseHelper{
     public function getBookedEvents($emailUtente) {
         $query = "SELECT DISTINCT E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
                          L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
-                         COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
+                         COUNT(P.codPrenotazione) as postiOccupati
                   FROM evento E, luogo L, posto P, prenotazione PR
                   WHERE E.codLuogo = L.codLuogo
                     AND P.codEvento = E.codEvento
@@ -435,6 +436,121 @@ class DatabaseHelper{
         $stmt->bind_param("s", $emailUtente);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC)[0];
+    }
+
+    public function getRemainingSeats($codEvento, $codTipologia, $costo) {
+        $stmt = $this->db->prepare("SELECT COUNT(codPosto) 
+         FROM posto
+         WHERE codEvento = ?
+         AND codTipologia = ?
+         AND costo = ?
+         AND codPrenotazione IS NULL");
+        $stmt->bind_param("iii", $codEvento, $codTipologia, $costo);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
+
+    public function getSeatType($codTipologia) {
+        $stmt = $this->db->prepare("SELECT * FROM tipologia_posto WHERE codTipologia = ?");
+        $stmt->bind_param("i", $codTipologia);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC)[0];
+    }
+
+    public function insertBooking($dataEOra, $totale, $differenzaGiorni, $emailUtente) {
+        $stmt = $this->db->prepare("INSERT INTO prenotazione(codPrenotazione, dataEOra, costoTotale, differenzaGiorni, emailUtente) VALUES (?, ?, ?, ?, ?)");
+        $newBookingId = $this->getLastBookId() + 1;
+        $stmt->bind_param("isiis", $newBookingId, $dataEOra, $totale, $differenzaGiorni, $emailUtente);
+        $stmt->execute();
+        return $newBookingId;
+    }
+
+    public function bookSeats($codPrenotazione, $codEvento, $codTipologia, $costo, $num) {
+        $query = "UPDATE posto
+                  SET codPrenotazione = ?
+                  WHERE codTipologia = ?
+                  AND costo = ?
+                  AND codEvento = ?
+                  AND codPrenotazione IS NULL
+                  LIMIT ?";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("iiiii", $codPrenotazione, $codTipologia, $costo, $codEvento, $num);
+        $stmt->execute();
+
+        //Notifiche
+        $stmtSoldOut = $this->db->prepare("SELECT COUNT(codPosto) FROM posto WHERE codEvento = ? AND codPrenotazione IS NULL");
+        $stmtSoldOut->bind_param("i", $codEvento);
+        $stmtSoldOut->execute();
+        if ($stmtSoldOut->get_result()->fetch_all()[0][0] <= 0) {
+            $stmtOrganizzatore = $this->db->prepare("SELECT nomeEvento, emailOrganizzatore FROM evento WHERE codEvento = ?");
+            $stmtOrganizzatore->bind_param("i", $codEvento);
+            $stmtOrganizzatore->execute();
+            $evento = $stmt->get_result()->fetch_all(MYSQLI_ASSOC)[0];
+            $titoloNotifica = "Un tuo evento ha esaurito i biglietti!";
+            $descrizione = "L'evento ".$evento["nomeEvento"]." ha esaurito i posti disponibili. Complimenti!";
+            $dataEOra = date("Y-m-d H:i:s");
+            $newCodNotifica = $this->getLastNotificationId($codEvento) + 1;
+            $stmtNotifica = $this->db->prepare("INSERT INTO notifica(codEvento, codNotificaEvento, titolo, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES(?, ?, ?, ?, 0, ?, NULL, ?)");
+            $stmtNotifica->bind_param("iissss", $codEvento, $newCodNotifica, $titoloNotifica, $descrizione, $dataEOra, $evento["emailOrganizzatore"]);
+            $stmtNotifica->execute();
+        }
+        $stmtBiglietti = $this->db->prepare("SELECT COUNT(codPosto) AS totPosti, SUM(IF(codPrenotazione IS NULL, 1, 0)) AS postiLiberi FROM POSTO WHERE codEvento = ?");
+        $stmtBiglietti->bind_param("i", $codEvento);
+        $stmtBiglietti->execute();
+        $resultBiglietti = $stmtBiglietti->get_result()->fetch_all(MYSQLI_ASSOC)[0];
+        if($resultBiglietti["postiLiberi"]/$resultBiglietti["totPosti"] <= 0.25) {
+            //Manda notifica a chi osserva l'evento
+            $stmtOsservatori = $this->db->prepare("SELECT emailUtente FROM osserva WHERE codEvento = ?");
+            $stmtOsservatori->bind_param("i", $codEvento);
+            $stmtOsservatori->execute();
+            $emailsOsservatori = $stmtOsservatori->get_result()->fetch_all(MYSQLI_ASSOC);
+            if(count($emailsOsservatori) > 0) {
+                $titoloNotifica = "Rimangono pochi biglietti per un evento che ti interessa!";
+                $descrizione = "I biglietti per l'evento ".$evento["nomeEvento"]." iniziano a scarseggiare. Affrettati!";
+                $dataEOra = date("Y-m-d H:i:s");
+                $newCodNotifica = $this->getLastNotificationId($codEvento) + 1;
+                foreach ($emailsOsservatori as $email) {
+                    $stmtNotifica = $this->db->prepare("INSERT INTO notifica(codEvento, codNotificaEvento, titolo, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES(?, ?, ?, ?, 0, ?, NULL, ?)");
+                    $stmtNotifica->bind_param("iissss", $codEvento, $newCodNotifica, $titoloNotifica, $descrizione, $dataEOra, $email);
+                    $stmtNotifica->execute();
+                    $newCodNotifica++;
+                }
+            }
+        }
+    }
+
+    public function getNotificationFor($emailUtente) {
+        $stmt = $this->db->prepare("SELECT codEvento, codNotificaEvento AS codNotifica, titolo, letta, dataEOraInvio FROM notifica WHERE emailUtente = ?");
+        $stmt->bind_param("s", $emailUtente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getNotification($codEvento, $codNotifica) {
+        $stmt = $this->db->prepare("SELECT * FROM notifica WHERE codEvento = ? AND codNotificaEvento = ?");
+        $stmt->bind_param("ii", $codEvento, $codNotifica);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC)[0];
+    }
+
+    public function readNotification($codEvento, $codNotifica) {
+        $stmt = $this->db->prepare("UPDATE notifica SET letta = 1 WHERE codEvento = ? AND codNotificaEvento = ?");
+        $stmt->bind_param("ii", $codEvento, $codNotifica);
+        $stmt->execute();
+    }
+
+    public function readAllNots($emailUtente) {
+        $stmt = $this->db->prepare("UPDATE notifica SET letta = 1 WHERE emailUtente = ?");
+        $stmt->bind_param("s", $emailUtente);
+        $stmt->execute();
+    }
+
+    public function getUnreadNotificationNum($emailUtente) {
+        $stmt = $this->db->prepare("SELECT COUNT(codNotifica) FROM notifica WHERE emailUtente = ?");
+        $stmt->bind_param("s", $emailUtente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
     }
 
     private function getHashedPassword($email, $password) {
@@ -512,6 +628,11 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all()[0][0];
     }
 
+    private function getLastBookId(){
+        $stmt = $this->db->prepare("SELECT IFNULL(MAX(codPrenotazione), 0) FROM prenotazione");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
 }
 
 $servername = "localhost";

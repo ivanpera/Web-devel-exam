@@ -56,6 +56,7 @@ create table MODERAZIONE (
 create table NOTIFICA (
      codEvento int not null,
      codNotificaEvento int not null,
+     titolo varchar(100) not null,
      descrizione varchar(128) not null,
      letta BIT(1) not null,
      dataEOraInvio DATETIME not null,

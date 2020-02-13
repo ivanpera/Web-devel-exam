@@ -13,33 +13,41 @@
             </button>
         </label>
 
-        <p>
-            Biglietti disponibili: <?php echo min($templateParams["evento"]["capienzaMassima"],$templateParams["evento"]["maxPostiDisponibili"]) - $templateParams["evento"]["postiOccupati"]?>
-            <!-- Tabella posti
-                | Categoria | costo | posti (x/y) |
-            -->
-        </p>
-        <p> Organizzatore: <?php echo $templateParams["evento"]["emailOrganizzatore"] ?> </p>
-        
-        <?php
-            if (!empty($templateParams["moderatori"])) {
-                echo "<p> Moderatori: </p>";
-                foreach ($templateParams["moderatori"] as $moderatore){
-                    echo "<p>".$moderatore["emailModeratore"]."</p>";
-                }
+    <div id="tickets">
+        Biglietti disponibili: <?php echo min($templateParams["evento"]["capienzaMassima"],$templateParams["evento"]["maxPostiDisponibili"]) - $templateParams["evento"]["postiOccupati"]?>
+        <?php if(!isset($_SESSION["sessUser"])) {
+            $_SESSION["previousPage"] = "event_details.php?codEvento=".$_GET["codEvento"]."#tickets";
+            echo '<p>Per aggiungere biglietti al carrello devi essere autenticato. <a href="login.php">Autenticati</a></p>';
+        }?>
+        <?php foreach ($templateParams["tickets"] as $biglietto):?>
+        <div>
+            <p>Tipo: <?php echo $biglietto["nomeTipologia"];?></p>
+            <p>Prezzo: <?php printf("%.2f", $biglietto["costo"]/100)?></p>
+            <p>Disponibili: <?php echo $biglietto["numTotPosti"] - $biglietto["postiPrenotati"];?></p>
+            <?php
+            if (isset($_SESSION["sessUser"])) {
+                echo '<label>Numero biglietti:<input type="number" value="1" min="0" max="'.($biglietto["numTotPosti"] - $biglietto["postiPrenotati"]).'"/><button onclick="addToCart('.$_GET["codEvento"].','.$biglietto["codTipologia"].','.$biglietto["costo"].')">Aggiungi al carrello</button></label>';
             }
-        ?>
-        <!-- Stampa le recensioni -->
-        <!--php check, if the the user is not logged in, display the "log in first to purchase", else display the "proceed to check out" -> disable it if no tickets are selected -->
-
-
-        <!-- php check, if the user is the organizer, they can modify the event -->
-        <?php if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] == $_SESSION["sessUser"]["email"]) {
-            echo '<a href="modify_event.php?codEvento='.$templateParams["evento"]["codEvento"].'">Modifica evento</a>';
+            ?>
+        </div>
+        <?php endforeach;?>
+    </div>
+    <p> Organizzatore: <?php echo $templateParams["evento"]["emailOrganizzatore"] ?> </p>
+    
+    <?php
+        if (!empty($templateParams["moderatori"])) {
+            echo "<p> Moderatori: </p>";
+            foreach ($templateParams["moderatori"] as $moderatore){
+                echo "<p>".$moderatore["emailModeratore"]."</p>";
+            }
         }
-        if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] != $_SESSION["sessUser"]["email"]) {
-            echo '<button class="observe_btn" onclick="toggleObserveStatus('.$templateParams["evento"]["codEvento"].', \''.$_SESSION["sessUser"]["email"].'\')"></button>';
-        }
-        ?>
-    </section>
-</div>
+    ?>
+    <!-- Stampa le recensioni -->
+    <?php if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] == $_SESSION["sessUser"]["email"]) {
+        echo '<a href="modify_event.php?codEvento='.$templateParams["evento"]["codEvento"].'">Modifica evento</a>';
+    }
+    if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] != $_SESSION["sessUser"]["email"]) {
+        echo '<button class="observe_btn" onclick="toggleObserveStatus('.$templateParams["evento"]["codEvento"].', \''.$_SESSION["sessUser"]["email"].'\')"></button>';
+    }
+    ?>
+</section>

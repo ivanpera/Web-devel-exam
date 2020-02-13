@@ -23,7 +23,7 @@
             <span><?php echo "Data: ".$osservato["dataEOra"];?></span><br/>
             <span><?php echo $osservato["nomeLuogo"]." @ ".$osservato["indirizzo"];?></span><br/>
             <span class="description_span"><?php echo $osservato["descrizione"];?></span>
-            <span>Posti: <?php echo $osservato["postiOccupati"]."/".$osservato["capienzaMassima"]." (".$osservato["percPostiOccupati"]."%)"?></span><br/>
+            <span>Posti: <?php echo $osservato["postiOccupati"]."/".min($osservato["capienzaMassima"], $osservato["maxPostiDisponibili"])." (".$osservato["percPostiOccupati"]."%)"?></span><br/>
         </article>
         </a>
       <?endforeach;?>
@@ -47,7 +47,7 @@
             <span><?php echo "Data: ".$organizzato["dataEOra"];?></span><br/>
             <span><?php echo $organizzato["nomeLuogo"]." @ ".$organizzato["indirizzo"];?></span><br/>
             <span class="description_span"><?php echo $organizzato["descrizione"];?></span>
-            <span>Posti: <?php echo $organizzato["postiOccupati"]."/".$organizzato["capienzaMassima"]." (".$organizzato["percPostiOccupati"]."%)"?></span><br/>
+            <span>Posti: <?php echo $organizzato["postiOccupati"]."/".min($organizzato["capienzaMassima"], $organizzato["maxPostiDisponibili"])." (".$organizzato["percPostiOccupati"]."%)"?></span><br/>
         </article>
         </a>
       <?endforeach;?>
@@ -71,7 +71,7 @@
             <span><?php echo "Data: ".$moderato["dataEOra"];?></span><br/>
             <span><?php echo $moderato["nomeLuogo"]." @ ".$moderato["indirizzo"];?></span><br/>
             <span class="description_span"><?php echo $moderato["descrizione"];?></span>
-            <span>Posti: <?php echo $moderato["postiOccupati"]."/".$moderato["capienzaMassima"]." (".$moderato["percPostiOccupati"]."%)"?></span><br/>
+            <span>Posti: <?php echo $moderato["postiOccupati"]."/".min($moderato["capienzaMassima"], $moderato["maxPostiDisponibili"])." (".$moderato["percPostiOccupati"]."%)"?></span><br/>
         </article>
         </a>
       <?endforeach;?>
@@ -95,7 +95,7 @@
             <span><?php echo "Data: ".$prenotato["dataEOra"];?></span><br/>
             <span><?php echo $prenotato["nomeLuogo"]." @ ".$prenotato["indirizzo"];?></span><br/>
             <span class="description_span"><?php echo $prenotato["descrizione"];?></span>
-            <span>Posti: <?php echo $prenotato["postiOccupati"]."/".$prenotato["capienzaMassima"]." (".$prenotato["percPostiOccupati"]."%)"?></span><br/>
+            <span>Posti prenotati: <?php echo $prenotato["postiOccupati"]?></span><br/>
         </article>
         </a>
       <?endforeach;?>
