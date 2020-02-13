@@ -23,7 +23,7 @@
     $templateParams["name"] = "event_details.php";
     $templateParams["title"] = "Dettagli evento";
     $templateParams["css"] = array("base.css");
-    $templateParams["js"] = array("https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js", "js/base.js", "js/event_details.js");
+    $templateParams["js"] = array("https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js", "js/base.js", "js/event_details.js", "js/cart_handler.js");
 
     $templateParams["tickets"] = $dbh->getSeatNumByTypeAndCost($_GET["codEvento"]);
     require(TEMPLATE_DIR."base.php");
