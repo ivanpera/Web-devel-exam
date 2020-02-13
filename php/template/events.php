@@ -25,7 +25,7 @@
 </section>
 
 <div id="search_form" class="tabcontent">
-    <form action="/search_results.php" method="get"> <!-- should we have a search_results page or should we reuse this one, hiding the form and showing the result after an ajax query? -->
+    <form action="search_results.php" method="get"> <!-- should we have a search_results page or should we reuse this one, hiding the form and showing the result after an ajax query? -->
         <label for="event_name">
             Nome evento: <br/>
             <input type="text" id="event_name" name="event_name"><br/>
