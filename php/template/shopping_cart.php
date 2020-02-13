@@ -16,7 +16,7 @@
     </div>
   <?php endforeach;?>
   <p>Totale: <?php echo $total."€";?></p>
-  <a href = "#">Paga</a>
+  <a href = "php/checkout_process.php">Paga</a>
 <?php else:?>
 <p>Il tuo carrello è vuoto.</p>
 <?php endif;?>
