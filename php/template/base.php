@@ -64,7 +64,7 @@
           <li><a href="user_area.php">Profilo</a></li>
           <li><a href="shopping_cart.php">Carrello</a></li>
           <li>Statistiche</li>
-          <li>Messaggi</li>
+          <li><a href="notification.php">Notifiche</a></li>
           <li>Moderazione</li>
           <li><a href="php/logout_process.php">Logout</a></li>
         </ul>
