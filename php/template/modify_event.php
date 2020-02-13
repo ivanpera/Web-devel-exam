@@ -1,74 +1,63 @@
-<!-- Template taken from https://www.w3schools.com/howto/howto_js_form_steps.asp -->
-<?php
-    if(isset($_GET["uploadError"]) && $_GET["uploadError"] < count($errorMessages)) {
-        echo "<p>".$errorMessages[$_GET["uploadError"]]."</p>";
-    }
-?>
+<div class="main-content">
+    <form id="createForm" action="php/modify_event_process.php" method="post" enctype="multipart/form-data">
+        <h3>Modifica un evento: </h3>
+        <section class="tab"> 
+            <h4>Informazioni di Base:</h4>
+            <label for="nomeEvento">Nome evento: <input id="nomeEvento" name="nomeEvento" type="text" value="<?php echo $templateParams["evento"]["nomeEvento"]?>" placeholder="Nome dell'evento..." required class="required"/></label>
+            <label for="NSFC"><input name="NSFC" id="NSFC" type="checkbox" value="1" <?php if ($templateParams["evento"]["NSFC"] == 1) { echo "checked";}?>/>Not Safe For Children</label>
+            <label for="luogo">Luogo: <select name="luogo" id="luogo" required class="required">
+                <?php foreach ($templateParams["luoghi"] as $luogo): ?>
+                    <option value=<?php echo $luogo["codLuogo"];?> <?php if ($templateParams["evento"]["codLuogo"] == $luogo["codLuogo"]) {echo "selected";}?>><?php echo $luogo["nome"]?></option>
+                <?php endforeach;?>
+            </select></label>
+            <label for="data">Data di inizio: <input name="data" id="data" type="date" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("Y-m-d")?>"/></label>
+            <label for="ora">Ora di inizio: <input name="ora" type="time" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("H:i")?>"/></label>
+            <label for="descr">Descrizione evento: <textarea name="descr" form="createForm" placeholder="Descrizione dell'evento..."> <?php echo $templateParams["evento"]["descrizione"];?> </textarea></label>
+        </section>
 
-<form id="createForm" action="php/modify_event_process.php" method="post" enctype="multipart/form-data">
-    <h3>Modifica un evento: </h3>
-    <input type="number" name="codEvento" value="<?php echo $templateParams["evento"]["codEvento"];?>" hidden>
+        <section class="tab">
+            <h4>Informazioni aggiuntive:</h4>
+            <label for="image_picker"> Scegli un'immagine: <br/><input name="" type="file" id="image_picker" name="filename"/></label>
+            <label for="catg_list">Aggiungi delle categorie:<ul id="catg_list">
+            <?php foreach ($templateParams["categories"] as $category): ?>
+                <li><input type="checkbox" name="categories[]" value="<?php echo $category["nomeCategoria"]?>" <?php if(strpos($templateParams["evento"]["categorie"], $category["nomeCategoria"]) !== false) {echo "checked";} ?>/><?php echo $category["nomeCategoria"];?></li>
+            <?php endforeach; ?></ul></label>
+        </section>
 
-    <div class="tab"> Informazioni di Base:
-        <p><input name="nomeEvento" type="text" value="<?php echo $templateParams["evento"]["nomeEvento"]?>" oninput="this.className = ''" required/></p>
-        <p><label><input name="NSFC" type="checkbox" value="1" <?php if ($templateParams["evento"]["NSFC"] == 1) { echo "checked";}?>/>Not Safe For Children</label></p>
-        <p><select name="luogo" required>
-            <?php foreach ($templateParams["luoghi"] as $luogo): ?>
-                <option value=<?php echo $luogo["codLuogo"];?> <?php if ($templateParams["evento"]["codLuogo"] == $luogo["codLuogo"]) {echo "selected";}?>><?php echo $luogo["nome"]?></option>
-            <?php endforeach;?>
-        </select></p>
-        <p><input name="data" type="date" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("Y-m-d")?>" oninput="this.className=''" required/><input name="ora" type="time" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("H:i")?>" oninput="this.className=''" required/></p>
-        <p><textarea name="description" form="createForm" oninput="this.className = ''"><?php echo $templateParams["evento"]["descrizione"];?></textarea></p>
-    </div>
+        <section class="tab">
+            <h4>Biglietti:</h4>
+            <?php foreach($templateParams["biglietti"] as $biglietto): ?>
+                <div class="ticket_creator">
+                    <label for="ticket_type">Tipo biglietto:
+                    <select name="ticket_type[]" required class="required">
+                        <?php foreach ($templateParams["tipoPosti"] as $tipoPosto): ?>
+                            <option value="<?php echo $tipoPosto["codTipologia"]; ?>" <?php if($biglietto["codTipologia"] == $tipoPosto["codTipologia"]) { echo "selected";} elseif ($biglietto["postiPrenotati"] > 0) {echo "disabled";}?>><?php echo $tipoPosto["nomeTipologia"];?></option>
+                        <?php endforeach; ?>
+                    </select></label>
+                    <label for="ticket_cost">Costo unitario del biglietto : <input id="ticket_cost" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/></label>
+                    <label for="num_tickets"> Numero biglietti: <input type="number" min="<?php echo $biglietto["postiPrenotati"];?>" name="num_tickets[]" id="num_tickets" required value="<?php echo $biglietto["numTotPosti"]?>"/></label>
+                    <? if($biglietto["postiPrenotati"] == 0) {echo  '<label for="rm_ticket_btn" class="visuallyhidden">Rimuovi ultima tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_btn" class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button>'; }  ?>
+                    <label for="add_ticket_btn" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" class="add_ticket_btn" type="button" onclick=addNewTicket()> + </button>
+                </div>
+            <?php endforeach; ?>
+        </section>
 
-    <section class="tab"> Informazioni aggiuntive:
-        <input name="currentImageName" type="text" value="<?php echo $templateParams["evento"]["nomeImmagine"]?>" hidden/>
-        <?php if(!empty($templateParams["evento"]["nomeImmagine"])) {
-            echo '<img class="preview" src="img/'.$templateParams["evento"]["emailOrganizzatore"].'/'.$templateParams["evento"]["nomeImmagine"].'"/>';
-        }?>
-        <p><label for="image_picker"> Scegli un'immagine: <br/><input type="file" id="image_picker" name="imageName"/></label></p>
-        <p>Aggiungi delle categorie: </p>
-        <?php foreach ($templateParams["categories"] as $category): ?>
-            <label><input type="checkbox" name="categories[]" value="<?php echo $category["codCategoria"]?>" <?php if(strpos($templateParams["evento"]["categorie"], $category["nomeCategoria"]) !== false) {echo "checked";} ?>/><?php echo $category["nomeCategoria"];?></label>
-        <?php endforeach; ?>
-    </section>
+        <section class="tab">
+            <h4>Moderatori:</h4>
+            <div class="moderator_adder">
 
-    <section class="tab"> Biglietti:
-        <?php foreach($templateParams["biglietti"] as $biglietto): ?>
-            <div class="ticket_creator">
-                <select name="ticket_type[]" required>
-                    <?php foreach ($templateParams["tipoPosti"] as $tipoPosto): ?>
-                        <option value="<?php echo $tipoPosto["codTipologia"]; ?>" <?php if($biglietto["codTipologia"] == $tipoPosto["codTipologia"]) { echo "selected";} elseif ($biglietto["postiPrenotati"] > 0) {echo "disabled";}?> ><?php echo $tipoPosto["nomeTipologia"];?></option>
-                    <?php endforeach; ?>
-                </select>
-                <label>Costo per biglietto: <input name="ticket_cost[]" type="number" min="0.01" step="0.01" required value="<?php printf("%.2f",$biglietto["costo"]/100)?>" <?php if($biglietto["postiPrenotati"] > 0){echo "readonly";}?>/></label>
-                <label for="num_tickets"> Numero biglietti: <input type="number" min="<?php echo $biglietto["postiPrenotati"];?>" name="num_tickets[]" id="num_tickets" required value="<?php echo $biglietto["numTotPosti"]?>"/></label>
-                <? if($biglietto["postiPrenotati"] == 0) {echo  '<button class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button>'; }  ?><!-- classden for the first ticket type -->
-                <button class="add_ticket_btn" type="button" onclick=addNewTicket()> + </button>
-                <br/> <!-- TO BE IMPROVED -->
+                <?php foreach($templateParams["moderatori"] as $mod):?>
+                    <label for="mod_mail">Mail del moderatore: </label><input id="mod_mail" type="text" name="mod_mail[]" value="<?php echo $mod;?>"/>
+                    <label for="rm_ticket_btn" class="visuallyhidden">Rimuovi ultimo moderatore</label><button title="Rimuovi moderatore" class="rm_mod_btn" type="button" onclick=removeLastMod()> - </button><label for="rm_ticket_btn" class="visuallyhidden">Aggiungi un moderatore</label><button title="Aggiungi moderatore" class="add_mod_btn" type="button" onclick=addNewMod()> + </button>
+                <?php endforeach;?>
             </div>
-        <?php endforeach; ?>
-    </section>
+        </section>
 
-    <section class="tab"> Moderatori (un indirizzo email di un utente non registrato non verrà considerato):
-        <div class="moderator_adder">
-            <?php foreach($templateParams["moderatori"] as $mod):?>
-                <input type="text" name="mod_mail[]" value="<?php echo $mod;?>"/>
-                <button class="rm_mod_btn" type="button" onclick=removeLastMod()> - </button>  <!-- Hidden for the first moderator -->
-                <button class="add_mod_btn" type="button" onclick=addNewMod()> + </button>
-            <?php endforeach;?>
-            <input type="text" name="mod_mail[]" placeholder="E-mail moderatore"/>
-            <button class="rm_mod_btn" type="button" onclick=removeLastMod()> - </button>  <!-- Hidden for the first moderator -->
-            <button class="add_mod_btn" type="button" onclick=addNewMod()> + </button>
+        <div style="overflow:auto;">
+            <div style="float:right;">
+                <label for="prevBtn" class="visuallyhidden">Vai alla prossima sezione della form </label><button type="button" id="prevBtn" onclick="changeTab(-1)">Precedente</button>
+                <label for="nextBtn" class="visuallyhidden">Vai alla precedente sezione della form </label><button type="button" id="nextBtn" onclick="changeTab(1)">Successivo</button>
+            </div>
         </div>
-    </section>
-
-    <input type="submit"/>
-
-    <div style="overflow:auto;">
-        <div style="float:right;">
-            <button type="button" id="prevBtn" onclick="TODO">Precedente</button>
-            <button type="button" id="nextBtn" onclick="TODO">Successivo</button>
-        </div>
-    </div>
-</form>
+    </form>
+</div>
