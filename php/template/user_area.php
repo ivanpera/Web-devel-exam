@@ -95,7 +95,7 @@
             <span><?php echo "Data: ".$prenotato["dataEOra"];?></span><br/>
             <span><?php echo $prenotato["nomeLuogo"]." @ ".$prenotato["indirizzo"];?></span><br/>
             <span class="description_span"><?php echo $prenotato["descrizione"];?></span>
-            <span>Posti: <?php echo $prenotato["postiOccupati"]."/".$prenotato["capienzaMassima"]." (".$prenotato["percPostiOccupati"]."%)"?></span><br/>
+            <span>Posti prenotati: <?php echo $prenotato["postiOccupati"]?></span><br/>
         </article>
         </a>
       <?endforeach;?>
