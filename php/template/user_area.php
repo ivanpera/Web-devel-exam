@@ -26,7 +26,7 @@
             <span>Posti: <?php echo $osservato["postiOccupati"]."/".min($osservato["capienzaMassima"], $osservato["maxPostiDisponibili"])." (".$osservato["percPostiOccupati"]."%)"?></span><br/>
         </article>
         </a>
-      <?endforeach;?>
+      <?php endforeach;?>
       <a href="#observedSection">Return at the top</a>
     </div>
 </section>
@@ -50,7 +50,7 @@
             <span>Posti: <?php echo $organizzato["postiOccupati"]."/".min($organizzato["capienzaMassima"], $organizzato["maxPostiDisponibili"])." (".$organizzato["percPostiOccupati"]."%)"?></span><br/>
         </article>
         </a>
-      <?endforeach;?>
+      <?php endforeach;?>
       <a href="#organizedSection">Return at the top</a>
     </div>
 </section>
@@ -74,7 +74,7 @@
             <span>Posti: <?php echo $moderato["postiOccupati"]."/".min($moderato["capienzaMassima"], $moderato["maxPostiDisponibili"])." (".$moderato["percPostiOccupati"]."%)"?></span><br/>
         </article>
         </a>
-      <?endforeach;?>
+      <?php endforeach;?>
       <a href="#moderatedSection">Return at the top</a>
     </div>
 </section>
@@ -98,7 +98,7 @@
             <span>Posti prenotati: <?php echo $prenotato["postiOccupati"]?></span><br/>
         </article>
         </a>
-      <?endforeach;?>
+      <?php endforeach;?>
       <a href="#bookedSection">Return at the top</a>
     </div>
 </section>
