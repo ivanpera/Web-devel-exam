@@ -456,6 +456,27 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC)[0];
     }
 
+    public function insertBooking($dataEOra, $totale, $differenzaGiorni, $emailUtente) {
+        $stmt = $this->db->prepare("INSERT INTO prenotazione(codPrenotazione, dataEOra, costoTotale, differenzaGiorni, emailUtente) VALUES (?, ?, ?, ?, ?)");
+        $newBookingId = $this->getLastBookId() + 1;
+        $stmt->bind_param("isiis", $newBookingId, $dataEOra, $totale, $differenzaGiorni, $emailUtente);
+        $stmt->execute();
+        return $newBookingId;
+    }
+
+    public function bookSeats($codPrenotazione, $codEvento, $codTipologia, $costo, $num) {
+        $query = "UPDATE posto
+                  SET codPrenotazione = ?
+                  WHERE codTipologia = ?
+                  AND costo = ?
+                  AND codEvento = ?
+                  LIMIT ?";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("iiiii", $codPrenotazione, $codTipologia, $costo, $codEvento, $num);
+        $stmt->execute();
+    }
+
     private function getHashedPassword($email, $password) {
         $salt = hash('sha512', $email);
         $hashedPass = hash('sha512', $password.$salt);
