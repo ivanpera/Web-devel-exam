@@ -4,41 +4,45 @@ textarea {
     box-sizing: border-box;
 }
 
-form > section > label {
-    width: 100%;
-    display: block;
+ul {
+    margin-top: .3em;
+    padding-left: 5%;
 }
 
-input[name="data"], input[name="ora"] {
+/* input[name="data"], input[name="ora"] {
     display: inline-block;
     width: 50%;
     box-sizing: border-box;
-}
+} */
 
 /* form > section > label > input[type="checkbox"] {
     width: 10%;
 } */
 
-form > section > div.ticket_creator:not(:last-child) > button:first-of-type,
-form > section > div.ticket_creator:first-of-type > button:first-of-type,
-form > section > div.moderator_adder:not(:last-child) > button:first-of-type,
-form > section > div.moderator_adder:first-of-type > button:first-of-type {
+h3 {
+    margin-bottom: 2.5%;
+}
+
+h4 {
+    margin-bottom: 3%;
+}
+
+.ticket_creator:not(:last-child) > button:first-of-type,
+.ticket_creator:first-of-type > button:first-of-type,
+.moderator_adder:not(:last-child) > button:first-of-type,
+.moderator_adder:first-of-type > button:first-of-type {
     display: none;
 }
 
-form > section > div.ticket_creator:not(:last-child) > button:last-of-type,
-form > section > div.moderator_adder:not(:last-child) > button:last-of-type {
+div.ticket_creator:not(:last-child) > button:last-of-type,
+div.moderator_adder:not(:last-child) > button:last-of-type {
     display:none;
-}
-
-#bg-image {
-    filter: blur(3px);
 }
 
 /* Mark input boxes that gets an error on validation: */
 .invalid {
     background-color: #ffdddd;
-  }
+}
   
 /* Hide all steps by default: */
 .tab {
