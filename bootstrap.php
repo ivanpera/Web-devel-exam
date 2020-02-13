@@ -55,4 +55,11 @@
         }
         return $imageName;
     }
+
+    if(isset($_SESSION["sessUser"])) {
+        $notificationNumber = $dbh->getUnreadNotificationNum($_SESSION["sessUser"]["email"]);
+    }
+    if ($notificationNumber == 0) {
+        unset($notificationNumber);
+    }
 ?>
