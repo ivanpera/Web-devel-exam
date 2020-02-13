@@ -17,11 +17,13 @@ function validateForm() {
     const tabs = document.getElementsByClassName("tab");
     let currInputs = tabs[currentTab].querySelectorAll(".required");
     for (let i = 0; i < currInputs.length; i++) {
-        if(currInputs[i].value == "") {
-            currInputs[i].className += " invalid";
+        if(currInputs[i].value === "") {
+            if(!currInputs[i].className.includes(" invalid")) {
+                currInputs[i].className += " invalid";
+            }
             valid = false;
         } else {
-            currInputs[i].className -= " invalid";
+            currInputs[i].className = currInputs[i].className.replace(" invalid", "");
         }
     }
     return valid;
@@ -60,9 +62,9 @@ function removeLastMod() {
 function addNewMod() {
     $(".moderator_adder").first().parent().append(' \
         <div class="moderator_adder"> \
-            <input type="text" name="mod_mail[]" placeholder="E-mail moderatore"/> \
-            <button class="rm_mod_btn" type="button" onclick=removeLastMod()> - </button>  <!-- Hidden for the first moderator --> \
-            <button class="add_mod_btn" type="button" onclick=addNewMod()> + </button> <!-- Just a placeholder: adds another moderator to edit (todo with js) --> \
+        <label for="mod_mail">Mail del moderatore: </label><input id="mod_mail" type="text" name="mod_mail[]" placeholder="E-mail moderatore"/></label> \
+        <label for="rm_ticket_btn" class="visuallyhidden">Rimuovi ultimo moderatore</label><button title="Rimuovi moderatore" class="rm_mod_btn" type="button" onclick=removeLastMod()> - </button> \
+        <label for="rm_ticket_btn" class="visuallyhidden">Aggiungi un moderatore</label><button title="Aggiungi moderatore" class="add_mod_btn" type="button" onclick=addNewMod()> + </button> \
         </div> \
     ');
 }
