@@ -1,25 +1,9 @@
-section {
+.form-appendage {
     text-align: center;
+    line-height: 2em;
+    padding-top: 0px;
 }
 
-form {
-    margin-top: 20%;
-}
-
-form input {
-    margin-bottom: 8%;
-}
-
-button, form > input:last-child {
-    border-radius: 12px;
-    background-color: blue;
-    color: white;
-    border-color: blueviolet;
-    box-shadow: 2px 2px black; /*meh*/
-    padding: .25em;
-}
-
-button {
-    width: 40%;
-    padding: .25em;
+.form-appendage button {
+    width: 50%;
 }

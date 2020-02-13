@@ -1,10 +1,12 @@
 .headline_text {
-    color: white;
     font-size: 0.7em;
-    text-shadow: 2px 2px grey;
     text-align: center;
     line-height: 14vmax;
     padding: 2vmin 5vmin;
+}
+
+.headline_text > h1 {
+    color: white;
 }
 
 .composed_button_container {
@@ -14,51 +16,53 @@
     padding: 2%;
     width: 57%;
     box-sizing: border-box;
-    background-color: red;
+    vertical-align: top;
 }
 
 .composed_button_container img {
     display: block;
-    width: 18%;
-    margin-left: 41%;
-    margin-top: 1%;
+    width: 25%;
+    margin-left: 37.5%;
+    margin: 10% auto;
     box-sizing: border-box;
-    background-color: purple;
     border-radius: 50%;
 }
 
-.composed_button_container > section {
+.composed_button_container > button {
+    height: 100%;
+    border-radius: 10%;
+}
+
+.composed_button_container > button > section {
     display: block;
     box-sizing: border-box;
     width: 80%;
-    height: 100%;
     margin-left: 10%;
 }
 
-.composed_button_container > section > h2 {
-    font-size: 1.2em;
-    color: white;
+.composed_button_container > button > section > h2 {
+    font-size: 1.5em;
     font-weight: bold;
     text-align: center;
-    margin: 2% auto;
 }
 
-.composed_button_container > section > p {
-    font-size: 0.8em;
-    color: white;
+.composed_button_container > button > section > p {
+    font-size: 1.2em;
+    height: 6em;
+    margin-top: 10%;
 }
 
 @media screen and (min-width:450px) {
     .headline_text {
-        font-size: .75em;
+        font-size: 1.25em;
     }
 
-    .composed_button_container > section > h2 {
+    .composed_button_container > button > section > h2 {
+        font-size: 1.7em;
+    }
+
+    .composed_button_container > button > section > p {
         font-size: 1.5em;
-    }
-
-    .composed_button_container > section > p {
-        font-size: 1.2em;
     }
 }
 
@@ -68,25 +72,23 @@
         margin-left: 0px;
         margin-right: 0px;
         width: 28.5%;
-        background-color: red;
     }
 
     .composed_button_container:first-child {
         margin-left: 20%;
         margin-right: 3%;
         width: 28.5%;
-        background-color: red;
     }
 
-    .composed_button_container > section > p {
-        font-size: 1.45em;
+    .composed_button_container > button > section > p {
+        font-size: 1.65em;
     }
 
     .headline_text {
-        font-size: 1.25em;
+        font-size: 1.45em;
     }
 
-    .composed_button_container > section > h2 {
-        font-size: 1.75em;
+    .composed_button_container > button > section > h2 {
+        font-size: 1.95em;
     }
 }
