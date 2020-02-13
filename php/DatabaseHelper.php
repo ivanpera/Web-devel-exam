@@ -36,7 +36,7 @@ class DatabaseHelper{
         return $stmt->insert_id != 0;
     }
 
-    public function getPopularEvents( $NSFC = 0, $limit = -1) {
+    public function getPopularEvents( $NSFC = 0) {
         $query = "SELECT *
                   FROM (SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
                                L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
@@ -45,28 +45,20 @@ class DatabaseHelper{
                         WHERE E.codLuogo = L.codLuogo
                         AND p.codEvento = E.codEvento
                         AND E.NSFC <= ?
-                        AND E.dataEOra > ?
+                        AND DATEDIFF(E.dataEOra, ?) >= 0
                         GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
                                  L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
                         HAVING percPostiOccupati < 100
-                       ) AS tabEventi,
-              
+                       ) AS tabEventi LEFT JOIN
                        (SELECT EHC.codEvento, GROUP_CONCAT(ce.nomeCategoria SEPARATOR ', ') AS categorie
                         FROM evento_ha_categoria EHC, categoria_evento CE
                         WHERE EHC.codCategoria = ce.codCategoria
                         GROUP BY EHC.codEvento) AS tabCategorie
-                  WHERE tabEventi.codEvento = tabCategorie.codEvento
+                  USING (codEvento)
                   ";
-        if ($limit != -1) {
-            $query = $query." LIMIT ?";
-        }
         $currentDate = date("Y-m-d H:i:s");
         $stmt = $this->db->prepare($query);
-        if ($limit != -1) {
-            $stmt->bind_param("isi", $NSFC, $currentDate, $limit);
-        } else {
-            $stmt->bind_param("is", $NSFC, $currentDate);
-        }
+        $stmt->bind_param("is", $NSFC, $currentDate);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
@@ -94,14 +86,13 @@ class DatabaseHelper{
                         AND E.codEvento = ?
                         GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
                                  L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
-                       ) AS tabEventi,
-              
+                       ) AS tabEventi LEFT JOIN
                        (SELECT EHC.codEvento, GROUP_CONCAT(ce.nomeCategoria SEPARATOR ', ') AS categorie
                         FROM evento_ha_categoria EHC, categoria_evento CE
                         WHERE EHC.codCategoria = ce.codCategoria
                           AND EHC.codEvento = ?
                         GROUP BY EHC.codEvento) AS tabCategorie
-                  WHERE tabEventi.codEvento = tabCategorie.codEvento
+                  USING(codEvento)
                   ";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("ii", $codEvent, $codEvent);
@@ -204,9 +195,9 @@ class DatabaseHelper{
         $queryCategorie .= " GROUP BY EHC.codEvento";
 
         $queryCompleta = "SELECT *
-                          FROM (".$queryEvento.") AS tabEventi,
+                          FROM (".$queryEvento.") AS tabEventi LEFT JOIN
                                (".$queryCategorie.") AS tabCategorie
-                          WHERE tabEventi.codEvento = tabCategorie.codEvento";
+                          USING (codEvento)";
 
         $stmt = $this->db->prepare($queryCompleta);
         $stmt->execute();
@@ -320,10 +311,11 @@ class DatabaseHelper{
         }
         $interestedUsers = $this->getInterestedUsers($codEvento);
         $codNotifica = $this->getLastNotificationId($codEvento) + 1;
-        $queryAddNot = "INSERT INTO notifica(codEvento, codNotificaEvento, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES (".$codEvento.", ?, ?, '".$descrizioneNotifica."', 0, '".date("Y-m-d H:i:s")."', NULL, ?)";
+        $dataEOraInvio = date("Y-m-d H:i:s");
+        $queryAddNot = "INSERT INTO notifica(codEvento, codNotificaEvento, titolo, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES (?, ?, ?, ?, 0, ?, NULL, ?)";
         $stmtNotifiche = $this->db->prepare($queryAddNot);
         foreach ($interestedUsers as $user) {
-            $stmtNotifiche->bind_param("iss", $codNotifica, $titoloNotifica, $user["emailUtente"]);
+            $stmtNotifiche->bind_param("iissss", $codEvento, $codNotifica, $titoloNotifica, $descrizione, $dataEOraInvio, $user["emailUtente"]);
             $stmtNotifiche->execute();
             $codNotifica++;
         }

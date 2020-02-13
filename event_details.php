@@ -4,7 +4,6 @@
         safeHeader("Location: index.php");
     }
 
-
     $templateParams["evento"] = $dbh->getEvent($_GET["codEvento"])[0];
     if(!empty($templateParams["evento"])) {
         if ($templateParams["evento"]["NSFC"] == "1") {

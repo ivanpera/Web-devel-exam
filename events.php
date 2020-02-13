@@ -8,6 +8,5 @@
     $templateParams["events"] = $dbh->getPopularEvents(isset($_SESSION["sessUser"]["NSFC"]) ? $_SESSION["sessUser"]["NSFC"] : 0);
     $templateParams["categories"] = $dbh->getCategories();
     $templateParams["luoghi"] = $dbh->getPlaces();
-
     require(TEMPLATE_DIR."base.php");
 ?>

@@ -20,7 +20,7 @@
     $descrizione = $_POST["description"];
     $NSFC = isset($_POST["NSFC"]) ? 1 : 0;
     $categories = $_POST["categories"];
-    $emailModeratori = $_POST["mod_mail"];
+    $emailModeratori = empty($_POST["mod_mail"]) ? array() : $_POST["mod_mail"];
 
     $biglietti["type"] = $_POST["ticket_type"];
     $biglietti["cost"] = $_POST["ticket_cost"];

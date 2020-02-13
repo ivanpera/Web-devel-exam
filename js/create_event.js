@@ -35,7 +35,7 @@ function changeTab(step) {
     tabs[currentTab].style.display = "none";
     currentTab += step;
     if(currentTab >= tabs.length) {
-        document.getElementById("createForm").submit();
+        $("#createForm").submit();
         return false;
     }
     showTab(currentTab);

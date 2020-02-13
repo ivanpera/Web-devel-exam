@@ -15,7 +15,7 @@
             
             <label for="data">Data di inizio: <input name="data" id="data" type="date" required class="required" placeholder="YYYY-mm-dd"/></label>
             <label for="ora">Ora di inizio: <input name="ora" type="time" required class="required" placeholder="HH:ii:ss"/></label>
-            <label for="descr">Descrizione evento: <textarea name="descr" form="createForm" placeholder="Descrizione dell'evento..."></textarea></label>
+            <label for="description">Descrizione evento: <textarea name="description" form="createForm" placeholder="Descrizione dell'evento..."></textarea></label>
         </section>
 
         <section class="tab"> 
@@ -23,7 +23,7 @@
             <label for="image_picker"> Scegli un'immagine: <br/><input name="" type="file" id="image_picker" name="filename"/></label>
             <label for="catg_list">Aggiungi delle categorie:<ul id="catg_list">
             <?php foreach ($templateParams["categories"] as $category): ?>
-                <li><input type="checkbox" name="categories[]" value="<?php echo $category["nomeCategoria"]?>"/><?php echo $category["nomeCategoria"];?></li>
+                <li><input type="checkbox" name="categories[]" value="<?php echo $category["codCategoria"]?>"/><?php echo $category["nomeCategoria"];?></li>
             <?php endforeach; ?></ul></label>
         </section>
 
