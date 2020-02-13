@@ -413,7 +413,7 @@ class DatabaseHelper{
     public function getBookedEvents($emailUtente) {
         $query = "SELECT DISTINCT E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
                          L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
-                         COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
+                         COUNT(P.codPrenotazione) as postiOccupati
                   FROM evento E, luogo L, posto P, prenotazione PR
                   WHERE E.codLuogo = L.codLuogo
                     AND P.codEvento = E.codEvento
@@ -470,6 +470,7 @@ class DatabaseHelper{
                   WHERE codTipologia = ?
                   AND costo = ?
                   AND codEvento = ?
+                  AND codPrenotazione IS NULL
                   LIMIT ?";
 
         $stmt = $this->db->prepare($query);
