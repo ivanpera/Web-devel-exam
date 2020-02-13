@@ -31,6 +31,7 @@
   <body>
     <div id="bg-image"></div>
     <header>
+      <div id="notificationNumber"><?php if(isset($notificationNumber)) {echo $notificationNumber; } ?></div>
         <?php 
         if (!isset($_SESSION["sessUser"]["email"])) { 
           echo '<a href="login.php">
@@ -63,7 +64,7 @@
           <li><a href="user_area.php">Profilo</a></li>
           <li><a href="shopping_cart.php">Carrello</a></li>
           <li>Statistiche</li>
-          <li><a href="notification.php">Notifiche</a></li>
+          <li><a href="notification.php">Notifiche<?php if(isset($notificationNumber)) {echo " (".$notificationNumber.")";}?></a></li>
           <li>Moderazione</li>
           <li><a href="php/logout_process.php">Logout</a></li>
         </ul>

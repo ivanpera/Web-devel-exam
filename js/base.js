@@ -17,3 +17,26 @@ function closeSidebar() {
         $("#overlay").css("display", "none");
     });
 }
+
+function getNumOfNotification() {
+    console.log("Sono il timer e funziono");
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            $("#notificationNumber").html(xhttp.responseText == "0" ? "" : xhttp.responseText);
+        }
+    };
+    xhttp.open("GET", "php/ajax_response/notification_num_getter.php");
+    xhttp.send();
+}
+
+let pullNotificationTimer;
+
+$(document).ready(function() {
+    let seconds = 60;
+    pullNotificationTimer = setInterval(getNumOfNotification, seconds * 1000);
+});
+
+$(document).on("unload", function() {
+    clearInterval(pullNotificationTimer);
+});
