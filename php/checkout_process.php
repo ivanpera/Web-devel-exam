@@ -10,20 +10,19 @@
     }
   }
   if($disponibili) {
-    //Crea prenotazione
     $dataEOra = (new DateTime())->format("Y-m-d H:i:s");
     $differenzaGiorni = 7;
     $emailUtente = $_SESSION["sessUser"]["email"];
     $newBookingId = $dbh->insertBooking($dataEOra, $totale, $differenzaGiorni, $emailUtente);
-    //Per ogni biglietto aggiorna il cod prenotazione
     foreach ($_SESSION["sessUser"]["cart"] as $codEvento => $biglietto) {
       foreach ($biglietto as $tipoCosto => $numero) {
         $arrTipoCosto = explode("/",$tipoCosto);
         $dbh->bookSeats($newBookingId, $codEvento, $arrTipoCosto[0], $arrTipoCosto[1], $numero);
       }
     }
-    //SafeHeader per qualche pagina di successo
+    unset($_SESSION["sessUser"]["cart"]);
+    safeHeader("Location: ../communication.php?page=payment_ok.php");
   } else {
-    //Safe header per qualche pagina di errore
+    safeHeader("Location: ../communication.php?page=payment_ko.php");
   }
 ?>
