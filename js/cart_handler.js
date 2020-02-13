@@ -16,7 +16,6 @@ function addToCart(codEvento, codTipologia, costo) {
 function removeFromCart(codEvento, codTipologia, costo, num) {
   let xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    console.log(xhttp);
     if(this.readyState == 4 && this.status == 200) {
       location.reload(true);
     }
