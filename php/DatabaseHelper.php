@@ -547,7 +547,7 @@ class DatabaseHelper{
     }
 
     public function getUnreadNotificationNum($emailUtente) {
-        $stmt = $this->db->prepare("SELECT COUNT(codNotifica) FROM notifica WHERE emailUtente = ?");
+        $stmt = $this->db->prepare("SELECT COUNT(codNotificaEvento) FROM notifica WHERE emailUtente = ?");
         $stmt->bind_param("s", $emailUtente);
         $stmt->execute();
         return $stmt->get_result()->fetch_all()[0][0];
