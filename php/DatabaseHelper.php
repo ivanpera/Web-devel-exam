@@ -478,7 +478,7 @@ class DatabaseHelper{
             $stmtOrganizzatore = $this->db->prepare("SELECT nomeEvento, emailOrganizzatore FROM evento WHERE codEvento = ?");
             $stmtOrganizzatore->bind_param("i", $codEvento);
             $stmtOrganizzatore->execute();
-            $evento = $stmt->get_result()->fetch_all(MYSQLI_ASSOC)[0];
+            $evento = $stmtOrganizzatore->get_result()->fetch_all(MYSQLI_ASSOC)[0];
             $titoloNotifica = "Un tuo evento ha esaurito i biglietti!";
             $descrizione = "L'evento ".$evento["nomeEvento"]." ha esaurito i posti disponibili. Complimenti!";
             $dataEOra = date("Y-m-d H:i:s");
