@@ -23,7 +23,7 @@
   foreach ($templateParams["bookedEvents"] as &$evento) {
     $evento["bigliettiPrenotati"] = $dbh->getBookedSeats($evento["codEvento"], $userEmail);
   }
-  //$templateParams["recensioni"] = $dbh->getReviews();
+  $templateParams["recensioni"] = $dbh->getUserReviews($_SESSION["sessUser"]["email"]);
 
   require(TEMPLATE_DIR."base.php");
 ?>
