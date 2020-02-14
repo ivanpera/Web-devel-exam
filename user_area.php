@@ -20,6 +20,9 @@
   $templateParams["organizedEvents"] = $dbh->getOrganizedEvents($userEmail);
   $templateParams["moderatedEvents"] = $dbh->getModeratedEvents($userEmail);
   $templateParams["bookedEvents"] = $dbh->getBookedEvents($userEmail);
+  foreach ($templateParams["bookedEvents"] as &$evento) {
+    $evento["bigliettiPrenotati"] = $dbh->getBookedSeats($evento["codEvento"], $userEmail);
+  }
   //$templateParams["recensioni"] = $dbh->getReviews();
 
   require(TEMPLATE_DIR."base.php");
