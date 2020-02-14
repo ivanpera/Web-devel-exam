@@ -40,7 +40,7 @@ class DatabaseHelper{
         $query = "SELECT *
                   FROM (SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
                                L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
-                               COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati
+                               COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
                         FROM evento E, luogo L, posto P
                         WHERE E.codLuogo = L.codLuogo
                         AND p.codEvento = E.codEvento
@@ -558,6 +558,8 @@ class DatabaseHelper{
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
+
+
 
     private function getHashedPassword($email, $password) {
         $salt = hash('sha512', $email);
