@@ -26,7 +26,7 @@
             <p>Disponibili: <?php echo $biglietto["numTotPosti"] - $biglietto["postiPrenotati"];?></p>
             <?php
             if (isset($_SESSION["sessUser"])) {
-                echo '<label>Numero biglietti:<input type="number" value="1" min="0" max="'.($biglietto["numTotPosti"] - $biglietto["postiPrenotati"]).'"/><button onclick="addToCart('.$_GET["codEvento"].','.$biglietto["codTipologia"].','.$biglietto["costo"].')">Aggiungi al carrello</button></label>';
+                echo '<label>Numero biglietti:<input type="number" value="'.min(1, $biglietto["numTotPosti"] - $biglietto["postiPrenotati"]).'" min="0" max="'.($biglietto["numTotPosti"] - $biglietto["postiPrenotati"]).'"/>'.($biglietto["numTotPosti"] - $biglietto["postiPrenotati"] > 0 ? '<button onclick="addToCart('.$_GET["codEvento"].','.$biglietto["codTipologia"].','.$biglietto["costo"].')">Aggiungi al carrello</button></label>' : '');
             }
             ?>
         </div>
