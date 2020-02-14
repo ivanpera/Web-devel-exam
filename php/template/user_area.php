@@ -89,15 +89,25 @@
       }
       ?>
       <?php foreach($templateParams["bookedEvents"] as $prenotato):?>
-        <a href="event_details.php?codEvento=<?php echo $prenotato["codEvento"];?>">
         <article>
+          <a href="event_details.php?codEvento=<?php echo $prenotato["codEvento"];?>">
             <h4><?php echo $prenotato["nomeEvento"];?></h4>
             <span><?php echo "Data: ".$prenotato["dataEOra"];?></span><br/>
             <span><?php echo $prenotato["nomeLuogo"]." @ ".$prenotato["indirizzo"];?></span><br/>
             <span class="description_span"><?php echo $prenotato["descrizione"];?></span>
-            <span>Posti prenotati: <?php echo $prenotato["postiOccupati"]?></span><br/>
+          </a>
+            <button class="collapsableBtn"><img class="collapsableIcon" src="img/ArrowIcon.png"/>Posti prenotati: <?php echo $prenotato["postiOccupati"]?></button>
+            <div class="articles">
+              <?php foreach ($prenotato["bigliettiPrenotati"] as $biglietto): ?>
+                <article>
+                  <p>Codice posto: <?php echo $biglietto["codEvento"]."-".$biglietto["codPosto"]?></p>
+                  <p>Tipologia posto: <?php echo $biglietto["nomeTipologia"];?></p>
+                  <p>Codice prenotazione: <?php echo $biglietto["codPrenotazione"];?></p>
+                </article>
+              <?php endforeach; ?>
+            </div>
         </article>
-        </a>
+        
       <?php endforeach;?>
       <a href="#bookedSection">Return at the top</a>
     </div>
