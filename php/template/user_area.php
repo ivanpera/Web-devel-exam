@@ -113,5 +113,24 @@
     </div>
 </section>
 
-<!-- Recensioni
-<section></section>-->
+<section id="reviewSection">
+<button class="collapsableBtn"><img class="collapsableIcon" src="img/ArrowIcon.png"/>Le tue recensioni</button>
+    <div class="articles">
+    <?php if (count($templateParams["recensioni"]) == 0) {
+        echo "<p>Non hai scritto alcuna recensione.</p>";
+      }
+      ?>
+      <?php foreach($templateParams["recensioni"] as $recensione):?>
+        <article>
+            <h4>Evento: <?php echo $dbh->getEventName($recensione["codEvento"]);?></h4>
+            <p>Voto: <?php echo $recensione["voto"]?></p>
+            <p><?php echo $recensione["testo"]?></p>
+            <?php if($recensione["anonima"]) {
+              echo "<p>Pubblicata anonimamente</p>";
+            } ?>
+            <p>Data scrittura<?php echo "Data: ".$recensione["dataScrittura"];?></p><br/>
+        </article>
+      <?php endforeach;?>
+      <a href="#reviewSection">Return at the top</a>
+    </div>
+</section>
