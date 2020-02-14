@@ -13,7 +13,6 @@ function toggleObserveStatus(codEvento, email) {
   let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if(this.readyState == 4 && this.status == 200) {
-        console.log(xhttp);
         updateButtonText(codEvento, email);
       }
     };
