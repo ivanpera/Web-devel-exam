@@ -12,7 +12,7 @@
 -- Database Section
 -- ________________ 
 
-create database projtecweb;
+create database projtecweb CHARACTER SET utf16 COLLATE utf16_unicode_ci;
 use projtecweb;
 
 
