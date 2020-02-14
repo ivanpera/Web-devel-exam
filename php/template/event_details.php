@@ -1,7 +1,7 @@
 <div class="main-content">
     <section>
         <h1><?php echo $templateParams["evento"]["nomeEvento"]?></h1>
-        <img src="<?php echo "img/".(file_exists("img/".$templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"]) ? $templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"] : "image-not-available.jpg")?>" alt="event_image"/>
+        <img src="<?php echo "img/".(file_exists("img/".$templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"]) && is_file("img/".$templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"]) ? $templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"] : "image-not-available.jpg")?>" alt="event_image"/>
         <p><?php echo $templateParams["evento"]["dataEOra"]?>
         <p>  <?php echo $templateParams["evento"]["descrizione"] ?> </p>
 
