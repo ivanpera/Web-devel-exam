@@ -1,6 +1,9 @@
 <div class="main-content">
     <section>
         <h1><?php echo $templateParams["evento"]["nomeEvento"]?></h1>
+        <?php if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] == $_SESSION["sessUser"]["email"]) {
+            echo '<a href="modify_event.php?codEvento='.$templateParams["evento"]["codEvento"].'">Modifica evento</a>';
+        }?>
         <img src="<?php echo "img/".(file_exists("img/".$templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"]) && is_file("img/".$templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"]) ? $templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"] : "image-not-available.jpg")?>" alt="event_image"/>
         <p><?php echo $templateParams["evento"]["dataEOra"]?>
         <p>  <?php echo $templateParams["evento"]["descrizione"] ?> </p>
@@ -12,7 +15,7 @@
                 Mostralo sulla mappa
             </button>
         </label>
-
+    <?php if($templateParams["evento"]["dataEOra"] > date("Y-m-d H:i:s")):?>
     <div id="tickets">
         Biglietti disponibili: <?php echo min($templateParams["evento"]["capienzaMassima"],$templateParams["evento"]["maxPostiDisponibili"]) - $templateParams["evento"]["postiOccupati"]?>
         <?php if(!isset($_SESSION["sessUser"])) {
@@ -32,6 +35,7 @@
         </div>
         <?php endforeach;?>
     </div>
+    <?php endif;?>
     <p> Organizzatore: <?php echo $templateParams["evento"]["emailOrganizzatore"] ?> </p>
     
     <?php
@@ -42,12 +46,31 @@
             }
         }
     ?>
-    <!-- Stampa le recensioni -->
-    <?php if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] == $_SESSION["sessUser"]["email"]) {
-        echo '<a href="modify_event.php?codEvento='.$templateParams["evento"]["codEvento"].'">Modifica evento</a>';
-    }
+    <?php
     if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] != $_SESSION["sessUser"]["email"]) {
         echo '<button class="observe_btn" onclick="toggleObserveStatus('.$templateParams["evento"]["codEvento"].', \''.$_SESSION["sessUser"]["email"].'\')"></button>';
     }
     ?>
+    <div class="reviews">
+        <?php if(!isset($_SESSION["sessUser"]) && $templateParams["evento"]["dataEOra"] < date("Y-m-d H:i:s")):?>
+            <a href="login.php">Autenticati per recensire questo evento!</a>
+        <?php endif;?>
+        <?php if(!$templateParams["utenteHaRecensito"] && $templateParams["evento"]["dataEOra"] < date("Y-m-d H:i:s") && $templateParams["userCanReview"]):?>
+            <a href="create_review.php?codEvento=<?php echo $_GET["codEvento"]?>">Recensisci questo evento</a>
+        <?php endif;?>
+        <?php if(!empty($templateParams["recensioni"])):?>
+            <p>Recensioni: <a href="event_reviews.php?codEvento=<?php echo $_GET["codEvento"]?>">(Mostra tutte le recensioni)</a></p>
+            <p>Voto medio: <?php printf("%.1f",$templateParams["votoMedioRecensioni"])?></p>
+            <?php foreach($templateParams["recensioni"] as $recensione ): ?>
+                <article>
+                    <h5><?php echo ($recensione["anonima"] == 0 ? $recensione["emailUtente"] : "Anonimo")?></h5>
+                    <p>Voto: <?php echo $recensione["voto"]?></p>
+                    <p><?php echo $recensione["testo"]?></p>
+                    <p>Scritta il: <?php echo $recensione["dataScrittura"]?></p>
+                </article>
+              <?php endforeach; ?>
+        <?php else:?>
+            <p>Non sono ancora state scritte recensioni per questo evento.</p>
+        <?php endif;?>
+    </div>
 </section>
