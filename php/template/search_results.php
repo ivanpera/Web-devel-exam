@@ -11,16 +11,11 @@
         ?>
         <a href="event_details.php?codEvento=<?php echo $event["codEvento"];?>">
             <article>
-                <!-- <img src="<?php /*if (file_exists("img/".$event["emailOrganizzatore"].$event["nomeImmagine"])) {
-                    echo "img/".$event["emailOrganizzatore"].$event["nomeImmagine"];
-                    } else {
-                        echo "img/image-not-available.jpg";
-                    }?>" alt=""/> */?>-->
                 <h2><?php echo $event["nomeEvento"];?></h2>
                 <span><?php echo $event["dataEOra"];?></span>
                 <span><?php echo $event["nomeLuogo"].", ".$event["indirizzo"];?></span>
                 <span class="description_span"><?php echo "<h3>Descrizione</h3>\n".$event["descrizione"];?></span>
-                <span>Posti disponibili: <?php echo $event["capienzaMassima"] - $event["postiOccupati"]?></span>
+                <span>Posti <?php echo ($event["dataEOra"] > date("Y-m-d H:i:s") ? "disponibili" : "rimasti" );?>: <?php echo min($event["capienzaMassima"], $event["maxPostiDisponibili"]) - $event["postiOccupati"]?></span>
             </article>
         </a>
         <?php endforeach;?>
