@@ -327,7 +327,7 @@ class DatabaseHelper{
                   FROM posto, tipologia_posto
                   WHERE codEvento = ? 
                   AND posto.codTipologia = tipologia_posto.codTipologia
-                  GROUP BY codTipologia, costo
+                  GROUP BY codTipologia, nomeTipologia, costo
                   ";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("i", $codEvento);
@@ -539,10 +539,24 @@ class DatabaseHelper{
     }
 
     public function getUnreadNotificationNum($emailUtente) {
-        $stmt = $this->db->prepare("SELECT COUNT(codNotificaEvento) FROM notifica WHERE emailUtente = ?");
+        $stmt = $this->db->prepare("SELECT COUNT(codNotificaEvento) FROM notifica WHERE emailUtente = ? AND LETTA = 0");
         $stmt->bind_param("s", $emailUtente);
         $stmt->execute();
         return $stmt->get_result()->fetch_all()[0][0];
+    }
+
+    public function getBookedSeats($codEvento, $emailUtente) {
+        $query = "SELECT E.codEvento, E.nomeEvento, P.codPosto, T.nomeTipologia, PR.codPrenotazione
+                  FROM evento E, posto P, prenotazione PR, tipologia_posto T
+                  WHERE E.codEvento = ?
+                  AND E.codEvento = P.codEvento
+                  AND P.codTipologia = T.codTipologia
+                  AND P.codPrenotazione = PR.codPrenotazione
+                  AND PR.emailUtente = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("is", $codEvento, $emailUtente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
     private function getHashedPassword($email, $password) {
