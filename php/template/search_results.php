@@ -1,11 +1,11 @@
 <div class="main-content">
     <section id="result_events" class="tabcontent">
+        <h1> Risulati di ricerca </h1>
         <?php 
         if(count($templateParams["events"]) <= 0): ?>
             <p>No event found with this search terms.</p>
             <a href="events.php">Search with different terms</a>
         <?php endif;?>
-        <h1> Risulati di ricerca </h1>
         <?php
             foreach ($templateParams["events"] as $event):
         ?>
