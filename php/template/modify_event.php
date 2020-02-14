@@ -37,7 +37,7 @@
                     </select></label>
                     <label for="ticket_cost">Costo unitario del biglietto : <input id="ticket_cost" name="ticket_cost[]" type="number" min="0" step="1" required class="required" value="<?php printf("%.2f", $biglietto["costo"]/100); ?>" <?php echo ($biglietto["postiPrenotati"] > 0 ? "readonly" : "")?>/></label>
                     <label for="num_tickets"> Numero biglietti: <input type="number" min="<?php echo $biglietto["postiPrenotati"];?>" name="num_tickets[]" id="num_tickets" required value="<?php echo $biglietto["numTotPosti"]?>"/></label>
-                    <? if($biglietto["postiPrenotati"] == 0) {echo  '<label for="rm_ticket_btn" class="visuallyhidden">Rimuovi ultima tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_btn" class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button>'; }  ?>
+                    <?php if($biglietto["postiPrenotati"] == 0) {echo  '<label for="rm_ticket_btn" class="visuallyhidden">Rimuovi ultima tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_btn" class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button>'; }  ?>
                     <label for="add_ticket_btn" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" class="add_ticket_btn" type="button" onclick=addNewTicket()> + </button>
                 </div>
             <?php endforeach; ?>
