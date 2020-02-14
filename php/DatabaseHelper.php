@@ -239,8 +239,10 @@ class DatabaseHelper{
                     }
                 } elseif ($seatNumDiff < 0) {
                     //Tolgo posti
-                    $queryPosti = "DELETE FROM posto WHERE codTipologia = ".$tickets["type"][$i]." AND costo = ".$tickets["cost"][$i]." AND codPrenotazione IS NULL LIMIT ".$seatNumDiff;
+                    $queryPosti = "DELETE FROM posto WHERE codTipologia = ".$tickets["type"][$i]." AND costo = ".$tickets["cost"][$i]." AND codPrenotazione IS NULL LIMIT ?";
                     $stmtRmPosti = $this->db->prepare($queryPosti);
+                    $positiveNum = -$seatNumDiff;    
+                    $stmtRmPosti->bind_param("i", $positiveNum);
                     $stmtRmPosti->execute();
                 }
             } else {
