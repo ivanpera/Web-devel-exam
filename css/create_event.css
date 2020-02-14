@@ -9,16 +9,6 @@ ul {
     padding-left: 5%;
 }
 
-/* input[name="data"], input[name="ora"] {
-    display: inline-block;
-    width: 50%;
-    box-sizing: border-box;
-} */
-
-/* form > section > label > input[type="checkbox"] {
-    width: 10%;
-} */
-
 h3 {
     margin-bottom: 2.5%;
 }
@@ -27,17 +17,9 @@ h4 {
     margin-bottom: 3%;
 }
 
-.ticket_creator:not(:last-child) > button:first-of-type,
-.ticket_creator:first-of-type > button:first-of-type,
-.moderator_adder:not(:last-child) > button:first-of-type,
-.moderator_adder:first-of-type > button:first-of-type {
+/* .ticket_creator:first-of-type #rm_ticket_btn {
     display: none;
-}
-
-div.ticket_creator:not(:last-child) > button:last-of-type,
-div.moderator_adder:not(:last-child) > button:last-of-type {
-    display:none;
-}
+} */
 
 /* Mark input boxes that gets an error on validation: */
 .invalid {
@@ -45,6 +27,6 @@ div.moderator_adder:not(:last-child) > button:last-of-type {
 }
   
 /* Hide all steps by default: */
-.tab {
+.tab{
     display: none;
 }
