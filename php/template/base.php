@@ -31,8 +31,8 @@
   <body>
     <div id="bg-image"></div>
     <header>
-      <div id="notificationNumber"><?php if(isset($notificationNumber)) {echo $notificationNumber; } ?></div>
-        <?php 
+      <div id="notificationNumber"><?php if(isset($notificationNumber)) {echo $notificationNumber; } else {echo "";} ?></div>
+        <?php
         if (!isset($_SESSION["sessUser"]["email"])) { 
           echo '<a href="login.php">
           <img src="img/login_icon.png" alt="login" class="login"/>
