@@ -159,7 +159,7 @@ class DatabaseHelper{
     public function searchEvent(array $searchParameters) {
         $queryEvento = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
                                L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
-                               COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati
+                               COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/L.capienzaMassima * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
                         FROM evento E, luogo L, posto P
                         WHERE E.codLuogo = L.codLuogo
                           AND p.codEvento = E.codEvento
@@ -559,7 +559,65 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function insertEventReview($codEvento, $emailUtente, $voto, $testo, $anonima, $dataScrittura) {
+        $query = "INSERT INTO recensione(codEvento, emailUtente, voto, testo, anonima, DataScrittura) VALUES (?,?,?,?,?,?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("isisis", $codEvento, $emailUtente, $voto, $testo, $anonima, $dataScrittura);
+        $stmt->execute();
+    }
 
+    public function hasUserWrittenReview($codEvento, $emailUtente) {
+        $query = "SELECT COUNT(*) FROM recensione WHERE codEvento = ? AND emailUtente = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("is", $codEvento, $emailUtente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
+
+    public function getEventReviews($codEvento, $limit = -1) {
+        $query = "SELECT codEvento, emailUtente, voto, testo, anonima, dataScrittura FROM recensione WHERE codEvento = ? ORDER BY dataScrittura";
+        if ($limit != -1) {
+            $query .= " LIMIT ?";
+        }
+        $stmt = $this->db->prepare($query);
+        if ($limit != -1) {
+            $stmt->bind_param("ii", $codEvento, $limit);
+        } else {
+            $stmt->bind_param("i", $codEvento);
+        }
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getAverageReviewVote($codEvento) {
+        $stmt = $this->db->prepare("SELECT IFNULL(AVG(voto), 0) FROM recensione WHERE codEvento = ?");
+        $stmt->bind_param("i", $codEvento);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
+
+    public function getEventName($codEvento) {
+        $stmt = $this->db->prepare("SELECT nomeEvento FROM evento WHERE codEvento = ?");
+        $stmt->bind_param("i", $codEvento);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
+
+    public function canUserReviewEvent($codEvento, $emailUtente) {
+        $query = "SELECT COUNT(R.codEvento) FROM recensione R, prenotazione PR, posto P WHERE R.codEvento = ? AND R.emailUtente = ? AND R.codEvento = P.codEvento AND P.codPrenotazione = PR.codPrenotazione AND R.emailUtente = PR.emailUtente";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("is", $codEvento, $emailUtente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
+
+    public function getUserReviews($emailUtente) {
+        $query = "SELECT codEvento, voto, testo, anonima, dataScrittura FROM recensione WHERE emailUtente = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $emailUtente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
 
     private function getHashedPassword($email, $password) {
         $salt = hash('sha512', $email);
