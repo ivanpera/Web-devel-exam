@@ -13,10 +13,10 @@
   if (isset($_SESSION["sessUser"]["cart"])) {
     foreach ($_SESSION["sessUser"]["cart"] as $codEvento => $bigliettiEvento) {
       $templateParams["eventi"][$codEvento] = $dbh->getEvent($codEvento)[0];
-      foreach($_SESSION["sessUser"]["cart"][$codEvento] as $tipoCosto => $biglietto) {
-        $total += intval(explode("/", $tipoCosto)[1])/100;
+      foreach($_SESSION["sessUser"]["cart"][$codEvento] as $tipoCosto => $numero) {
+        $total += intval(explode("/", $tipoCosto)[1]) * $numero;
       }
-    } 
+    }
   }
   require(TEMPLATE_DIR."base.php");
 

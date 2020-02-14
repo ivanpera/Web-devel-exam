@@ -6,7 +6,7 @@
     foreach ($biglietto as $tipoCosto => $numero) {
       $arrTipoCosto = explode("/",$tipoCosto);
       $disponibili = $disponibili and ($dbh->getRemainingSeats($codEvento, $arrTipoCosto[0], $arrTipoCosto[1]) >= $numero);
-      $totale += intval($arrTipoCosto[1]);
+      $totale += intval($arrTipoCosto[1]) * $numero;
     }
   }
   if($disponibili) {
