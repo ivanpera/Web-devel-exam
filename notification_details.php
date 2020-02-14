@@ -7,8 +7,8 @@
 
   $templateParams["notifica"] = $dbh->getNotification($_GET["codEvento"], $_GET["codNotifica"]);
 
-  if ($_SESSION["sessUser"]["email"] != $notifica["emailUtente"]) {
-    safeHeader("Location: index.html");
+  if ($_SESSION["sessUser"]["email"] != $templateParams["notifica"]["emailUtente"]) {
+    safeHeader("Location: index.php");
   }
 
   $templateParams["name"] = "notification_details.php";
