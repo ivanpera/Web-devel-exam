@@ -20,7 +20,7 @@
                 <span><?php echo $event["dataEOra"];?></span>
                 <span><?php echo $event["nomeLuogo"].", ".$event["indirizzo"];?></span>
                 <span class="description_span"><?php echo "<h3>Descrizione</h3>\n".$event["descrizione"];?></span>
-                <span>Posti disponibili: <?php echo $event["capienzaMassima"] - $event["postiOccupati"]?></span>
+                <span>Posti disponibili: <?php echo min($event["capienzaMassima"], $event["maxPostiDisponibili"]) - $event["postiOccupati"]?></span>
             </article>
         </a>
         <?php endforeach;?>
