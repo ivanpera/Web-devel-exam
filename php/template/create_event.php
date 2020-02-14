@@ -23,31 +23,31 @@
             <label for="image_picker"> Scegli un'immagine: <br/><input name="" type="file" id="image_picker" name="filename"/></label>
             <label for="catg_list">Aggiungi delle categorie:<ul id="catg_list">
             <?php foreach ($templateParams["categories"] as $category): ?>
-                <li><input type="checkbox" name="categories[]" value="<?php echo $category["codCategoria"]?>"/><?php echo $category["nomeCategoria"];?></li>
+                <li><label><input type="checkbox" name="categories[]" value="<?php echo $category["codCategoria"]?>"/><?php echo $category["nomeCategoria"];?></label></li>
             <?php endforeach; ?></ul></label>
         </section>
 
-        <section class="tab">
+        <section id="section_biglietti" class="tab">
             <h4>Biglietti:</h4>
-            <div class="ticket_creator">
-                <label for="ticket_type">Tipo biglietto:
+            <div class="ticket_creator" id="ticket_creator_0">
+                <label>Tipo biglietto:
                 <select name="ticket_type[]" required class="required">
                     <option value="" disabled selected hidden>Seleziona una categoria...</option>
                     <?php foreach ($templateParams["tipoPosti"] as $tipoPosto): ?>
                         <option value="<?php echo $tipoPosto["codTipologia"]; ?>"><?php echo $tipoPosto["nomeTipologia"];?></option>
                     <?php endforeach; ?>
                 </select></label>
-                <label for="ticket_cost">Costo unitario del biglietto : <input id="ticket_cost" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/></label>
-                <label for="num_tickets"> Numero biglietti: <input type="number" min="1" name="num_tickets[]" id="num_tickets" required class="required"/></label>
-                <label for="rm_ticket_btn" class="visuallyhidden">Rimuovi ultima tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_btn" class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button><label for="add_ticket_btn" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" class="add_ticket_btn" type="button" onclick=addNewTicket()> + </button>
+                <label for="ticket_cost_0">Costo unitario del biglietto: </label><input id="ticket_cost_0" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/>
+                <label for="num_tickets_0"> Numero biglietti: </label><input type="number" min="1" name="num_tickets[]" id="num_tickets_0" required class="required"/>
+                <label for="rm_ticket_0" style="display: none" class="visuallyhidden">Rimuovi tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_0" class="rm_ticket_btn" style="display: none" type="button" onclick=removeTicket(0)> - </button><label for="add_ticket_btn" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" id="add_ticket_0" class="add_ticket_0" type="button" onclick=addNewTicket()> + </button>
             </div>
         </section>
 
         <section class="tab"> 
             <h4>Moderatori:</h4>
-            <div class="moderator_adder">
-                <label for="mod_mail">Mail del moderatore: </label><input id="mod_mail" type="text" name="mod_mail[]" placeholder="E-mail moderatore"/></label>
-                <label for="rm_ticket_btn" class="visuallyhidden">Rimuovi ultimo moderatore</label><button title="Rimuovi moderatore" class="rm_mod_btn" type="button" onclick=removeLastMod()> - </button><label for="rm_ticket_btn" class="visuallyhidden">Aggiungi un moderatore</label><button title="Aggiungi moderatore" class="add_mod_btn" type="button" onclick=addNewMod()> + </button>
+            <div class="moderator_adder" id="section_moderatori">
+                <p id="no_mod_parag">Nessun moderatore presente al momento: aggiungine uno</p>
+                <label id="no_mod_label" for="add_mod_btn" class="visuallyhidden">Aggiungi un moderatore</label><button title="Aggiungi moderatore" class="add_mod_btn" type="button" onclick=addNewMod()> + </button>
             </div>
         </section>
 
