@@ -21,37 +21,60 @@
             <label for="image_picker"> Scegli un'immagine: <br/><input name="" type="file" id="image_picker" name="filename"/></label>
             <label for="catg_list">Aggiungi delle categorie:<ul id="catg_list">
             <?php foreach ($templateParams["categories"] as $category): ?>
-                <li><input type="checkbox" name="categories[]" value="<?php echo $category["codCategoria"]?>" <?php if(strpos($templateParams["evento"]["categorie"], $category["nomeCategoria"]) !== false) {echo "checked";} ?>/><?php echo $category["nomeCategoria"];?></li>
+                <li><label><input type="checkbox" name="categories[]" value="<?php echo $category["codCategoria"]?>" <?php if(strpos($templateParams["evento"]["categorie"], $category["nomeCategoria"]) !== false) {echo "checked";} ?>/><?php echo $category["nomeCategoria"];?></label></li>
             <?php endforeach; ?></ul></label>
         </section>
 
-        <section class="tab">
+        <section id="section_biglietti" class="tab">
             <h4>Biglietti:</h4>
+            <?php $numTickets = 0 ?>
             <?php foreach($templateParams["biglietti"] as $biglietto): ?>
-                <div class="ticket_creator">
-                    <label for="ticket_type">Tipo biglietto:
+                <div class="ticket_creator" id=<?php echo "ticket_creator_".$numTickets?>>
+                    <label>Tipo biglietto:
                     <select name="ticket_type[]" required class="required">
                         <?php foreach ($templateParams["tipoPosti"] as $tipoPosto): ?>
                             <option value="<?php echo $tipoPosto["codTipologia"]; ?>" <?php if($biglietto["codTipologia"] == $tipoPosto["codTipologia"]) { echo "selected";} elseif ($biglietto["postiPrenotati"] > 0) {echo "disabled";}?>><?php echo $tipoPosto["nomeTipologia"];?></option>
                         <?php endforeach; ?>
                     </select></label>
-                    <label for="ticket_cost">Costo unitario del biglietto : <input id="ticket_cost" name="ticket_cost[]" type="number" min="0" step="1" required class="required" value="<?php printf("%.2f", $biglietto["costo"]/100); ?>" <?php echo ($biglietto["postiPrenotati"] > 0 ? "readonly" : "")?>/></label>
-                    <label for="num_tickets"> Numero biglietti: <input type="number" min="<?php echo $biglietto["postiPrenotati"];?>" name="num_tickets[]" id="num_tickets" required value="<?php echo $biglietto["numTotPosti"]?>"/></label>
-                    <?php if($biglietto["postiPrenotati"] == 0) {echo  '<label for="rm_ticket_btn" class="visuallyhidden">Rimuovi ultima tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_btn" class="rm_ticket_btn" type="button" onclick=removeLastTicket()> - </button>'; }  ?>
-                    <label for="add_ticket_btn" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" class="add_ticket_btn" type="button" onclick=addNewTicket()> + </button>
+                    <label for=<?php echo "ticket_cost_".$numTickets ?>>Costo unitario del biglietto: </label><input id=<?php echo "ticket_cost_".$numTickets ?> name="ticket_cost[]" type="number" min="0" step="1" required class="required" value="<?php printf("%.2f", $biglietto["costo"]/100); ?>" <?php echo ($biglietto["postiPrenotati"] > 0 ? "readonly" : "")?>/>
+                    <label for=<?php echo "num_tickets_".$numTickets ?>> Numero biglietti: </label><input type="number" min="<?php echo $biglietto["postiPrenotati"];?>" name="num_tickets[]" id=<?php echo "num_tickets_".$numTickets?> required class="required" value="<?php echo $biglietto["numTotPosti"]?>"/>
+                    <?php
+                        if($biglietto["postiPrenotati"] == 0) {
+                            $message = '<label for="rm_ticket_'.$numTickets.'" class="visuallyhidden"';
+                            if(count($templateParams["biglietti"]) <= 1) {
+                                $message .= ' style="display: none" ';
+                            }
+                            $message .= '>Rimuovi tipologia di biglietto</label>
+                            <button ';
+                            if(count($templateParams["biglietti"]) <= 1) {
+                                $message .= ' style="display: none" ';
+                            }
+                            $message .= 'title="Rimuovi biglietto" id="rm_ticket_'.$numTickets.'" class="rm_ticket_btn" type="button" onclick=removeTicket('.$numTickets.')> - </button>';
+                            echo $message;
+                        }
+                    ?>
+                    <label for=<?php echo "add_ticket_".$numTickets ?> class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" id=<?php echo "add_ticket_".$numTickets ?> class="add_ticket_btn" type="button" onclick=addNewTicket()> + </button>
                 </div>
+                <?php $numTickets = $numTickets + 1; ?>
             <?php endforeach; ?>
         </section>
 
-        <section class="tab">
+        <section id="section_moderatori" class="tab">
             <h4>Moderatori:</h4>
-            <div class="moderator_adder">
-
-                <?php foreach($templateParams["moderatori"] as $mod):?>
-                    <label for="mod_mail">Mail del moderatore: </label><input id="mod_mail" type="text" name="mod_mail[]" value="<?php echo $mod;?>"/>
-                    <label for="rm_ticket_btn" class="visuallyhidden">Rimuovi ultimo moderatore</label><button title="Rimuovi moderatore" class="rm_mod_btn" type="button" onclick=removeLastMod()> - </button><label for="rm_ticket_btn" class="visuallyhidden">Aggiungi un moderatore</label><button title="Aggiungi moderatore" class="add_mod_btn" type="button" onclick=addNewMod()> + </button>
-                <?php endforeach;?>
-            </div>
+            <?php $numMods = 0 ?>
+            <?php foreach($templateParams["moderatori"] as $mod):?>
+                <div class="moderator_adder" id="mod_adder".$numMods>
+                        <label for=<?php echo "mod_".$numMods ?>>Mail del moderatore: </label><input id="mod_".$numMods type="text" name="mod_mail[]" value="<?php echo $mod["emailModeratore"];?>"/>
+                        <label for="rm_mod_".$numMods class="visuallyhidden">Rimuovi moderatore</label><button id="rm_mod_".$numMods title="Rimuovi moderatore" class="rm_mod_btn" type="button" onclick=removeMod(<?php echo $numMods ?>)> - </button><label for="add_mod".$numMods class="visuallyhidden">Aggiungi un moderatore</label><button title="Aggiungi moderatore" id="add_mod".$numMods class="add_mod_btn" type="button" onclick=addNewMod()> + </button>
+                        <?php $numMods = $numMods + 1; ?>
+                    </div>
+            <?php endforeach;?>
+            <?php
+                if(count($templateParams["moderatori"]) <= 0) {
+                    echo '<p id="no_mod_parag">Nessun moderatore presente al momento: aggiungine uno</p>';
+                    echo '<label id="no_mod_label" for="add_mod_btn" class="visuallyhidden">Aggiungi un moderatore</label><button title="Aggiungi moderatore" class="add_mod_btn" type="button" onclick=addNewMod()> + </button>';
+                }
+            ?>
         </section>
 
         <div style="overflow:auto;">
