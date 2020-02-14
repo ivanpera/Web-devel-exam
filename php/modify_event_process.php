@@ -19,7 +19,7 @@
     $codLuogo = intval($_POST["luogo"]);
     $descrizione = $_POST["description"];
     $NSFC = isset($_POST["NSFC"]) ? 1 : 0;
-    $categories = $_POST["categories"];
+    $categories = empty($_POST["categories"]) ? array() : $_POST["categories"];
     $emailModeratori = empty($_POST["mod_mail"]) ? array() : $_POST["mod_mail"];
 
     $biglietti["type"] = $_POST["ticket_type"];
