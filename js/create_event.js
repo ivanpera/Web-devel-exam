@@ -50,9 +50,7 @@ function addNewTicket() {
     <div class="ticket_creator"> \
     </div>');
 
-    $.each($("div.ticket_creator:not(:first-of-type)"), function (i, item) {
-        item.innerHTML = $("div.ticket_creator:first-of-type").html();
-    });
+    $("div.ticket_creator:last-of-type").html($("div.ticket_creator:last-of-type").prev().html());
 }
 
 function removeLastMod() {
