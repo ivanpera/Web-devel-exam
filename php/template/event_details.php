@@ -13,11 +13,11 @@
 
         <p> Dove: <?php echo $templateParams["evento"]["nomeLuogo"].", ".$templateParams["evento"]["indirizzo"]?> </p>
 
-        <label for="btn_show_on_map">
+        <!--<label for="btn_show_on_map">
             <button type="button" id="btn_show_on_map">
                 Mostralo sulla mappa
             </button>
-        </label>
+        </label>-->
     <?php if($templateParams["evento"]["dataEOra"] > date("Y-m-d H:i:s")):?>
     <div id="tickets">
         Biglietti disponibili: <?php echo min($templateParams["evento"]["capienzaMassima"],$templateParams["evento"]["maxPostiDisponibili"]) - $templateParams["evento"]["postiOccupati"]?>
