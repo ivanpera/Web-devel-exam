@@ -34,3 +34,9 @@ h4 {
 .prevNext_div {
     float: right;
 }
+
+.imgMiniature {
+    height: 15%;
+    width: 15%;
+    object-fit: contain;
+}
