@@ -215,8 +215,8 @@ function checkTickets(modifiedIndex) {
 $(document).ready(function () {
     $("select#luogo").bind("input keyup", function() {setMaxCapacityOf(); recheckTickets();});
     $('[id^="num_tickets_"]').each(function(index, element){
-        $(this).prop("oninput", "checkTickets("+index+")");
-        $(this).prop("onkeyup", "checkTickets("+index+")");
+        $(this).attr("oninput", "checkTickets("+index+")");
+        $(this).attr("onkeyup", "checkTickets("+index+")");
     });
 });
 function isCreateForm() {
