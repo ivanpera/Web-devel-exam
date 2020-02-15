@@ -621,6 +621,13 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getPlaceCapacity($codLuogo) {
+        $stmt = $this->db->prepare("SELECT capienzaMassima FROM luogo WHERE codLuogo = ?");
+        $stmt->bind_param("i", $codLuogo);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
+
     private function getHashedPassword($email, $password) {
         $salt = hash('sha512', $email);
         $hashedPass = hash('sha512', $password.$salt);
