@@ -5,13 +5,14 @@
     }
     define("ONE_MiB", 1048576);
 
+    $imageName = "";
+
     if(!empty($_FILES["imageName"]["name"])) {
-        $imageName = uploadImage();
-        if(!empty($_POST["currentImageName"])) {
+        $imageArray = uploadImage();
+        $imageName = $imageArray["imageName"];
+        if(!empty($_POST["currentImageName"]) && !$imageArray["uploadError"]) {
             unlink("../img/".$_SESSION["sessUser"]["email"]."/".$_POST["currentImageName"]);
         }
-    } else {
-        $imageName = "";
     }
     $codEvento = $_POST["codEvento"];
     $eventName = $_POST["nomeEvento"];
@@ -38,6 +39,6 @@
     }
 
     $dbh->updateEvent($codEvento, $eventName, $dataEOra, $NSFC, $descrizione, $imageName, $codLuogo, $categories, $biglietti, $emailModeratori);
-    safeHeader("Location: ../event_details.php?codEvento=".$codEvento);
+    safeHeader("Location: ../event_details.php?codEvento=".$codEvento.($imageArray["uploadError"] ? "&uploadError=".$imageArray["uploadError"] : ""));
     
 ?>
