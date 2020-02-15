@@ -7,14 +7,14 @@ button.collapsableBtn {
 h2, button.collapsableBtn > span {
   display: inline-block;
   width: 92%;
-  margin-top: 0.2em;
+  margin-top: .8%;
   vertical-align: top;
-  font-size: .9em;
+  font-size: 1em;
   padding-right: 4%;
   box-sizing: border-box;
 }
 
-.main-article > article {
+div.list-container > article {
   margin-bottom: .5em;
 }
 
@@ -32,6 +32,7 @@ h3 + button.collapsableBtn {
 
 h3 + button.collapsableBtn > img.collapsableIcon {
   width: 1em;
+  padding: 2%;
 }
 
 div.articles {
@@ -39,18 +40,12 @@ div.articles {
   padding: 1%;
 }
 
-div.articles section article {
-  border-bottom: thin solid black;
-}
-
 img.collapsableIcon {
   width: 8%;
+  padding: 1%;
   vertical-align: top;
   object-fit: contain;
-}
-
-div.main-article {
-  background-color: #edefef;
+  box-sizing: border-box;
 }
 
 div.articles > article > a > *{
@@ -72,4 +67,8 @@ div.articles > article > span.description_span {
   display: block;
   height: 3rem;
   overflow: hidden;
+}
+
+article a {
+  text-decoration: none;
 }
