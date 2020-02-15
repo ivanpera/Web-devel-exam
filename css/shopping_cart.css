@@ -1,0 +1,42 @@
+ul > li > * {
+    display: block;
+}
+
+h1 {
+    font-size: 1.2em;
+}
+
+h2 {
+    font-size: 1em;
+}
+
+.list-item {
+    margin-bottom: .5em;
+    padding: 1%;
+}
+
+ul > li > p.cartRemover:hover {
+    cursor: pointer;
+    color: blue;
+}
+
+ul > li > p.cartRemover {
+    text-align: right;
+    width: 100%;
+    text-decoration: underline;
+}
+
+.right-aligned {
+    text-align: right;
+}
+
+button.cartEmptier {
+    vertical-align: top;
+    width: 40%;
+}
+
+button.pay {
+    vertical-align: top;
+    width: 25%;
+    margin-left: 35%;
+}
