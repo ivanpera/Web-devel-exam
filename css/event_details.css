@@ -11,6 +11,10 @@ p {
     margin-top: 2%;
 }
 
+div.reviews {
+    margin-top: 5%;
+}
+
 .main-content img {
     display: block;
     margin-left: auto;
