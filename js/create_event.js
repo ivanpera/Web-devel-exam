@@ -173,13 +173,11 @@ function getSumOfTickets() {
 
 function setMaxCapacityOf() {
     let codLuogo = $("select#luogo").val();
-    console.log(codLuogo);
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
             $("#maxCapacity").html("Capacità massima del luogo: "+xhttp.responseText);
             $("#maxCapacity").attr("max-capacity", xhttp.responseText);
-            console.log($("#maxCapacity").attr("max-capacity"));
         }
     };
     xhttp.open("POST", "php/ajax_response/place_capacity.php");
