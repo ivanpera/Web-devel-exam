@@ -105,10 +105,6 @@ body > header {
     z-index: 1;
 }
 
-body > header > a:first-child {
-    width: 8%;
-}
-
 body > header > a > img.login {
     box-sizing: border-box;
     padding: 10%;
@@ -134,7 +130,7 @@ header > * {
 }
 
 header > a {
-    width: 15%;
+    width: 8%;
     display: inline-block;
     height: 100%;
     text-align: center;
