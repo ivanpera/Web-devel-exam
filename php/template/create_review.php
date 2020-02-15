@@ -4,8 +4,9 @@
     <input name="codEvento" hidden value="<?php echo $_GET["codEvento"]?>"/>
     <input name="emailUtente" hidden value="<?php echo $_SESSION["sessUser"]["email"]?>"/>
     <label>Voto: <span id="valoreVoto"></span><input type="range" name="voto" min="1" max="5" step="1" value="3" /></label>
-    <label>
-      <textarea name="descrizione"></textarea>
+    <label>Testo:
+      <textarea name="descrizione" maxlength="500" oninput="checkRemainingCharacters()" onkeyup="checkRemainingCharacters()"></textarea>
+      <p id="remainingChars"></p>
     </label>
     <label>Anonima: <input type="checkbox" name="anonymous"/></label>
     <input type="submit"/>
