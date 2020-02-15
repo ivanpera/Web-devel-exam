@@ -1,4 +1,4 @@
-<div class="mainContent">
+<div class="main-content">
   <h3>Scrivi una recensione per l'evento '<?php echo $templateParams["nomeEvento"]?>'</h3>
   <form id="reviewForm" action="php/create_review_process.php" method="post">
     <input name="codEvento" hidden value="<?php echo $_GET["codEvento"]?>"/>
