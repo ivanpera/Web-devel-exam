@@ -29,6 +29,7 @@
 
         <section id="section_biglietti" class="tab">
             <h4>Biglietti:</h4>
+            <p id="maxCapacity" max-capacity=""></p>
             <div class="ticket_creator" id="ticket_creator_0">
                 <label>Tipo biglietto:
                 <select name="ticket_type[]" required class="required">
