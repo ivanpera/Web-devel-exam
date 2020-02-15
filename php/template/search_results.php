@@ -20,7 +20,9 @@
                 <span><?php echo $event["dataEOra"];?></span>
                 <span><?php echo $event["nomeLuogo"].", ".$event["indirizzo"];?></span>
                 <span class="description_span"><?php echo "<h3>Descrizione</h3>\n".$event["descrizione"];?></span>
+                <?php if($event["dataEOra"] > date("Y-m-d H:i:s")):?>
                 <span>Posti <?php echo ($event["dataEOra"] > date("Y-m-d H:i:s") ? "disponibili" : "rimasti" );?>: <?php echo min($event["capienzaMassima"], $event["maxPostiDisponibili"]) - $event["postiOccupati"]?></span>
+                <?php endif; ?>
             </article>
         </a>
         <?php endforeach;?>
