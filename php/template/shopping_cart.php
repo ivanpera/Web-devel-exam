@@ -1,5 +1,5 @@
 <?php if (!empty($templateParams["eventi"])) : ?>
-  <button class="cartEmptier" onclick="emptyCart()">Svuota carrello</button>
+  <button type="button" class="cartEmptier" onclick="emptyCart()">Svuota carrello</button>
   <?php foreach ($templateParams["eventi"] as $evento): ?>
     <div class="evento">
       <p><?php echo $evento["nomeEvento"]?>
@@ -10,7 +10,7 @@
           <?php $arrTipoCosto = explode("/",$tipoCosto); ?>
           <p>Tipologia: <?php echo $dbh->getSeatType($arrTipoCosto[0])["nomeTipologia"]; ?></p>
           <p><?php echo (intval($arrTipoCosto[1])/100)."€ * ".$numero." = ".(intval($arrTipoCosto[1]) / 100 * intval($numero))."€";?></p> 
-          <button class="cartRemover" onclick='removeFromCart(<?php echo $evento["codEvento"].",".$arrTipoCosto[0].",".$arrTipoCosto[1].",".$numero;?>)'>Rimuovi voce</button>
+          <button type="button" class="cartRemover" onclick='removeFromCart(<?php echo $evento["codEvento"].",".$arrTipoCosto[0].",".$arrTipoCosto[1].",".$numero;?>)'>Rimuovi voce</button>
         </div>
       <?php endforeach; ?>
     </div>
