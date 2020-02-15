@@ -46,7 +46,7 @@
 
         <section class="tab"> 
             <h4>Moderatori:</h4>
-            <div class="moderator_adder" id="section_moderatori">
+            <div id="section_moderatori">
                 <p id="no_mod_parag">Nessun moderatore presente al momento: aggiungine uno</p>
                 <label id="no_mod_label" for="add_mod_btn" class="visuallyhidden">Aggiungi un moderatore</label><button title="Aggiungi moderatore" class="add_mod_btn" type="button" onclick=addNewMod()> + </button>
             </div>
