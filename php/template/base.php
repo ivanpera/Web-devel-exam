@@ -63,13 +63,13 @@
         <ul>
           <li><a href="user_area.php">Profilo</a></li>
           <li><a href="shopping_cart.php">Carrello</a></li>
-          <li>Statistiche</li>
+          <!-- <li>Statistiche</li> -->
           <li><a href="notification.php">Notifiche<?php if(isset($notificationNumber)) {echo " (".$notificationNumber.")";}?></a></li>
-          <li>Moderazione</li>
+          <!-- <li>Moderazione</li> -->
           <li><a href="php/logout_process.php">Logout</a></li>
         </ul>
     </aside>
-    <div id="overlay"></div>
+    <div id="overlay" onclick=closeSidebar()></div>
 
     <footer>Contatti</footer>
   </body>
