@@ -1,7 +1,6 @@
 <!-- Template taken from https://www.w3schools.com/howto/howto_js_form_steps.asp -->
 <div class="main-content">
-    <?php if (isset($_GET["uploadError"])) { echo '<p>'.$errorMessages[$_GET["uploadError"]].'</p>'; }?>
-    <form id="createForm" action="php/create_event_process.php" method="post">
+    <form id="createForm" action="php/create_event_process.php" method="post" enctype="multipart/form-data">
         <h3>Crea un evento: </h3>
 
         <section class="tab"> 
@@ -21,7 +20,7 @@
 
         <section class="tab"> 
             <h4>Informazioni aggiuntive:</h4>
-            <label for="image_picker"> Scegli un'immagine: <br/><input name="" type="file" id="image_picker" name="filename"/></label>
+            <label for="image_picker"> Scegli un'immagine: <br/><input type="file" id="image_picker" name="imageName"/></label>
             <label for="catg_list">Aggiungi delle categorie:<ul id="catg_list">
             <?php foreach ($templateParams["categories"] as $category): ?>
                 <li><label><input type="checkbox" name="categories[]" value="<?php echo $category["codCategoria"]?>"/><?php echo $category["nomeCategoria"];?></label></li>
