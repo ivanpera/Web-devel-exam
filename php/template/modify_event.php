@@ -18,6 +18,7 @@
 
         <section class="tab">
             <h4>Informazioni aggiuntive:</h4>
+            <input type="text" value="<?php echo $templateParams["evento"]["nomeImmagine"]?>" name="currentImageName" hidden/>
             <label for="image_picker"> Scegli un'immagine: <br/><input type="file" id="image_picker" name="imageName"/></label>
             <label for="catg_list">Aggiungi delle categorie:<ul id="catg_list">
             <?php foreach ($templateParams["categories"] as $category): ?>
