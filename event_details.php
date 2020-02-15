@@ -30,5 +30,11 @@
     $templateParams["votoMedioRecensioni"] = $dbh->getAverageReviewVote($_GET["codEvento"]);
     $templateParams["utenteHaRecensito"] = (isset($_SESSION["sessUser"]) ? $dbh->hasUserWrittenReview($_GET["codEvento"], $_SESSION["sessUser"]["email"]) : 1);
     $templateParams["userCanReview"] = (isset($_SESSION["sessUser"]) ? !$dbh->canUserReviewEvent($_GET["codEvento"], $_SESSION["sessUser"]["email"]) : 0) && (isset($_SESSION["sessUser"]) ? $_SESSION["sessUser"]["email"] != $templateParams["evento"]["emailOrganizzatore"] : 0);
+    $errorMessages = array("",
+                           "The submitted file is not a real image.", 
+                           "The submitted file already exists on the server, please change its name.",
+                           "The submitted file is too large, please load a smaller one.",
+                           "The submitted file has a not supported type, please change the type of the file.",
+                           "An internal error occurred, please retry later.");
     require(TEMPLATE_DIR."base.php");
 ?>

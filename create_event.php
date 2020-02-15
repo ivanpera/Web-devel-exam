@@ -12,11 +12,5 @@
     $templateParams["categories"] = $dbh->getCategories();
     $templateParams["tipoPosti"] = $dbh->getSeatTypes();
     $templateParams["luoghi"] = $dbh->getPlaces();
-    $errorMessages = array("",
-                           "The submitted file is not a real image.", 
-                           "The submitted file already exists on the server, please change its name.",
-                           "The submitted file is too large, please load a smaller one.",
-                           "The submitted file has a not supported type, please change the type of the file.",
-                           "An internal error occurred, please retry later.");
     require(TEMPLATE_DIR."base.php");
 ?>
