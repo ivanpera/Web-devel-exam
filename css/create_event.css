@@ -30,3 +30,7 @@ h4 {
 .tab{
     display: none;
 }
+
+.prevNext_div {
+    float: right;
+}
