@@ -1,8 +1,10 @@
 <div class="main-content">
+  <h1> Area utente </h1>
   <!-- Dati personali -->
   <section id="personalSection">
-    <p><?php echo $_SESSION["sessUser"]["email"]?></p>
-    <p><?php echo $templateParams["userData"]["nome"]." ".$templateParams["userData"]["cognome"]?></p>
+    <h2>Informazioni personali</h2>
+    <p>Indirizzo mail: <?php echo $_SESSION["sessUser"]["email"]?></p>
+    <p>Nome e cognome: <?php echo $templateParams["userData"]["nome"]." ".$templateParams["userData"]["cognome"]?></p>
     <p>Genere: <?php echo $genere[$templateParams["userData"]["genere"]];?></p>
     <p>Nato il: <?php echo $templateParams["userData"]["dataNascita"]?></p>
     <p>Iscritto il: <?php echo $templateParams["userData"]["dataIscrizione"]?></p>
@@ -10,80 +12,80 @@
 
   <!-- Eventi osservati -->
   <section id="observedSection">
-    <button class="collapsableBtn"><img class="collapsableIcon" src="img/ArrowIcon.png"/>Eventi osservati</button>
-      <div class="articles">
+    <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/><h2>Eventi osservati</h2></button>
+      <div class="articles main-article">
         <?php
         if (count($templateParams["observedEvents"]) == 0) {
           echo "<p>Non stai osservando alcun evento.</p>";
         }
         ?>
         <?php foreach($templateParams["observedEvents"] as $osservato):?>
-          <a href="event_details.php?codEvento=<?php echo $osservato["codEvento"];?>">
           <article>
+            <a href="event_details.php?codEvento=<?php echo $osservato["codEvento"];?>">
               <h4><?php echo $osservato["nomeEvento"];?></h4>
               <span><?php echo "Data: ".$osservato["dataEOra"];?></span><br/>
-              <span><?php echo $osservato["nomeLuogo"]." @ ".$osservato["indirizzo"];?></span><br/>
+              <span><?php echo $osservato["nomeLuogo"].", ".$osservato["indirizzo"];?></span><br/>
               <span class="description_span"><?php echo $osservato["descrizione"];?></span>
               <span>Posti: <?php echo $osservato["postiOccupati"]."/".min($osservato["capienzaMassima"], $osservato["maxPostiDisponibili"])." (".$osservato["percPostiOccupati"]."%)"?></span><br/>
+            </a>
           </article>
-          </a>
         <?php endforeach;?>
-        <a href="#observedSection">Return at the top</a>
+        <a href="#observedSection">Torna in cima</a>
       </div>
   </section>
 
   <!-- Eventi organizzati -->
   <section id="organizedSection">
-  <button class="collapsableBtn"><img class="collapsableIcon" src="img/ArrowIcon.png"/>Eventi Organizzati</button>
-      <div class="articles">
+  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/><h2>Eventi Organizzati</h2></button>
+      <div class="articles main-article">
       <?php
         if (count($templateParams["organizedEvents"]) == 0) {
           echo "<p>Non hai organizzato alcun evento.</p>";
         }
         ?>
         <?php foreach($templateParams["organizedEvents"] as $organizzato):?>
-          <a href="event_details.php?codEvento=<?php echo $organizzato["codEvento"];?>">
           <article>
+          <a href="event_details.php?codEvento=<?php echo $organizzato["codEvento"];?>">
               <h4><?php echo $organizzato["nomeEvento"];?></h4>
               <span><?php echo "Data: ".$organizzato["dataEOra"];?></span><br/>
-              <span><?php echo $organizzato["nomeLuogo"]." @ ".$organizzato["indirizzo"];?></span><br/>
+              <span><?php echo $organizzato["nomeLuogo"].", ".$organizzato["indirizzo"];?></span><br/>
               <span class="description_span"><?php echo $organizzato["descrizione"];?></span>
               <span>Posti: <?php echo $organizzato["postiOccupati"]."/".min($organizzato["capienzaMassima"], $organizzato["maxPostiDisponibili"])." (".$organizzato["percPostiOccupati"]."%)"?></span><br/>
+            </a>
           </article>
-          </a>
         <?php endforeach;?>
-        <a href="#organizedSection">Return at the top</a>
+        <a href="#organizedSection">Torna in cima</a>
       </div>
   </section>
 
   <!-- Eventi moderati -->
   <section id="moderatedSection">
-  <button class="collapsableBtn"><img class="collapsableIcon" src="img/ArrowIcon.png"/>Eventi moderati</button>
-      <div class="articles">
+  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/><h2>Eventi moderati</h2></button>
+      <div class="articles main-article">
       <?php
         if (count($templateParams["moderatedEvents"]) == 0) {
           echo "<p>Non sei stato nominato moderatore per alcun evento.</p>";
         }
         ?>
         <?php foreach($templateParams["moderatedEvents"] as $moderato):?>
-          <a href="event_details.php?codEvento=<?php echo $moderato["codEvento"];?>">
           <article>
+            <a href="event_details.php?codEvento=<?php echo $moderato["codEvento"];?>">
               <h4><?php echo $moderato["nomeEvento"];?></h4>
               <span><?php echo "Data: ".$moderato["dataEOra"];?></span><br/>
-              <span><?php echo $moderato["nomeLuogo"]." @ ".$moderato["indirizzo"];?></span><br/>
+              <span><?php echo $moderato["nomeLuogo"].", ".$moderato["indirizzo"];?></span><br/>
               <span class="description_span"><?php echo $moderato["descrizione"];?></span>
               <span>Posti: <?php echo $moderato["postiOccupati"]."/".min($moderato["capienzaMassima"], $moderato["maxPostiDisponibili"])." (".$moderato["percPostiOccupati"]."%)"?></span><br/>
+            </a>
           </article>
-          </a>
         <?php endforeach;?>
-        <a href="#moderatedSection">Return at the top</a>
+        <a href="#moderatedSection">Torna in cima</a>
       </div>
   </section>
 
   <!-- Eventi presieduti -->
   <section id="bookedSection">
-    <button class="collapsableBtn"><img class="collapsableIcon" src="img/ArrowIcon.png"/>Eventi prenotati</button>
-      <div class="articles">
+    <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/><h2>Eventi prenotati</h2></button>
+      <div class="articles main-article">
       <?php
         if (count($templateParams["bookedEvents"]) == 0) {
           echo "<p>Non hai prenotato alcun evento.</p>";
@@ -94,10 +96,12 @@
             <a href="event_details.php?codEvento=<?php echo $prenotato["codEvento"];?>">
               <h4><?php echo $prenotato["nomeEvento"];?></h4>
               <span><?php echo "Data: ".$prenotato["dataEOra"];?></span><br/>
-              <span><?php echo $prenotato["nomeLuogo"]." @ ".$prenotato["indirizzo"];?></span><br/>
-              <span class="description_span"><?php echo $prenotato["descrizione"];?></span>
+              <span><?php echo $prenotato["nomeLuogo"].", ".$prenotato["indirizzo"];?></span><br/>
+              <!--<span class="description_span"><!?php echo $prenotato["descrizione"];?></span>-->
             </a>
-              <button class="collapsableBtn"><img class="collapsableIcon" src="img/ArrowIcon.png"/>Posti prenotati: <?php echo $prenotato["postiOccupati"]?></button>
+            <section>
+              <h3>Posti prenotati: <?php echo $prenotato["postiOccupati"]?></h3>
+              <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/>Espandi</button>
               <div class="articles">
                 <?php foreach ($prenotato["bigliettiPrenotati"] as $biglietto): ?>
                   <article>
@@ -106,17 +110,18 @@
                     <p>Codice prenotazione: <?php echo $biglietto["codPrenotazione"];?></p>
                   </article>
                 <?php endforeach; ?>
-              </div>
+              <div>
+            </section>
           </article>
           
         <?php endforeach;?>
-        <a href="#bookedSection">Return at the top</a>
+        <a href="#bookedSection">Torna in cima</a>
       </div>
   </section>
 
   <section id="reviewSection">
-  <button class="collapsableBtn"><img class="collapsableIcon" src="img/ArrowIcon.png"/>Le tue recensioni</button>
-      <div class="articles">
+  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/><h2>Le tue recensioni</h2></button>
+      <div class="articles main-article">
       <?php if (count($templateParams["recensioni"]) == 0) {
           echo "<p>Non hai scritto alcuna recensione.</p>";
         }
@@ -132,7 +137,7 @@
               <p>Data scrittura<?php echo "Data: ".$recensione["dataScrittura"];?></p><br/>
           </article>
         <?php endforeach;?>
-        <a href="#reviewSection">Return at the top</a>
+        <a href="#reviewSection">Torna in cima</a>
       </div>
   </section>
 </div>
