@@ -11,12 +11,6 @@
         die();
     }
 
-    function checkUploadError($uploadError) {
-        if ($uploadError != 0) {
-            safeHeader("Location: ../create_event.php?uploadError=".$uploadError);
-        }
-    }
-
     /*  uploadError = 0 -> all correct
         uploadError = 1 -> fake image
         uploadError = 2 -> file already exists
@@ -26,6 +20,7 @@
     */
     function uploadImage() {
         $imageName = "";
+        $uploadError = 0;
         //Se la stringa è vuota, allora non è stato caricato nessun file
         if ($_FILES["imageName"]["name"] != "") {
             $target_dir = "../img/".$_SESSION["sessUser"]["email"]."/";
@@ -36,24 +31,28 @@
             $target_file = $target_dir.$imageName;
             $check = getimagesize($_FILES["imageName"]["tmp_name"]);
             $imageFileType =  strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-            $uploadError = 0;
 
             $check !== false ? $uploadError = 0 : $uploadError = 1;
-            checkUploadError($uploadError);
 
-            file_exists($target_file) ? $uploadError = 2 : $uploadError = 0;
-            checkUploadError($uploadError);
+            if(!$uploadError) {
+                file_exists($target_file) ? $uploadError = 2 : $uploadError = 0;
+            }
+            if(!$uploadError) {
+                $_FILES["imageName"]["size"] > ONE_MiB ? $uploadError = 3 : $uploadError = 0;
+            }
 
-            $_FILES["imageName"]["size"] > ONE_MiB ? $uploadError = 3 : $uploadError = 0;
-            checkUploadError($uploadError);
+            if(!$uploadError) {
+                ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") ? $uploadError = 4 : $uploadError = 0;
+            }
 
-            ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") ? $uploadError = 4 : $uploadError = 0;
-            checkUploadError($uploadError);
-
-            move_uploaded_file($_FILES["imageName"]["tmp_name"], $target_file) ? $uploadError = 0 : $uploadError = 5;
-            checkUploadError($uploadError);
+            if(!$uploadError) {
+                move_uploaded_file($_FILES["imageName"]["tmp_name"], $target_file) ? $uploadError = 0 : $uploadError = 5;
+            }
+            if($uploadError) {
+                $imageName = "";
+            }
         }
-        return $imageName;
+        return array("imageName" => $imageName, "uploadError" => $uploadError);
     }
 
     if(isset($_SESSION["sessUser"])) {
