@@ -1,5 +1,6 @@
 <!-- Template taken from https://www.w3schools.com/howto/howto_js_form_steps.asp -->
 <div class="main-content">
+    <?php if (isset($_GET["uploadError"])) { echo '<p>'.$errorMessages[$_GET["uploadError"]].'</p>'; }?>
     <form id="createForm" action="php/create_event_process.php" method="post">
         <h3>Crea un evento: </h3>
 
