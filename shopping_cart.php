@@ -6,7 +6,7 @@
 
   $templateParams["name"] = "shopping_cart.php";
   $templateParams["title"] = "Carrello";
-  $templateParams["css"] = array("base.css");
+  $templateParams["css"] = array("base.css", "shopping_cart.css");
   $templateParams["js"] = array("https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js", "js/base.js", "js/cart_handler.js");
 
   $total = 0;
