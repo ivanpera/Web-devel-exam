@@ -4,8 +4,13 @@ let currentTickets = 1;
 
 $(document).ready(function() {
     showTab(currentTab);
+    const ticketCreators = document.getElementsByClassName("ticket_creator");
     currentMods = document.getElementsByClassName("moderator_adder").length;
-    currentTickets = document.getElementsByClassName("ticket_creator").length;
+    currentTickets = ticketCreators.length;
+    if(currentTickets <= 1 && !isCreateForm() && ticketCreators[0].children.length > 7) {
+        ticketCreators[0].children[5].style.display = "none";
+        ticketCreators[0].children[6].style.display = "none";
+    }
 });
 
 function showTab(n) {
@@ -39,7 +44,9 @@ function changeTab(step) {
     tabs[currentTab].style.display = "none";
     currentTab += step;
     if(currentTab >= tabs.length) {
-        $("#createForm").submit();
+        document.getElementById("nextBtn").style.display = "none";
+        document.getElementById("prevBtn").style.display = "none";
+        document.getElementsByTagName("form")[0].submit();
         return false;
     }
     showTab(currentTab);
@@ -212,3 +219,6 @@ $(document).ready(function () {
         $(this).prop("onkeyup", "checkTickets("+index+")");
     });
 });
+function isCreateForm() {
+    return document.getElementById("createForm") !== null;
+}
