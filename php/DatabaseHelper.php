@@ -215,7 +215,7 @@ class DatabaseHelper{
         $queryEvento = "UPDATE evento
                         SET nomeEvento = '".$nomeEvento."', dataEOra = '".$dataEOra."', NSFC = ".$NSFC.", descrizione = '".$descrizione."', codLuogo = ".$codLuogo;
         if(!empty($nomeImmagine)){
-            $queryEvento.=", nomeImmagine = ".$nomeImmagine;
+            $queryEvento.=", nomeImmagine = '".$nomeImmagine."'";
         }
         $queryEvento.=" WHERE codEvento = ".$codEvento;
         $stmtEvento = $this->db->prepare($queryEvento);
