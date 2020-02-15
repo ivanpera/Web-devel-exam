@@ -1,30 +1,56 @@
-section#personalSection {
-  width: 98%;
-  margin: 1%;
+button.collapsableBtn {
+  width: 100%;
+  text-align: center;
+  padding: 0px;
 }
 
-button.collapsableBtn {
-  text-align: left;
-  width: 98%;
+h2, button.collapsableBtn > span {
+  display: inline-block;
+  width: 92%;
+  margin-top: 0.2em;
+  vertical-align: top;
+  font-size: .9em;
+  padding-right: 4%;
+  box-sizing: border-box;
+}
+
+.main-article > article {
+  margin-bottom: .5em;
+}
+
+h3 {
+  font-size: .9em;
+  display: block;
   margin-left: 1%;
-  margin-right: 1%;
+}
+
+h3 + button.collapsableBtn {
+  width: 5em;
+  margin-left: 1%;
+  text-align: left;
+}
+
+h3 + button.collapsableBtn > img.collapsableIcon {
+  width: 1em;
 }
 
 div.articles {
   display: none;
+  padding: 1%;
+}
+
+div.articles section article {
+  border-bottom: thin solid black;
 }
 
 img.collapsableIcon {
-  width: 10%;
+  width: 8%;
+  vertical-align: top;
   object-fit: contain;
 }
 
-div.articles > article {
-  margin: 1%;
-  border: thin solid black;
-  width: 98%;
-  box-sizing: border-box;
-  padding: 2px;
+div.main-article {
+  background-color: #edefef;
 }
 
 div.articles > article > a > *{
@@ -36,7 +62,6 @@ div.articles > article > a > *{
 div.articles > article > h4 {
   text-align: center;
   margin: 0;
-  padding: 5px;
 }
 
 div.articles > article > span {
