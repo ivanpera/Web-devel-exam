@@ -4,8 +4,13 @@ let currentTickets = 1;
 
 $(document).ready(function() {
     showTab(currentTab);
+    const ticketCreators = document.getElementsByClassName("ticket_creator");
     currentMods = document.getElementsByClassName("moderator_adder").length;
-    currentTickets = document.getElementsByClassName("ticket_creator").length;
+    currentTickets = ticketCreators.length;
+    if(currentTickets <= 1 && !isCreateForm() && ticketCreators[0].children.length > 7) {
+        ticketCreators[0].children[5].style.display = "none";
+        ticketCreators[0].children[6].style.display = "none";
+    }
 });
 
 function showTab(n) {
@@ -39,7 +44,9 @@ function changeTab(step) {
     tabs[currentTab].style.display = "none";
     currentTab += step;
     if(currentTab >= tabs.length) {
-        $("#createForm").submit();
+        document.getElementById("nextBtn").style.display = "none";
+        document.getElementById("prevBtn").style.display = "none";
+        document.getElementsByTagName("form")[0].submit();
         return false;
     }
     showTab(currentTab);
@@ -97,8 +104,8 @@ function addNewTicket() {
         itemString += '<option value="' + seatOptions[i].value + '">' + seatOptions[i].innerHTML + '</option>';
     }
     itemString += '</select></label>   \
-    <label for="ticket_cost_' + currentTickets + '">Costo unitario del biglietto: </label><input id="ticket_cost_"' + currentTickets + '" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/> \
-    <label for="num_tickets_' + currentTickets + '"> Numero biglietti: </label><input type="number" min="1" name="num_tickets[]" id="num_tickets_"' + currentTickets + '" required class="required"/>  \
+    <label for="ticket_cost_' + currentTickets + '">Costo unitario del biglietto: </label><input id="ticket_cost_' + currentTickets + '" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/> \
+    <label for="num_tickets_' + currentTickets + '"> Numero biglietti: </label><input type="number" min="1" name="num_tickets[]" id="num_tickets_' + currentTickets + '" required class="required"/>  \
     <label for="rm_ticket_' + currentTickets + '" class="visuallyhidden">Rimuovi tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_' + currentTickets + '" class="rm_ticket_btn" type="button" onclick=removeTicket(' + currentTickets + ')> - </button>    \
     <label for="add_ticket_' + currentTickets + '" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" class=add_ticket_btn id="add_ticket_' + currentTickets + '" type="button" onclick=addNewTicket()> + </button>   \
     </div>';
@@ -150,4 +157,8 @@ function addNewMod() {
     </div> \
     ');
     currentMods++;
+}
+
+function isCreateForm() {
+    return document.getElementById("createForm") !== null;
 }
