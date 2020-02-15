@@ -18,7 +18,7 @@
 
         <section class="tab">
             <h4>Informazioni aggiuntive:</h4>
-            <label for="image_picker"> Scegli un'immagine: <br/><input name="" type="file" id="image_picker" name="filename"/></label>
+            <label for="image_picker"> Scegli un'immagine: <br/><input type="file" id="image_picker" name="imageName"/></label>
             <label for="catg_list">Aggiungi delle categorie:<ul id="catg_list">
             <?php foreach ($templateParams["categories"] as $category): ?>
                 <li><label><input type="checkbox" name="categories[]" value="<?php echo $category["codCategoria"]?>" <?php if(strpos($templateParams["evento"]["categorie"], $category["nomeCategoria"]) !== false) {echo "checked";} ?>/><?php echo $category["nomeCategoria"];?></label></li>
