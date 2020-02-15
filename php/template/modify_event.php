@@ -1,5 +1,5 @@
 <div class="main-content">
-    <form id="createForm" action="php/modify_event_process.php" method="post" enctype="multipart/form-data">
+    <form id="editForm" action="php/modify_event_process.php" method="post" enctype="multipart/form-data">
         <h3>Modifica un evento: </h3>
         <section class="tab"> 
             <h4>Informazioni di Base:</h4>
@@ -13,7 +13,7 @@
             </select></label>
             <label for="data">Data di inizio: <input name="data" id="data" type="date" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("Y-m-d")?>"/></label>
             <label for="ora">Ora di inizio: <input name="ora" type="time" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("H:i")?>"/></label>
-            <label for="description">Descrizione evento: <textarea name="description" form="createForm" placeholder="Descrizione dell'evento..."> <?php echo $templateParams["evento"]["descrizione"];?> </textarea></label>
+            <label for="description">Descrizione evento: <textarea name="description" form="editForm" placeholder="Descrizione dell'evento..."> <?php echo $templateParams["evento"]["descrizione"];?> </textarea></label>
         </section>
 
         <section class="tab">
@@ -40,16 +40,8 @@
                     <label for=<?php echo "num_tickets_".$numTickets ?>> Numero biglietti: </label><input type="number" min="<?php echo $biglietto["postiPrenotati"];?>" name="num_tickets[]" id=<?php echo "num_tickets_".$numTickets?> required class="required" value="<?php echo $biglietto["numTotPosti"]?>"/>
                     <?php
                         if($biglietto["postiPrenotati"] == 0) {
-                            $message = '<label for="rm_ticket_'.$numTickets.'" class="visuallyhidden"';
-                            if(count($templateParams["biglietti"]) <= 1) {
-                                $message .= ' style="display: none" ';
-                            }
-                            $message .= '>Rimuovi tipologia di biglietto</label>
-                            <button ';
-                            if(count($templateParams["biglietti"]) <= 1) {
-                                $message .= ' style="display: none" ';
-                            }
-                            $message .= 'title="Rimuovi biglietto" id="rm_ticket_'.$numTickets.'" class="rm_ticket_btn" type="button" onclick=removeTicket('.$numTickets.')> - </button>';
+                            $message = '<label for="rm_ticket_'.$numTickets.'" class="visuallyhidden">Rimuovi tipologia di biglietto</label>
+                                        <button title="Rimuovi biglietto" id="rm_ticket_'.$numTickets.'" class="rm_ticket_btn" type="button" onclick=removeTicket('.$numTickets.')> - </button>';
                             echo $message;
                         }
                     ?>
@@ -77,11 +69,9 @@
             ?>
         </section>
 
-        <div style="overflow:auto;">
-            <div style="float:right;">
-                <label for="prevBtn" class="visuallyhidden">Vai alla prossima sezione della form </label><button type="button" id="prevBtn" onclick="changeTab(-1)">Precedente</button>
-                <label for="nextBtn" class="visuallyhidden">Vai alla precedente sezione della form </label><button type="button" id="nextBtn" onclick="changeTab(1)">Successivo</button>
-            </div>
+        <div class="prevNext_div">
+            <label for="prevBtn" class="visuallyhidden">Vai alla prossima sezione della form </label><button type="button" id="prevBtn" onclick="changeTab(-1)">Precedente</button>
+            <label for="nextBtn" class="visuallyhidden">Vai alla precedente sezione della form </label><button type="button" id="nextBtn" onclick="changeTab(1)">Successivo</button>
         </div>
     </form>
 </div>
