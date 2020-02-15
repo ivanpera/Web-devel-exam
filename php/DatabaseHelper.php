@@ -515,7 +515,7 @@ class DatabaseHelper{
     }
 
     public function getNotificationFor($emailUtente) {
-        $stmt = $this->db->prepare("SELECT codEvento, codNotificaEvento AS codNotifica, titolo, letta, dataEOraInvio FROM notifica WHERE emailUtente = ?");
+        $stmt = $this->db->prepare("SELECT codEvento, codNotificaEvento AS codNotifica, titolo, letta, dataEOraInvio FROM notifica WHERE emailUtente = ? ORDER BY dataEOraInvio");
         $stmt->bind_param("s", $emailUtente);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
