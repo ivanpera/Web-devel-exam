@@ -80,30 +80,34 @@ function removeTicket(i) {
 }
 
 function addNewTicket() {
-    const ticketCreators = document.getElementsByClassName("ticket_creator");
-    addButtons = document.querySelectorAll('[id^="add_ticket"]');
-    seatOptions = document.querySelectorAll('.ticket_creator:first-of-type option');
-    for(let i = 0; i < currentTickets; i++) {
-        addButtons[i].style.display = "none";
-        if(ticketCreators[i].children.length > 7) {
-            ticketCreators[i].children[5].style.display = "inline-block";
-            ticketCreators[i].children[6].style.display = "inline-block";
+    if(getSumOfTickets() < Number($("#maxCapacity").attr("max-capacity"))) {
+        const ticketCreators = document.getElementsByClassName("ticket_creator");
+        addButtons = document.querySelectorAll('[id^="add_ticket"]');
+        seatOptions = document.querySelectorAll('.ticket_creator:first-of-type option');
+        for(let i = 0; i < currentTickets; i++) {
+            addButtons[i].style.display = "none";
+            if(ticketCreators[i].children.length > 7) {
+                ticketCreators[i].children[5].style.display = "inline-block";
+                ticketCreators[i].children[6].style.display = "inline-block";
+            }
         }
+        let itemString = '<div class="ticket_creator" id="ticket_creator_' + currentTickets + '">   \
+        <label>Tipo biglietto:      \
+        <select name="ticket_type[]" required class="required">';
+        for(let i = 0; i < seatOptions.length; i++) {
+            itemString += '<option value="' + seatOptions[i].value + '">' + seatOptions[i].innerHTML + '</option>';
+        }
+        itemString += '</select></label>   \
+        <label for="ticket_cost_' + currentTickets + '">Costo unitario del biglietto: </label><input id="ticket_cost_' + currentTickets + '" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/> \
+        <label for="num_tickets_' + currentTickets + '"> Numero biglietti: </label><input type="number" min="1" name="num_tickets[]" id="num_tickets_' + currentTickets + '" required class="required" oninput="checkTickets('+currentTickets+')" onkeyup="checkTickets('+currentTickets+')"/>  \
+        <label for="rm_ticket_' + currentTickets + '" class="visuallyhidden">Rimuovi tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_' + currentTickets + '" class="rm_ticket_btn" type="button" onclick=removeTicket(' + currentTickets + ')> - </button>    \
+        <label for="add_ticket_' + currentTickets + '" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" class=add_ticket_btn id="add_ticket_' + currentTickets + '" type="button" onclick=addNewTicket()> + </button>   \
+        </div>';
+        currentTickets++;
+        $("#section_biglietti").append(itemString);
+    } else {
+        alert("La capacità massima è stata raggiunta. Diminuire il numero di biglietti per aggiugere un'altra categoria");
     }
-    let itemString = '<div class="ticket_creator" id="ticket_creator_' + currentTickets + '">   \
-    <label>Tipo biglietto:      \
-    <select name="ticket_type[]" required class="required">';
-    for(let i = 0; i < seatOptions.length; i++) {
-        itemString += '<option value="' + seatOptions[i].value + '">' + seatOptions[i].innerHTML + '</option>';
-    }
-    itemString += '</select></label>   \
-    <label for="ticket_cost_' + currentTickets + '">Costo unitario del biglietto: </label><input id="ticket_cost_"' + currentTickets + '" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/> \
-    <label for="num_tickets_' + currentTickets + '"> Numero biglietti: </label><input type="number" min="1" name="num_tickets[]" id="num_tickets_"' + currentTickets + '" required class="required"/>  \
-    <label for="rm_ticket_' + currentTickets + '" class="visuallyhidden">Rimuovi tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_' + currentTickets + '" class="rm_ticket_btn" type="button" onclick=removeTicket(' + currentTickets + ')> - </button>    \
-    <label for="add_ticket_' + currentTickets + '" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" class=add_ticket_btn id="add_ticket_' + currentTickets + '" type="button" onclick=addNewTicket()> + </button>   \
-    </div>';
-    currentTickets++;
-    $("#section_biglietti").append(itemString);
 }
 
 function removeMod(i) {
@@ -151,3 +155,60 @@ function addNewMod() {
     ');
     currentMods++;
 }
+
+function getSumOfTickets() {
+    let sum = 0;
+    $('[id^="num_tickets"]').each(function(index, element) {
+        sum += Number($(this).val());
+    });
+    return sum;
+}
+
+function setMaxCapacityOf() {
+    let codLuogo = $("select#luogo").val();
+    console.log(codLuogo);
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if(xhttp.readyState == 4 && xhttp.status == 200) {
+            $("#maxCapacity").html("Capacità massima del luogo: "+xhttp.responseText);
+            $("#maxCapacity").attr("max-capacity", xhttp.responseText);
+            console.log($("#maxCapacity").attr("max-capacity"));
+        }
+    };
+    xhttp.open("POST", "php/ajax_response/place_capacity.php");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("codLuogo="+codLuogo);
+}
+
+//Called when place changed
+function recheckTickets() {
+    let maxCapacity = Number($("#maxCapacity").attr("max-capacity"));
+    let oldSum = getSumOfTickets();
+    if(oldSum > maxCapacity) {
+        $('[id^="num_tickets_"]').each(function(index, element) {
+            let num = Number($(this).val());
+            $(this).val(floor(num/oldSum*maxCapacity));
+        });
+        alert("La somma dei biglietti era maggiore della capacità massima. Il numero di ciascuna tipologia di biglietto è stata rivalutata in proporzione alla vecchia somma.");
+    }
+}
+
+//Called when ticket num changed
+function checkTickets(modifiedIndex) {
+    let maxCapacity = Number($("#maxCapacity").attr("max-capacity"));
+    let sum = getSumOfTickets();
+    if (sum > maxCapacity) {
+        let overVal = Number($("#num_tickets_"+modifiedIndex).val());
+        $("#num_tickets_"+modifiedIndex).val(overVal - (sum - maxCapacity));
+        alert("La somma dei biglietti è maggiore della capacità massima. Il numero dell'ultimo biglietto modificato verrà impostato al massimo numero possibile mantenendo invariati gli altri biglietti.");
+    }
+}
+
+
+$(document).ready(function () {
+    $("select#luogo").bind("input keyup", function() {setMaxCapacityOf(); recheckTickets();});
+    $('[id^="num_tickets_"]').each(function(index, element){
+        $(this).prop("oninput", "checkTickets("+index+")");
+        $(this).prop("onkeyup", "checkTickets("+index+")");
+    });
+});
