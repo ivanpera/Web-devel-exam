@@ -1,4 +1,7 @@
 <div class="main-content">
+    <?php if(isset($_GET["uploadError"])):?>
+        <p>Errore: <?php echo $errorMessages[$_GET["uploadError"]];?></p>
+    <?php endif;?>
     <section>
         <h1><?php echo $templateParams["evento"]["nomeEvento"]?></h1>
         <?php if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] == $_SESSION["sessUser"]["email"]) {
