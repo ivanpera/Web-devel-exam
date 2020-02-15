@@ -4,15 +4,15 @@
         <section class="tab"> 
             <h4>Informazioni di Base:</h4>
             <input name="codEvento" hidden value="<?php echo $_GET["codEvento"]?>"/>
-            <label for="nomeEvento">Nome evento: <input id="nomeEvento" name="nomeEvento" type="text" value="<?php echo $templateParams["evento"]["nomeEvento"]?>" placeholder="Nome dell'evento..." required class="required"/></label>
+            <label for="nomeEvento">Nome evento: *<input id="nomeEvento" name="nomeEvento" type="text" value="<?php echo $templateParams["evento"]["nomeEvento"]?>" placeholder="Nome dell'evento..." required class="required"/></label>
             <label for="NSFC"><input name="NSFC" id="NSFC" type="checkbox" value="1" <?php if ($templateParams["evento"]["NSFC"] == 1) { echo "checked";}?>/>Not Safe For Children</label>
-            <label for="luogo">Luogo: <select name="luogo" id="luogo" required class="required">
+            <label for="luogo">Luogo: *<select name="luogo" id="luogo" required class="required">
                 <?php foreach ($templateParams["luoghi"] as $luogo): ?>
                     <option value=<?php echo $luogo["codLuogo"];?> <?php if ($templateParams["evento"]["codLuogo"] == $luogo["codLuogo"]) {echo "selected";}?>><?php echo $luogo["nome"]?></option>
                 <?php endforeach;?>
             </select></label>
-            <label for="data">Data di inizio: <input name="data" id="data" type="date" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("Y-m-d")?>"/></label>
-            <label for="ora">Ora di inizio: <input name="ora" type="time" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("H:i")?>"/></label>
+            <label for="data">Data di inizio: *<input name="data" id="data" type="date" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("Y-m-d")?>"/></label>
+            <label for="ora">Ora di inizio: *<input name="ora" type="time" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("H:i")?>"/></label>
             <label for="description">Descrizione evento: <textarea name="description" form="editForm" placeholder="Descrizione dell'evento..."> <?php echo $templateParams["evento"]["descrizione"];?> </textarea></label>
         </section>
 
@@ -32,14 +32,14 @@
             <?php $numTickets = 0 ?>
             <?php foreach($templateParams["biglietti"] as $biglietto): ?>
                 <div class="ticket_creator" id=<?php echo "ticket_creator_".$numTickets?>>
-                    <label>Tipo biglietto:
+                    <label>Tipo biglietto: <?php echo $numTickets == 0 ? "*" : "" ;?>
                     <select name="ticket_type[]" required class="required">
                         <?php foreach ($templateParams["tipoPosti"] as $tipoPosto): ?>
                             <option value="<?php echo $tipoPosto["codTipologia"]; ?>" <?php if($biglietto["codTipologia"] == $tipoPosto["codTipologia"]) { echo "selected";} elseif ($biglietto["postiPrenotati"] > 0) {echo "disabled";}?>><?php echo $tipoPosto["nomeTipologia"];?></option>
                         <?php endforeach; ?>
                     </select></label>
-                    <label for="<?php echo "ticket_cost_".$numTickets ?>">Costo unitario del biglietto: </label><input id="<?php echo "ticket_cost_".$numTickets ?>" name="ticket_cost[]" type="number" min="0" step="1" required class="required" value="<?php printf("%.2f", $biglietto["costo"]/100); ?>" <?php echo ($biglietto["postiPrenotati"] > 0 ? "readonly" : "")?>/>
-                    <label for="<?php echo "num_tickets_".$numTickets ?>"> Numero biglietti: </label><input type="number" min="<?php echo $biglietto["postiPrenotati"];?>" name="num_tickets[]" id="<?php echo "num_tickets_".$numTickets?>" required class="required" value="<?php echo $biglietto["numTotPosti"]?>"/>
+                    <label for="<?php echo "ticket_cost_".$numTickets ?>">Costo unitario del biglietto: <?php echo $numTickets == 0 ? "*" : "" ;?></label><input id="<?php echo "ticket_cost_".$numTickets ?>" name="ticket_cost[]" type="number" min="0" step="1" required class="required" value="<?php printf("%.2f", $biglietto["costo"]/100); ?>" <?php echo ($biglietto["postiPrenotati"] > 0 ? "readonly" : "")?>/>
+                    <label for="<?php echo "num_tickets_".$numTickets ?>"> Numero biglietti: <?php echo $numTickets == 0 ? "*" : "" ;?></label><input type="number" min="<?php echo $biglietto["postiPrenotati"];?>" name="num_tickets[]" id="<?php echo "num_tickets_".$numTickets?>" required class="required" value="<?php echo $biglietto["numTotPosti"]?>"/>
                     <?php
                         if($biglietto["postiPrenotati"] == 0) {
                             $message = '<label for="rm_ticket_'.$numTickets.'" class="visuallyhidden">Rimuovi tipologia di biglietto</label>
@@ -75,5 +75,6 @@
             <label for="prevBtn" class="visuallyhidden">Vai alla prossima sezione della form </label><button type="button" id="prevBtn" onclick="changeTab(-1)">Precedente</button>
             <label for="nextBtn" class="visuallyhidden">Vai alla precedente sezione della form </label><button type="button" id="nextBtn" onclick="changeTab(1)">Successivo</button>
         </div>
+        <p>* = campo obbligatorio</p>
     </form>
 </div>
