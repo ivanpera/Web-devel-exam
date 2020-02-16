@@ -5,6 +5,6 @@ function readAll() {
       location.reload(true);
     }
   };
-  xhttp.open("GET", "php/ajax_response/cart_handler.php");
+  xhttp.open("GET", "php/ajax_response/notification_reader.php");
   xhttp.send();
 }
