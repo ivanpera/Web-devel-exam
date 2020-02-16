@@ -31,12 +31,30 @@ ul > li > p.cartRemover {
 }
 
 button.cartEmptier {
-    vertical-align: top;
     width: 40%;
+    padding: 2%;
+    height: 10%;
+    vertical-align: text-top;
+    box-sizing: border-box;
 }
 
-button.pay {
-    vertical-align: top;
+.pay {
     width: 25%;
     margin-left: 35%;
+    box-sizing: border-box;
+    float: right;
+    height: 10%;
+    text-align: center;
+    font-weight: bold;
+    padding: 5%;
+}
+
+.main-content > p {
+    margin-bottom: 5%;
+}
+
+@media screen and (min-width: 650px) {
+    .pay {
+        padding: 2%;
+    }
 }
