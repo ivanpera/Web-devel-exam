@@ -59,7 +59,7 @@
             <?php $numMods = 0 ?>
             <?php foreach($templateParams["moderatori"] as $mod):?>
                 <div class="moderator_adder" id="mod_adder".$numMods>
-                        <label for=<?php echo "mod_".$numMods ?>>Mail del moderatore: </label><input id="mod_".$numMods type="text" name="mod_mail[]" value="<?php echo $mod["emailModeratore"];?>"/>
+                        <label for=<?php echo "mod_".$numMods ?>>Mail del moderatore: *</label><input id="mod_".$numMods type="text" name="mod_mail[]" value="<?php echo $mod["emailModeratore"];?>"/>
                         <label for="rm_mod_".$numMods class="visuallyhidden">Rimuovi moderatore</label><button id="rm_mod_".$numMods title="Rimuovi moderatore" class="rm_mod_btn" type="button" onclick="removeMod(<?php echo $numMods ?>)"> - </button><label for="add_mod".$numMods class="visuallyhidden">Aggiungi un moderatore</label><button title="Aggiungi moderatore" id="add_mod".$numMods class="add_mod_btn" type="button" onclick=addNewMod()> + </button>
                         <?php $numMods = $numMods + 1; ?>
                     </div>

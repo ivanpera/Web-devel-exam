@@ -99,14 +99,14 @@ function addNewTicket() {
             }
         }
         let itemString = '<div class="ticket_creator" id="ticket_creator_' + currentTickets + '">   \
-        <label>Tipo biglietto:      \
+        <label>Tipo biglietto: *     \
         <select name="ticket_type[]" required class="required">';
         for(let i = 0; i < seatOptions.length; i++) {
             itemString += '<option value="' + seatOptions[i].value + '">' + seatOptions[i].innerHTML + '</option>';
         }
         itemString += '</select></label>   \
-        <label for="ticket_cost_' + currentTickets + '">Costo unitario del biglietto: </label><input id="ticket_cost_' + currentTickets + '" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/> \
-        <label for="num_tickets_' + currentTickets + '"> Numero biglietti: </label><input type="number" min="1" name="num_tickets[]" id="num_tickets_' + currentTickets + '" required class="required" oninput="checkTickets('+currentTickets+')" onkeyup="checkTickets('+currentTickets+')"/>  \
+        <label for="ticket_cost_' + currentTickets + '">Costo unitario del biglietto: *</label><input id="ticket_cost_' + currentTickets + '" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/> \
+        <label for="num_tickets_' + currentTickets + '"> Numero biglietti: *</label><input type="number" min="1" name="num_tickets[]" id="num_tickets_' + currentTickets + '" required class="required" oninput="checkTickets('+currentTickets+')" onkeyup="checkTickets('+currentTickets+')"/>  \
         <label for="rm_ticket_' + currentTickets + '" class="visuallyhidden">Rimuovi tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_' + currentTickets + '" class="rm_ticket_btn" type="button" onclick=removeTicket(' + currentTickets + ')> - </button>    \
         <label for="add_ticket_' + currentTickets + '" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" class=add_ticket_btn id="add_ticket_' + currentTickets + '" type="button" onclick=addNewTicket()> + </button>   \
         </div>';
@@ -155,7 +155,7 @@ function addNewMod() {
 
     $("#section_moderatori").append(' \
     <div class="moderator_adder" id="mod_adder' + currentMods + '"> \
-    <label for="mod_mail_' + currentMods + '">Mail del moderatore: </label><input id="mod_mail' + currentMods + '" type="text" name="mod_mail[]" placeholder="E-mail moderatore"/></label> \
+    <label for="mod_mail_' + currentMods + '">Mail del moderatore: *</label><input id="mod_mail' + currentMods + '" type="text" name="mod_mail[]" placeholder="E-mail moderatore"/></label> \
     <label for="rm_mod_' + currentMods + '" class="visuallyhidden">Rimuovi ultimo moderatore</label><button title="Rimuovi moderatore" id="rm_mod_' + currentMods + '" class="rm_mod_btn" type="button" onclick=removeMod(' + currentMods + ')> - </button> \
     <label for="add_mod_' + currentMods + '" class="visuallyhidden">Aggiungi un moderatore</label><button title="Aggiungi moderatore" id="add_mod_' + currentMods + '" class="add_mod_btn" type="button" onclick=addNewMod()> + </button> \
     </div> \
