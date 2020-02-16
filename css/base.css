@@ -16,6 +16,24 @@ button > a {
     text-decoration: none;
 }
 
+.a-button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #2be579;
+    border: thin solid #80e5aa;
+    height: 2em;
+}
+
+.a-button:hover {
+    background-color: #80e5aa;
+    color: white;
+}
+
+.a-button.active {
+    background-color: #80e5aa;
+    color: white;
+}
 
 * {
     font-family: 'Lato', sans-serif;
