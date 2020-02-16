@@ -12,7 +12,7 @@
 
   <!-- Eventi osservati -->
   <section id="observedSection">
-    <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/><h2>Eventi osservati</h2></button>
+    <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png" alt="toggleEventiOsservati"/><h2>Eventi osservati</h2></button>
       <div class="articles list-container">
         <?php
         if (count($templateParams["observedEvents"]) == 0) {
@@ -35,7 +35,7 @@
 
   <!-- Eventi organizzati -->
   <section id="organizedSection">
-  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/><h2>Eventi Organizzati</h2></button>
+  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png" alt="toggleEventiOrganizzati"/><h2>Eventi Organizzati</h2></button>
       <div class="articles list-container">
       <?php
         if (count($templateParams["organizedEvents"]) == 0) {
@@ -58,7 +58,7 @@
 
   <!-- Eventi moderati -->
   <section id="moderatedSection">
-  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/><h2>Eventi moderati</h2></button>
+  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png" alt="toggleEventiModerati"/><h2>Eventi moderati</h2></button>
       <div class="articles list-container">
       <?php
         if (count($templateParams["moderatedEvents"]) == 0) {
@@ -81,7 +81,7 @@
 
   <!-- Eventi presieduti -->
   <section id="bookedSection">
-    <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/><h2>Eventi prenotati</h2></button>
+    <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png" alt="toggleEventiPrenotati"/><h2>Eventi prenotati</h2></button>
       <div class="articles">
       <?php
         if (count($templateParams["bookedEvents"]) == 0) {
@@ -97,7 +97,7 @@
             </a>
             <section>
               <h3>Posti prenotati: <?php echo $prenotato["postiOccupati"]?></h3>
-              <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/> Dettagli </button>
+              <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png" alt="togglePostiPrenotati"/> Dettagli </button>
               <div class="articles">
               <?php foreach ($prenotato["bigliettiPrenotati"] as $biglietto): ?>
                 <article class="list-item">
@@ -116,7 +116,7 @@
   </section>
 
   <section id="reviewSection">
-  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png"/><h2>Le tue recensioni</h2></button>
+  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png" alt="toggleRecensioniScritte"/><h2>Le tue recensioni</h2></button>
       <div class="articles list-container">
       <?php if (count($templateParams["recensioni"]) == 0) {
           echo "<p>Non hai scritto alcuna recensione.</p>";
