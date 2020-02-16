@@ -70,7 +70,5 @@
         </ul>
     </aside>
     <div id="overlay" onclick=closeSidebar()></div>
-
-    <footer>Contatti</footer>
   </body>
 </html>
