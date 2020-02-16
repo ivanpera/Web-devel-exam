@@ -11,7 +11,7 @@
               <?php $arrTipoCosto = explode("/",$tipoCosto); ?>
               <ul>
                 <li class="list-item">
-                  <h2>Tipologia: <?php echo $dbh->getSeatType($arrTipoCosto[0])["nomeTipologia"]; ?><p></h2><span class="right-aligned"><?php echo ($numero." x ".intval($arrTipoCosto[1])/100)."€ = ".(intval($arrTipoCosto[1]) / 100 * intval($numero))."€";?></span></p><p class="cartRemover" onclick='removeFromCart(<?php echo $evento["codEvento"].",".$arrTipoCosto[0].",".$arrTipoCosto[1].",".$numero;?>)'>Rimuovi voce</p>
+                  <h2>Tipologia: <?php echo $dbh->getSeatType($arrTipoCosto[0])["nomeTipologia"]; ?></h2><p class="right-aligned"><?php echo ($numero." x ".intval($arrTipoCosto[1])/100)."€ = ".(intval($arrTipoCosto[1]) / 100 * intval($numero))."€";?></p><p class="cartRemover" onclick='removeFromCart(<?php echo $evento["codEvento"].",".$arrTipoCosto[0].",".$arrTipoCosto[1].",".$numero;?>)'>Rimuovi voce</p>
                 </li>
               </ul>
             </div>
@@ -20,7 +20,7 @@
       <?php endforeach;?>
     </div>
     <p class="right-aligned">Totale: <?php echo ($total/100)."€";?></p>
-    <button type="button" class="cartEmptier" onclick="emptyCart()">Svuota carrello</button><button class="pay" type="button"><a href = "php/checkout_process.php">Paga</a></button>
+    <button type="button" class="cartEmptier" onclick="emptyCart()">Svuota carrello</button><a href = "php/checkout_process.php" class="pay a-button">Paga</a>
   <?php else:?>
   <p>Il tuo carrello è vuoto.</p>
   <?php endif;?>

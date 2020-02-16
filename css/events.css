@@ -37,9 +37,10 @@ section > a > article > .description_span {
     text-overflow: ellipsis;
 }
 
-section > a > article > span {
+.description_span {
     display: block;
-
+    font-weight: bold;
+    color: #046aef;
 }
 
 div#search_form {

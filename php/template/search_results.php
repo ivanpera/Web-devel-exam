@@ -17,11 +17,11 @@
                         echo "img/image-not-available.jpg";
                     }*/?>" alt="" class="eventImgPreview"/>-->
                 <h2><?php echo $event["nomeEvento"];?></h2>
-                <span><?php echo $event["dataEOra"];?></span>
-                <span><?php echo $event["nomeLuogo"].", ".$event["indirizzo"];?></span>
-                <span class="description_span"><?php echo "<h3>Descrizione</h3>\n".$event["descrizione"];?></span>
+                <p><?php echo $event["dataEOra"];?></p>
+                <p><?php echo $event["nomeLuogo"].", ".$event["indirizzo"];?></p>
+                <p class="description_p"><?php echo '<span class="description_span">Descrizione</span>'.$event["descrizione"];?></p>
                 <?php if($event["dataEOra"] > date("Y-m-d H:i:s")):?>
-                <span>Posti <?php echo ($event["dataEOra"] > date("Y-m-d H:i:s") ? "disponibili" : "rimasti" );?>: <?php echo min($event["capienzaMassima"], $event["maxPostiDisponibili"]) - $event["postiOccupati"]?></span>
+                <p>Posti disponibili: <?php echo min($event["capienzaMassima"], $event["maxPostiDisponibili"]) - $event["postiOccupati"]?></p>
                 <?php endif; ?>
             </article>
         </a>

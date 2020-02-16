@@ -17,11 +17,11 @@
                         echo "img/image-not-available.jpg";
                     }*/?>" alt="" class="eventImgPreview"/>-->
                 <h2><?php echo $event["nomeEvento"];?></h2>
-                <span><?php echo $event["dataEOra"];?></span>
-                <span><?php echo $event["nomeLuogo"].", ".$event["indirizzo"];?></span>
-                <span class="description_span"><?php echo "<h3>Descrizione</h3>\n".$event["descrizione"];?></span>
+                <p><?php echo $event["dataEOra"];?></p>
+                <p><?php echo $event["nomeLuogo"].", ".$event["indirizzo"];?></p>
+                <p class="description_p"><?php echo '<span class="description_span">Descrizione</span>'.$event["descrizione"];?></p>
                 <?php if($event["dataEOra"] > date("Y-m-d H:i:s")):?>
-                <span>Posti disponibili: <?php echo min($event["capienzaMassima"], $event["maxPostiDisponibili"]) - $event["postiOccupati"]?></span>
+                <p>Posti disponibili: <?php echo min($event["capienzaMassima"], $event["maxPostiDisponibili"]) - $event["postiOccupati"]?></p>
                 <?php endif; ?>
             </article>
         </a>
@@ -41,12 +41,11 @@
             </label>
             <label for="start_date">Dal:<input type="date" id="start_date" name="fromDate"/></label> <!--TODO: Add min and max attributes defined using php -->
             <label for="end_date">Al:<input type="date" id="end_date" name="toDate"></label> <!--TODO: Add min and max attributes defined using php -->
-            <label for="categories">Categorie:
-                <ul id="categories">
+            <div id="categorie">Categorie:
                     <?php foreach ($templateParams["categories"] as $cat): ?>
-                        <li><label for="<?php echo $cat["codCategoria"] ?>"><input type="checkbox" name="categories[]" id="<?php echo $cat["codCategoria"]?>" value="<?php echo $cat["codCategoria"]?>"/><?php echo $cat["nomeCategoria"]?></label></li>
+                        <p><label for="<?php echo $cat["codCategoria"] ?>"><input type="checkbox" name="categories[]" id="<?php echo $cat["codCategoria"]?>" value="<?php echo $cat["codCategoria"]?>"/><?php echo $cat["nomeCategoria"]?></label></p>
                     <?php endforeach; ?>
-            </ul>
+            </div>
             <input type="submit" name="btn_search" value="Cerca"/>
         </form>
     </div>

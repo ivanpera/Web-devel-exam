@@ -69,8 +69,8 @@
 @media screen and (min-width:812px) {
     
     .composed_button_container {
-        margin-left: 0px;
-        margin-right: 0px;
+        margin-left: 5%;
+        margin-right: 5%;
         width: 28.5%;
     }
 
