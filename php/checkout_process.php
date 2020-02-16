@@ -5,7 +5,7 @@
   foreach ($_SESSION["sessUser"]["cart"] as $codEvento => $biglietto) {
     foreach ($biglietto as $tipoCosto => $numero) {
       $arrTipoCosto = explode("/",$tipoCosto);
-      $disponibili = $disponibili and ($dbh->getRemainingSeats($codEvento, $arrTipoCosto[0], $arrTipoCosto[1]) >= $numero);
+      $disponibili = $disponibili && (intval($dbh->getRemainingSeats($codEvento, $arrTipoCosto[0], $arrTipoCosto[1])) >= $numero);
       $totale += intval($arrTipoCosto[1]) * $numero;
     }
   }
