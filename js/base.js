@@ -22,7 +22,11 @@ function getNumOfNotification() {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if(this.readyState == 4 && this.status == 200) {
-            $("#notificationNumber").html(xhttp.responseText == "0" ? "" : xhttp.responseText);
+            $("#notification-container > div").html(xhttp.responseText == "0" ? "" : xhttp.responseText);
+            const isHidden = document.getElementById("notif_div").className.includes("hidden");
+            if((xhttp.responseText === "0" && !isHidden) || (xhttp.responseText !== "0" && isHidden)) {
+                $("#notification-container > div").toggleClass("hidden");
+            }
         }
     };
     xhttp.open("GET", "php/ajax_response/notification_num_getter.php");
