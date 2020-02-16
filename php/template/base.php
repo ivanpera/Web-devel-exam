@@ -31,16 +31,17 @@
   <body>
     <div id="bg-image"></div>
     <header>
-      <div id="notificationNumber"><?php if(isset($notificationNumber)) {echo $notificationNumber; } else {echo "";} ?></div>
-        <?php
+      <?php
         if (!isset($_SESSION["sessUser"]["email"])) { 
           echo '<a href="login.php">
           <img src="img/login_icon.png" alt="login" class="login"/>
-          </a>'; } else {
-            echo '<button id="openside_btn" type="button" onclick="openSidebar()"><img src="img/openSidebarIcon.png" alt="Open sidebar" /> </button>';
-        } ?><a href="index.php">
-          <img src="img/logo.png" alt="home" class="logo"/>
-        </a>
+          </a>'; 
+        } else {
+          $notificationString = isset($notificationNumber) ? $notificationNumber :  "";
+          $hidden = isset($notificationNumber) ? "" : 'class="hidden"';
+          echo '<button id="openside_btn" type="button" class="notification-container" onclick="openSidebar()"><img src="img/openSidebarIcon.png" alt="Open sidebar"/><div id="notif_div" '.$hidden.'>'.$notificationString.'</div></button>';
+        } 
+      ?><a href="index.php"><img src="img/logo.png" alt="home" class="logo"/></a>
     </header>
 
     <main>
