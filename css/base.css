@@ -23,6 +23,7 @@ button > a {
     background-color: #2be579;
     border: thin solid #80e5aa;
     height: 2em;
+    text-decoration: none;
 }
 
 .a-button:hover {

@@ -2,8 +2,14 @@
     text-align: center;
     line-height: 2em;
     padding-top: 0px;
+    margin: 2%;
 }
 
-.form-appendage button {
+.form-appendage a {
     width: 50%;
+    padding: 2% 5%;
+}
+
+.form-appendage p {
+    margin-bottom: 2%;
 }
