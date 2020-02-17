@@ -1,11 +1,10 @@
 /*Mobile first css*/
 
 .visuallyhidden { 
-    position: absolute; 
-    overflow: hidden; 
-    clip: rect(0 0 0 0); 
-    height: 1px; width: 1px; 
-    margin: -1px; padding: 0; border: 0; 
+    position: fixed; 
+    overflow: hidden;
+    top: -200vh;
+    left: -200vw;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -75,18 +74,19 @@ button.active:not(#openside_btn):not(#closeside_btn) {
     color: white;
 }
 
-.notification-container > div {
+.notification-container > span {
     position: absolute;
     background-color: red;
     color: white;
     height: 2vmax;
     width: 2vmax;
     text-align: center;
-    vertical-align: middle;
-    line-height: 2vmax;
+    line-height: 1.7vmax;
     border-radius: 50%;
     top: .8vmax;
     right: .4vmax;
+    font-size: 12px;
+    display: inline-block;
 }
 
 ul {
@@ -319,6 +319,11 @@ aside > p {
         width: 70%;
         margin-left: 15%;
     }
+
+    .notification-container > div {
+        line-height: 1.7vmax;
+        font-size: 13px;
+    }
 }
 
 @media screen and (min-width:812px) {
@@ -329,5 +334,10 @@ aside > p {
 
     aside, aside > header {
         width: 30%;
+    }
+
+    .notification-container > div {
+        line-height: 1.7vmax;
+        font-size: 16px;
     }
 }
