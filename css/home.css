@@ -44,6 +44,7 @@
     font-size: 1.5em;
     font-weight: bold;
     text-align: center;
+    width: 100%;
 }
 
 .composed_button_container > section > p {
@@ -72,6 +73,7 @@
         margin-left: 5%;
         margin-right: 5%;
         width: 28.5%;
+        min-height: 410px;
     }
 
     .composed_button_container:first-child {
