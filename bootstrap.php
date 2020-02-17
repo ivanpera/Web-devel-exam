@@ -5,10 +5,22 @@
     define("IMG_DIR", "img/");
     require_once("php/DatabaseHelper.php");
 
+    $notificationNumber = 0;
+
     function safeHeader($headerString) {
         session_write_close();
         header($headerString);
         die();
+    }
+
+    function checkNotifications($dbh) {
+        global $notificationNumber;
+        if(isset($_SESSION["sessUser"])) {
+            $notificationNumber = $dbh->getUnreadNotificationNum($_SESSION["sessUser"]["email"]);
+        }
+        if (isset($notificationNumber) && $notificationNumber == 0) {
+            unset($notificationNumber);
+        }
     }
 
     /*  uploadError = 0 -> all correct
@@ -56,10 +68,5 @@
         return array("imageName" => $imageName, "uploadError" => $uploadError);
     }
 
-    if(isset($_SESSION["sessUser"])) {
-        $notificationNumber = $dbh->getUnreadNotificationNum($_SESSION["sessUser"]["email"]);
-    }
-    if (isset($notificationNumber) && $notificationNumber == 0) {
-        unset($notificationNumber);
-    }
+    checkNotifications($dbh);
 ?>

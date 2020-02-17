@@ -17,6 +17,6 @@
   $templateParams["js"] = array("https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js", "js/base.js");
 
   $dbh->readNotification($_GET["codEvento"], $_GET["codNotifica"]);
-
+  checkNotifications($dbh);
   require(TEMPLATE_DIR."base.php");
 ?>

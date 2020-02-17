@@ -37,8 +37,8 @@
           <img src="img/login_icon.png" alt="login" class="login"/>
           </a>'; 
         } else {
-          $notificationString = isset($notificationNumber) ? $notificationNumber :  "";
-          $hidden = isset($notificationNumber) ? "" : 'class="hidden"';
+          $notificationString = (isset($notificationNumber) && $notificationNumber > 0) ? $notificationNumber :  "";
+          $hidden = isset($notificationNumber) && $notificationNumber > 0 ? "" : 'class="hidden"';
           echo '<button id="openside_btn" type="button" class="notification-container" onclick="openSidebar()"><img src="img/openSidebarIcon.png" alt="Open sidebar"/><span id="notif_span" '.$hidden.'>'.$notificationString.'</span></button>';
         } 
       ?><a href="index.php"><img src="img/logo.png" alt="home" class="logo"/></a>
