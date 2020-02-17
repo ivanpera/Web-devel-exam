@@ -1,6 +1,7 @@
 let currentTab = 0;
 let currentMods = 0;
 let currentTickets = 1;
+const descriptionMaxLength = 150;
 
 function showTab(n) {
     const tabs = document.getElementsByClassName("tab");
@@ -133,6 +134,11 @@ function removeMod(i) {
         modAdders[i].children[4].setAttribute("for", "add_mod_" + i.toString());
         modAdders[i].children[5].setAttribute("id", "add_mod_" + i.toString());
     }
+}
+
+function checkRemainingCharacters() {
+    let remainingChar = descriptionMaxLength - $('[name="description"]').val().length;
+    $("p#remainingChars").text("("+remainingChar+" caratteri rimanenti.)");
 }
 
 function addNewMod() {
