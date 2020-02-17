@@ -64,6 +64,23 @@ button, input[type="button"], input[type="submit"], input[type="reset"] {
     height: 2em;
 }
 
+.error {
+    animation-name: error-blink;
+    animation-duration: 600ms;
+    border-radius: 5px;
+    padding: 2%;
+    background-color : #fc6c64;
+    width: fit-content;
+}
+
+@keyframes error-blink {
+    0% {background-color : transparent;}
+    10% {background-color : red;}
+    50% {background-color : #fc6c64;}
+    60% {background-color : red;}
+    100% {background-color : #fc6c64;}
+}
+
 button:hover:not(#openside_btn):not(#closeside_btn) {
     background-color: #80e5aa;
     color: white;
