@@ -13,14 +13,14 @@
         <p> Dove: <?php echo $templateParams["evento"]["nomeLuogo"].", ".$templateParams["evento"]["indirizzo"]?> </p>
         <p>Categorie: <?php echo !empty($templateParams["evento"]["categorie"]) ? $templateParams["evento"]["categorie"] : "-"?></p>
     <?php if($templateParams["evento"]["dataEOra"] > date("Y-m-d H:i:s")):?>
-    <div id="tickets">
+    <div id="tickets" class="list-container">
         Biglietti disponibili: <?php echo min($templateParams["evento"]["capienzaMassima"],$templateParams["evento"]["maxPostiDisponibili"]) - $templateParams["evento"]["postiOccupati"]?>
         <?php if(!isset($_SESSION["sessUser"])) {
             $_SESSION["previousPage"] = "event_details.php?codEvento=".$_GET["codEvento"]."#tickets";
             echo '<p>Per aggiungere biglietti al carrello devi essere autenticato. <a href="login.php">Autenticati</a></p>';
         }?>
         <?php foreach ($templateParams["tickets"] as $biglietto):?>
-        <div>
+        <div class="list-item">
             <p>Tipo: <?php echo $biglietto["nomeTipologia"];?></p>
             <p>Prezzo: <?php printf("%.2f", $biglietto["costo"]/100)?></p>
             <p>Disponibili: <?php echo $biglietto["numTotPosti"] - $biglietto["postiPrenotati"];?></p>
@@ -33,22 +33,23 @@
         <?php endforeach;?>
     </div>
     <?php endif;?>
-    <p> Organizzatore: <?php echo $templateParams["evento"]["emailOrganizzatore"] ?> </p>
-    
-    <?php
-        if (!empty($templateParams["moderatori"])) {
-            echo "<p> Moderatori: </p>";
-            foreach ($templateParams["moderatori"] as $moderatore){
-                echo "<p>".$moderatore["emailModeratore"]."</p>";
+    <div class="list-container">
+        <p> Organizzatore: <?php echo $templateParams["evento"]["emailOrganizzatore"] ?> </p>
+        <?php
+            if (!empty($templateParams["moderatori"])) {
+                echo "<p> Moderatori: </p>";
+                foreach ($templateParams["moderatori"] as $moderatore){
+                    echo "<p>".$moderatore["emailModeratore"]."</p>";
+                }
             }
-        }
-    ?>
+        ?>
+    </div>
     <?php
-    if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] != $_SESSION["sessUser"]["email"]) {
+    if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] != $_SESSION["sessUser"]["email"] && $templateParams["evento"]["dataEOra"] > date("Y-m-d H:i:s")) {
         echo '<button class="observe_btn" onclick="toggleObserveStatus('.$templateParams["evento"]["codEvento"].', \''.$_SESSION["sessUser"]["email"].'\')"></button>';
     }
     ?>
-    <div class="reviews">
+    <div class="list-container">
         <?php if(!isset($_SESSION["sessUser"]) && $templateParams["evento"]["dataEOra"] < date("Y-m-d H:i:s")):?>
             <a href="login.php">Autenticati per recensire questo evento!</a>
         <?php endif;?>
