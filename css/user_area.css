@@ -26,7 +26,7 @@ h3 {
 }
 
 h3 + button.collapsableBtn {
-  width: 5em;
+  width: 7em;
   margin-left: 1%;
   text-align: left;
 }

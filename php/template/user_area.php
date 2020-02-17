@@ -35,7 +35,7 @@
 
   <!-- Eventi organizzati -->
   <div id="organizedSection">
-  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png" alt="toggleEventiOrganizzati"/>Eventi Organizzati</button>
+  <button class="collapsableBtn" type="button"><img class="collapsableIcon" src="img/ArrowIcon.png" alt="toggleEventiOrganizzati"/>Eventi organizzati</button>
       <div class="articles list-container">
       <?php
         if (count($templateParams["organizedEvents"]) == 0) {
