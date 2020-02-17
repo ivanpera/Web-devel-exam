@@ -36,7 +36,6 @@ button > a {
 
 .a-button.active {
     background-color: #80e5aa;
-    color: white;
 }
 
 * {
@@ -90,7 +89,6 @@ button:hover:not(#openside_btn):not(#closeside_btn) {
 
 button.active:not(#openside_btn):not(#closeside_btn) {
     background-color: #80e5aa;
-    color: white;
 }
 
 .notification-container > span {
@@ -262,6 +260,7 @@ form > input:last-child {
 .list-container {
     padding: 1%;
     background-color: #edefef;
+    margin: 2% auto;
 }
 
 .list-container:not(:first-child) {
@@ -271,7 +270,6 @@ form > input:last-child {
 .list-item:not(:first-child) {
     border-top: thin solid black;
     background-color: #edefef;
-    padding: 1%;
     margin-top: 2%;
 }
 
