@@ -6,6 +6,7 @@
         <section class="tab"> 
             <h4>Informazioni di Base:</h4>
             <label for="nomeEvento">Nome evento: *<input id="nomeEvento" name="nomeEvento" type="text" placeholder="Nome dell'evento..." required class="required"/></label>
+            <label for="NSFC"><input name="NSFC" id="NSFC" type="checkbox" value="1"/>Not Safe For Children</label>
             <label for="luogo">Luogo: *<select name="luogo" id="luogo" required class="required">
                 <option value="" disabled selected hidden>Seleziona un luogo...</option>
                 <?php foreach ($templateParams["luoghi"] as $luogo): ?>

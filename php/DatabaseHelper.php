@@ -452,9 +452,9 @@ class DatabaseHelper{
     }
 
     public function insertBooking($dataEOra, $totale, $emailUtente) {
-        $stmt = $this->db->prepare("INSERT INTO prenotazione(codPrenotazione, dataEOra, costoTotale, emailUtente) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $this->db->prepare("INSERT INTO prenotazione(codPrenotazione, dataEOra, costoTotale, emailUtente) VALUES (?, ?, ?, ?)");
         $newBookingId = $this->getLastBookId() + 1;
-        $stmt->bind_param("isiis", $newBookingId, $dataEOra, $totale, $emailUtente);
+        $stmt->bind_param("isis", $newBookingId, $dataEOra, $totale, $emailUtente);
         $stmt->execute();
         return $newBookingId;
     }
