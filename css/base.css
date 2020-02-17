@@ -86,7 +86,8 @@ button.active:not(#openside_btn):not(#closeside_btn) {
     top: .8vmax;
     right: .4vmax;
     font-size: 12px;
-    display: inline-block;
+    font-weight: bold;
+    /*display: inline-block;*/
 }
 
 ul {
