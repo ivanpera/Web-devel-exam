@@ -16,6 +16,19 @@ div.reviews {
     margin-top: 5%;
 }
 
+div.list-container label {
+    width: 100%;
+    display: inline-block;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+div.list-container label input {
+    display: inline-block;
+    width: 8em;
+    margin-left: 2%;
+}
+
 .main-content img {
     display: block;
     margin-left: auto;
