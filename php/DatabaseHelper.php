@@ -317,7 +317,7 @@ class DatabaseHelper{
         $queryAddNot = "INSERT INTO notifica(codEvento, codNotificaEvento, titolo, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES (?, ?, ?, ?, 0, ?, NULL, ?)";
         $stmtNotifiche = $this->db->prepare($queryAddNot);
         foreach ($interestedUsers as $user) {
-            $stmtNotifiche->bind_param("iissss", $codEvento, $codNotifica, $titoloNotifica, $descrizione, $dataEOraInvio, $user["emailUtente"]);
+            $stmtNotifiche->bind_param("iissss", $codEvento, $codNotifica, $titoloNotifica, $descrizioneNotifica, $dataEOraInvio, $user["emailUtente"]);
             $stmtNotifiche->execute();
             $codNotifica++;
         }
