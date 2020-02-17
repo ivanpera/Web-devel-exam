@@ -28,12 +28,19 @@ h3 {
 h3 + button.collapsableBtn {
   width: 7em;
   margin-left: 1%;
-  text-align: left;
 }
 
 h3 + button.collapsableBtn > img.collapsableIcon {
   width: 1em;
-  padding: 2%;
+  padding: 0;
+  margin-right: 10%;
+}
+
+h3 + button.collapsableBtn > span {
+  display: inline-block;
+  margin-top: .8%;
+  font-size: 1em;
+  width: auto;
 }
 
 div.articles {
