@@ -18,6 +18,7 @@
         echo("<title> Bad Title </title>");
       }
     ?>
+    <link rel="shortcut icon" href="favicon.ico" />
     <?php
       if(isset($templateParams["js"])):
           foreach($templateParams["js"] as $script):
