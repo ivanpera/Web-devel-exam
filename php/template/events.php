@@ -11,11 +11,6 @@
         ?>
         <a href="event_details.php?codEvento=<?php echo $event["codEvento"];?>">
             <article>
-                <!--<img src="<?php /*if (file_exists("img/".$event["emailOrganizzatore"]."/".$event["nomeImmagine"]) && is_file("img/".$event["emailOrganizzatore"]."/".$event["nomeImmagine"])) {
-                    echo "img/".$event["emailOrganizzatore"]."/".$event["nomeImmagine"];
-                    } else {
-                        echo "img/image-not-available.jpg";
-                    }*/?>" alt="" class="eventImgPreview"/>-->
                 <h2><?php echo $event["nomeEvento"];?></h2>
                 <p><?php echo $event["dataEOra"];?></p>
                 <p><?php echo $event["nomeLuogo"].", ".$event["indirizzo"];?></p>
@@ -39,8 +34,8 @@
                     <?php endforeach;?>
                 </select>
             </label>
-            <label for="start_date">Dal:<input type="date" id="start_date" name="fromDate"/></label> <!--TODO: Add min and max attributes defined using php -->
-            <label for="end_date">Al:<input type="date" id="end_date" name="toDate"></label> <!--TODO: Add min and max attributes defined using php -->
+            <label for="start_date">Dal:<input type="date" id="start_date" name="fromDate"/></label> 
+            <label for="end_date">Al:<input type="date" id="end_date" name="toDate"></label> 
             <div id="categorie">Categorie:
                     <?php foreach ($templateParams["categories"] as $cat): ?>
                         <p><label for="<?php echo $cat["codCategoria"] ?>"><input type="checkbox" name="categories[]" id="<?php echo $cat["codCategoria"]?>" value="<?php echo $cat["codCategoria"]?>"/><?php echo $cat["nomeCategoria"]?></label></p>

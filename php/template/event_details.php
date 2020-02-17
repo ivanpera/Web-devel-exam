@@ -9,15 +9,9 @@
         }?>
         <img src="<?php echo "img/".(file_exists("img/".$templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"]) && is_file("img/".$templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"]) ? $templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"] : "image-not-available.jpg")?>" alt="event_image"/>
         <p><?php echo $templateParams["evento"]["dataEOra"]?>
-        <p>  <?php echo $templateParams["evento"]["descrizione"] ?> </p>
-
+        <p><?php echo $templateParams["evento"]["descrizione"] ?></p>
         <p> Dove: <?php echo $templateParams["evento"]["nomeLuogo"].", ".$templateParams["evento"]["indirizzo"]?> </p>
-
-        <!--<label for="btn_show_on_map">
-            <button type="button" id="btn_show_on_map">
-                Mostralo sulla mappa
-            </button>
-        </label>-->
+        <p>Categorie: <?php echo !empty($templateParams["evento"]["categorie"]) ? $templateParams["evento"]["categorie"] : "-"?></p>
     <?php if($templateParams["evento"]["dataEOra"] > date("Y-m-d H:i:s")):?>
     <div id="tickets">
         Biglietti disponibili: <?php echo min($templateParams["evento"]["capienzaMassima"],$templateParams["evento"]["maxPostiDisponibili"]) - $templateParams["evento"]["postiOccupati"]?>

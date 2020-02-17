@@ -195,9 +195,9 @@ class DatabaseHelper{
         $queryCategorie .= " GROUP BY EHC.codEvento";
 
         $queryCompleta = "SELECT *
-                          FROM (".$queryEvento.") AS tabEventi LEFT JOIN
+                          FROM (".$queryEvento.") AS tabEventi,
                                (".$queryCategorie.") AS tabCategorie
-                          USING (codEvento)";
+                          WHERE tabEventi.codEvento = tabCategorie.codEvento";
 
         $stmt = $this->db->prepare($queryCompleta);
         $stmt->execute();

@@ -47,6 +47,10 @@ div#search_form {
     display: none;
 }
 
+.redirect-link {
+    text-decoration: underline;
+}
+
 @media screen and (min-width:450px) {
 
     div.tab {

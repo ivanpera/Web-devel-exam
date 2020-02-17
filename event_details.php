@@ -31,10 +31,10 @@
     $templateParams["utenteHaRecensito"] = (isset($_SESSION["sessUser"]) ? $dbh->hasUserWrittenReview($_GET["codEvento"], $_SESSION["sessUser"]["email"]) : 1);
     $templateParams["userCanReview"] = (isset($_SESSION["sessUser"]) ? !$dbh->canUserReviewEvent($_GET["codEvento"], $_SESSION["sessUser"]["email"]) : 0) && (isset($_SESSION["sessUser"]) ? $_SESSION["sessUser"]["email"] != $templateParams["evento"]["emailOrganizzatore"] : 0);
     $errorMessages = array("",
-                           "The submitted file is not a real image.", 
-                           "The submitted file already exists on the server, please change its name.",
-                           "The submitted file is too large, please load a smaller one.",
-                           "The submitted file has a not supported type, please change the type of the file.",
-                           "An internal error occurred, please retry later.");
+                           "Il file scelto non è un'immagine.", 
+                           "L'immagine scelta esiste già sul server con lo stesso nome. Cambia il nome per caricarla.",
+                           "L'immagine scelta è troppo grande. Carica un'immagine più piccola.",
+                           "L'immagine caricata non è supportata (Estensioni supportate: .jpg, .jpeg, .png).",
+                           "Si è verificato un errore interno. Per favore riprovare a caricare l'immagine più tardi.");
     require(TEMPLATE_DIR."base.php");
 ?>
