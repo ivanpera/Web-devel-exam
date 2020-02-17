@@ -28,6 +28,7 @@
                 mkdir($target_dir);
             }
             $imageName = basename($_FILES["imageName"]["name"]);
+            $imageName = str_replace(" ", "_", $imageName);
             $target_file = $target_dir.$imageName;
             $check = getimagesize($_FILES["imageName"]["tmp_name"]);
             $imageFileType =  strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
