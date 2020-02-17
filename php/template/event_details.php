@@ -5,7 +5,7 @@
     <section>
         <h1><?php echo $templateParams["evento"]["nomeEvento"]?></h1>
         <?php if (isset($_SESSION["sessUser"]) && $templateParams["evento"]["emailOrganizzatore"] == $_SESSION["sessUser"]["email"]) {
-            echo '<a href="modify_event.php?codEvento='.$templateParams["evento"]["codEvento"].'">Modifica evento</a>';
+            echo '<a href="modify_event.php?codEvento='.$templateParams["evento"]["codEvento"].'" class="a-button">Modifica evento</a>';
         }?>
         <img src="<?php echo "img/".(file_exists("img/".$templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"]) && is_file("img/".$templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"]) ? $templateParams["evento"]["emailOrganizzatore"]."/".$templateParams["evento"]["nomeImmagine"] : "image-not-available.jpg")?>" alt="event_image"/>
         <p><?php echo $templateParams["evento"]["dataEOra"]?>
@@ -59,7 +59,7 @@
             <a href="login.php">Autenticati per recensire questo evento!</a>
         <?php endif;?>
         <?php if(!$templateParams["utenteHaRecensito"] && $templateParams["evento"]["dataEOra"] < date("Y-m-d H:i:s") && $templateParams["userCanReview"]):?>
-            <a href="create_review.php?codEvento=<?php echo $_GET["codEvento"]?>">Recensisci questo evento</a>
+            <a href="create_review.php?codEvento=<?php echo $_GET["codEvento"]?>" class="a-button">Recensisci questo evento</a>
         <?php endif;?>
         <?php if(!empty($templateParams["recensioni"])):?>
             <p>Recensioni più recenti: <a href="event_reviews.php?codEvento=<?php echo $_GET["codEvento"]?>">(Mostra tutte le recensioni)</a></p>
