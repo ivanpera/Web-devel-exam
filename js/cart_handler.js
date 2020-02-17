@@ -1,6 +1,6 @@
 function addToCart(codEvento, codTipologia, costo) {
-  let numOfTickets = Number($('button[onclick="addToCart('+codEvento+','+codTipologia+','+ costo+')"]').first().prev().val());
-  if (numOfTickets <= Number($('button[onclick="addToCart('+codEvento+','+codTipologia+','+ costo+')"]').first().prev().attr("max"))) {
+  let numOfTickets = Number($('button[onclick="addToCart('+codEvento+','+codTipologia+','+ costo+')"]').first().prev().children("input").first().val());
+  if (numOfTickets <= Number($('button[onclick="addToCart('+codEvento+','+codTipologia+','+ costo+')"]').first().prev().children("input").first().attr("max"))) {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
       if(this.readyState == 4 && this.status == 200) {
