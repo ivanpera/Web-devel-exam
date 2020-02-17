@@ -3,8 +3,8 @@
         <h1> Risulati di ricerca </h1>
         <?php 
         if(count($templateParams["events"]) <= 0): ?>
-            <p>No event found with this search terms.</p>
-            <a href="events.php">Search with different terms</a>
+            <p>Nessun evento trovato con questi parametri.</p>
+            <a class="redirect-link" href="events.php">Cerca con parametri diversi.</a>
         <?php endif;?>
         <?php
             foreach ($templateParams["events"] as $event):
