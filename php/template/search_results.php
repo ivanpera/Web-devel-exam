@@ -11,11 +11,6 @@
         ?>
         <a href="event_details.php?codEvento=<?php echo $event["codEvento"];?>">
             <article>
-                <!--<img src="<?php /*if (file_exists("img/".$event["emailOrganizzatore"]."/".$event["nomeImmagine"]) && is_file("img/".$event["emailOrganizzatore"]."/".$event["nomeImmagine"])) {
-                    echo "img/".$event["emailOrganizzatore"]."/".$event["nomeImmagine"];
-                    } else {
-                        echo "img/image-not-available.jpg";
-                    }*/?>" alt="" class="eventImgPreview"/>-->
                 <h2><?php echo $event["nomeEvento"];?></h2>
                 <p><?php echo $event["dataEOra"];?></p>
                 <p><?php echo $event["nomeLuogo"].", ".$event["indirizzo"];?></p>
