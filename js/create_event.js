@@ -118,7 +118,7 @@ function removeMod(i) {
         $(".add_mod_btn").css("display", "block");
     }
 
-    document.querySelectorAll('#mod_adder' + i.toString())[0].remove();
+    document.querySelectorAll('#mod_adder_' + i.toString())[0].remove();
     currentMods--;
     for(let i = 0; i < currentMods; i++) {
         //display last "+" button
