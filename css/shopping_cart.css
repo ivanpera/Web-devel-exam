@@ -15,7 +15,7 @@ h2 {
     padding: 1%;
 }
 
-ul > li > p.cartRemover:hover {
+ul > li > p.cartRemover > span:hover {
     cursor: pointer;
     color: blue;
 }
