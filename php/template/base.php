@@ -39,7 +39,7 @@
         } else {
           $notificationString = isset($notificationNumber) ? $notificationNumber :  "";
           $hidden = isset($notificationNumber) ? "" : 'class="hidden"';
-          echo '<button id="openside_btn" type="button" class="notification-container" onclick="openSidebar()"><img src="img/openSidebarIcon.png" alt="Open sidebar"/><span id="notif_div" '.$hidden.'>'.$notificationString.'</span></button>';
+          echo '<button id="openside_btn" type="button" class="notification-container" onclick="openSidebar()"><img src="img/openSidebarIcon.png" alt="Open sidebar"/><span id="notif_span" '.$hidden.'>'.$notificationString.'</span></button>';
         } 
       ?><a href="index.php"><img src="img/logo.png" alt="home" class="logo"/></a>
     </header>
