@@ -29,7 +29,7 @@ create table EVENTO (
      nomeEvento varchar(60) not null,
      dataEOra DATETIME not null,
      NSFC BIT(1) not null,
-     descrizione varchar(150) not null,
+     descrizione varchar(600) not null,
      nomeImmagine varchar(30) not null,
      codLuogo int not null,
      emailOrganizzatore varchar(30) not null,
