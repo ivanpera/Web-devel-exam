@@ -21,7 +21,7 @@ class DatabaseHelper{
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function registerNewUser($email, $password, $name, $surname, $birthdate, $gender, $organizer) {
+    public function registerNewUser($email, $password, $name, $surname, $birthdate, $gender) {
         if( $this->checkUsername($email) != 0) {
             return 1;
         }
@@ -29,9 +29,9 @@ class DatabaseHelper{
         $registrationDate = date("Y-m-d");
         $administrator = 0;
 
-        $query = "INSERT INTO utente (email, userPassword, nome, cognome, dataNascita, genere, dataIscrizione, organizzatore, amministratore) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO utente (email, userPassword, nome, cognome, dataNascita, genere, dataIscrizione, amministratore) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('sssssssii', $email, $storedPassword, $name, $surname, $birthdate, $gender, $registrationDate, $organizer, $administrator);
+        $stmt->bind_param('sssssss', $email, $storedPassword, $name, $surname, $birthdate, $gender, $registrationDate);
         $stmt->execute();
         return $stmt->insert_id != 0;
     }
@@ -39,7 +39,7 @@ class DatabaseHelper{
     public function getPopularEvents( $NSFC = 0) {
         $query = "SELECT *
                   FROM (SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
-                               L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                               L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.capienzaMassima,
                                COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/COUNT(P.codPosto) * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
                         FROM evento E, luogo L, posto P
                         WHERE E.codLuogo = L.codLuogo
@@ -47,7 +47,7 @@ class DatabaseHelper{
                         AND E.NSFC <= ?
                         AND DATEDIFF(E.dataEOra, ?) >= 0
                         GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
-                                 L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
+                                 L.codLuogo, L.nome, L.indirizzo, L.capienzaMassima
                         HAVING percPostiOccupati < 100
                        ) AS tabEventi LEFT JOIN
                        (SELECT EHC.codEvento, GROUP_CONCAT(ce.nomeCategoria SEPARATOR ', ') AS categorie
@@ -78,14 +78,14 @@ class DatabaseHelper{
     public function getEvent($codEvent) {
         $query = "SELECT *
                   FROM (SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
-                               L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                               L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.capienzaMassima,
                                COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/COUNT(P.codPosto) * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
                         FROM evento E, luogo L, posto P
                         WHERE E.codLuogo = L.codLuogo
                         AND p.codEvento = E.codEvento
                         AND E.codEvento = ?
                         GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
-                                 L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
+                                 L.codLuogo, L.nome, L.indirizzo, L.capienzaMassima
                        ) AS tabEventi LEFT JOIN
                        (SELECT EHC.codEvento, GROUP_CONCAT(ce.nomeCategoria SEPARATOR ', ') AS categorie
                         FROM evento_ha_categoria EHC, categoria_evento CE
@@ -158,7 +158,7 @@ class DatabaseHelper{
        */
     public function searchEvent(array $searchParameters) {
         $queryEvento = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
-                               L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                               L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.capienzaMassima,
                                COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/COUNT(P.codPosto) * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
                         FROM evento E, luogo L, posto P
                         WHERE E.codLuogo = L.codLuogo
@@ -177,7 +177,7 @@ class DatabaseHelper{
             $queryEvento .= " AND DATEDIFF(E.dataEOra, '".$searchParameters["toData"]."') <= 0";
         }
         $queryEvento .= " GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.NSFC, E.descrizione, E.nomeImmagine, E.emailOrganizzatore,
-                                 L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima
+                                 L.codLuogo, L.nome, L.indirizzo, L.capienzaMassima
                         HAVING percPostiOccupati < 100";
         
         $queryCategorie = "SELECT EHC.codEvento, GROUP_CONCAT(ce.nomeCategoria SEPARATOR ', ') AS categorie
@@ -314,7 +314,7 @@ class DatabaseHelper{
         $interestedUsers = $this->getInterestedUsers($codEvento);
         $codNotifica = $this->getLastNotificationId($codEvento) + 1;
         $dataEOraInvio = date("Y-m-d H:i:s");
-        $queryAddNot = "INSERT INTO notifica(codEvento, codNotificaEvento, titolo, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES (?, ?, ?, ?, 0, ?, NULL, ?)";
+        $queryAddNot = "INSERT INTO notifica(codEvento, codNotificaEvento, titolo, descrizione, letta, dataEOraInvio, emailUtente) VALUES (?, ?, ?, ?, 0, ?, ?)";
         $stmtNotifiche = $this->db->prepare($queryAddNot);
         foreach ($interestedUsers as $user) {
             $stmtNotifiche->bind_param("iissss", $codEvento, $codNotifica, $titoloNotifica, $descrizioneNotifica, $dataEOraInvio, $user["emailUtente"]);
@@ -357,7 +357,7 @@ class DatabaseHelper{
 
     public function getObservedEvents($emailUtente){
         $query = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
-                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.capienzaMassima,
                          COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/COUNT(P.codPosto) * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
                   FROM evento E, luogo L, posto P, osserva O
                   WHERE E.codLuogo = L.codLuogo
@@ -365,7 +365,7 @@ class DatabaseHelper{
                   AND E.codEvento = O.codEvento
                   AND O.emailUtente = ?
                   GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione, 
-                           L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima";
+                           L.codLuogo, L.nome, L.indirizzo, L.capienzaMassima";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("s", $emailUtente);
         $stmt->execute();
@@ -374,14 +374,14 @@ class DatabaseHelper{
 
     public function getOrganizedEvents($emailOrganizzatore) {
         $query = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
-                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.capienzaMassima,
                          COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/COUNT(P.codPosto) * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
                   FROM evento E, luogo L, posto P
                   WHERE E.codLuogo = L.codLuogo
                   AND p.codEvento = E.codEvento
                   AND E.emailOrganizzatore = ?
                   GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione, 
-                           L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima";
+                           L.codLuogo, L.nome, L.indirizzo, L.capienzaMassima";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("s", $emailOrganizzatore);
         $stmt->execute();
@@ -390,7 +390,7 @@ class DatabaseHelper{
 
     public function getModeratedEvents($emailModeratore) {
         $query = "SELECT E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
-                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.capienzaMassima,
                          COUNT(P.codPrenotazione) as postiOccupati, (COUNT(P.codPrenotazione)/COUNT(P.codPosto) * 100) as percPostiOccupati, COUNT(P.codPosto) AS maxPostiDisponibili
                   FROM evento E, luogo L, posto P, moderazione M
                   WHERE E.codLuogo = L.codLuogo
@@ -398,7 +398,7 @@ class DatabaseHelper{
                   AND E.codEvento = M.codEvento
                   AND M.emailModeratore = ?
                   GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione, 
-                           L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima";
+                           L.codLuogo, L.nome, L.indirizzo, L.capienzaMassima";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("s", $emailModeratore);
         $stmt->execute();
@@ -407,7 +407,7 @@ class DatabaseHelper{
 
     public function getBookedEvents($emailUtente) {
         $query = "SELECT DISTINCT E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
-                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.urlMaps, L.capienzaMassima,
+                         L.codLuogo, L.nome AS nomeLuogo, L.indirizzo, L.capienzaMassima,
                          COUNT(P.codPrenotazione) as postiOccupati
                   FROM evento E, luogo L, posto P, prenotazione PR
                   WHERE E.codLuogo = L.codLuogo
@@ -415,7 +415,7 @@ class DatabaseHelper{
                     AND P.codPrenotazione = PR.codPrenotazione
                     AND PR.emailUtente = ?
                   GROUP BY E.codEvento, E.nomeEvento, E.dataEOra, E.descrizione,
-                           L.codLuogo, L.nome, L.indirizzo, L.urlMaps, L.capienzaMassima";
+                           L.codLuogo, L.nome, L.indirizzo, L.capienzaMassima";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("s", $emailUtente);
         $stmt->execute();
@@ -451,10 +451,10 @@ class DatabaseHelper{
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC)[0];
     }
 
-    public function insertBooking($dataEOra, $totale, $differenzaGiorni, $emailUtente) {
-        $stmt = $this->db->prepare("INSERT INTO prenotazione(codPrenotazione, dataEOra, costoTotale, differenzaGiorni, emailUtente) VALUES (?, ?, ?, ?, ?)");
+    public function insertBooking($dataEOra, $totale, $emailUtente) {
+        $stmt = $this->db->prepare("INSERT INTO prenotazione(codPrenotazione, dataEOra, costoTotale, emailUtente) VALUES (?, ?, ?, ?, ?)");
         $newBookingId = $this->getLastBookId() + 1;
-        $stmt->bind_param("isiis", $newBookingId, $dataEOra, $totale, $differenzaGiorni, $emailUtente);
+        $stmt->bind_param("isiis", $newBookingId, $dataEOra, $totale, $emailUtente);
         $stmt->execute();
         return $newBookingId;
     }
@@ -485,7 +485,7 @@ class DatabaseHelper{
             $descrizione = "L'evento ".$evento["nomeEvento"]." ha esaurito i posti disponibili. Complimenti!";
             $dataEOra = date("Y-m-d H:i:s");
             $newCodNotifica = $this->getLastNotificationId($codEvento) + 1;
-            $stmtNotifica = $this->db->prepare("INSERT INTO notifica(codEvento, codNotificaEvento, titolo, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES(?, ?, ?, ?, 0, ?, NULL, ?)");
+            $stmtNotifica = $this->db->prepare("INSERT INTO notifica(codEvento, codNotificaEvento, titolo, descrizione, letta, dataEOraInvio, emailUtente) VALUES(?, ?, ?, ?, 0, ?, ?)");
             $stmtNotifica->bind_param("iissss", $codEvento, $newCodNotifica, $titoloNotifica, $descrizione, $dataEOra, $evento["emailOrganizzatore"]);
             $stmtNotifica->execute();
         }
@@ -505,7 +505,7 @@ class DatabaseHelper{
                 $dataEOra = date("Y-m-d H:i:s");
                 $newCodNotifica = $this->getLastNotificationId($codEvento) + 1;
                 foreach ($emailsOsservatori as $email) {
-                    $stmtNotifica = $this->db->prepare("INSERT INTO notifica(codEvento, codNotificaEvento, titolo, descrizione, letta, dataEOraInvio, differenzaGiorni, emailUtente) VALUES(?, ?, ?, ?, 0, ?, NULL, ?)");
+                    $stmtNotifica = $this->db->prepare("INSERT INTO notifica(codEvento, codNotificaEvento, titolo, descrizione, letta, dataEOraInvio, emailUtente) VALUES(?, ?, ?, ?, 0, ?, ?)");
                     $stmtNotifica->bind_param("iissss", $codEvento, $newCodNotifica, $titoloNotifica, $descrizione, $dataEOra, $email);
                     $stmtNotifica->execute();
                     $newCodNotifica++;

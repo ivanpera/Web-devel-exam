@@ -44,7 +44,6 @@ create table LUOGO (
      codLuogo int not null,
      nome varchar(60) not null,
      indirizzo varchar(50) not null,
-     urlMaps varchar(128) not null,
      capienzaMassima int not null,
      constraint ID_LUOGO_ID primary key (codLuogo));
 
@@ -60,7 +59,6 @@ create table NOTIFICA (
      descrizione varchar(128) not null,
      letta BIT(1) not null,
      dataEOraInvio DATETIME not null,
-     differenzaGiorni int,
      emailUtente varchar(30) not null,
      constraint ID_NOTIFICA_ID primary key (codEvento, codNotificaEvento));
 
@@ -81,7 +79,6 @@ create table PRENOTAZIONE (
      codPrenotazione int not null,
      dataEOra DATETIME not null,
      costoTotale int not null,
-     differenzaGiorni int not null,
      emailUtente varchar(30) not null,
      constraint ID_PRENOTAZIONE_ID primary key (codPrenotazione));
 
@@ -107,7 +104,6 @@ create table UTENTE (
      dataNascita date not null,
      genere char(1) not null,
      dataIscrizione date not null,
-     organizzatore BIT(1) not null,
      amministratore BIT(1) not null,
      constraint ID_UTENTE_ID primary key (email));
 

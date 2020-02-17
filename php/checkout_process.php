@@ -11,9 +11,8 @@
   }
   if($disponibili) {
     $dataEOra = (new DateTime())->format("Y-m-d H:i:s");
-    $differenzaGiorni = 7;
     $emailUtente = $_SESSION["sessUser"]["email"];
-    $newBookingId = $dbh->insertBooking($dataEOra, $totale, $differenzaGiorni, $emailUtente);
+    $newBookingId = $dbh->insertBooking($dataEOra, $totale, $emailUtente);
     foreach ($_SESSION["sessUser"]["cart"] as $codEvento => $biglietto) {
       foreach ($biglietto as $tipoCosto => $numero) {
         $arrTipoCosto = explode("/",$tipoCosto);
