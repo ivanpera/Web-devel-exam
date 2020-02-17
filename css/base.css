@@ -290,7 +290,7 @@ aside {
 }
 
 aside > ul {
-    margin-top: .3em;
+    margin-top: 7vmax;
     line-height: 1.7em;
 }
 
