@@ -1,5 +1,5 @@
 <div class="main-content">
-  <section>
+  <section class="list-container">
     <h3>Recensioni per l'evento <?php echo $templateParams["nomeEvento"]?></h3>
     <p>Recensioni: <a href="event_reviews.php?codEvento=<?php echo $_GET["codEvento"]?>">(Mostra tutte le recensioni)</a></p>
       <?php foreach($templateParams["recensioni"] as $recensione ): ?>
