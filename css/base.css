@@ -71,6 +71,8 @@ button, input[type="button"], input[type="submit"], input[type="reset"] {
     padding: 2%;
     background-color : #fc6c64;
     width: fit-content;
+    font-weight: bold;
+    color: black;
 }
 
 @keyframes error-blink {

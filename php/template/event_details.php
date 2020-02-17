@@ -1,6 +1,6 @@
 <div class="main-content">
     <?php if(isset($_GET["uploadError"])):?>
-        <p>Errore: <?php echo $errorMessages[$_GET["uploadError"]];?></p>
+        <p class="error">Errore: <?php echo $errorMessages[$_GET["uploadError"]];?></p>
     <?php endif;?>
     <section>
         <h1><?php echo $templateParams["evento"]["nomeEvento"]?></h1>
