@@ -4,9 +4,8 @@ textarea {
     box-sizing: border-box;
 }
 
-ul {
+#catg_list {
     margin-top: .3em;
-    padding-left: 5%;
 }
 
 h3 {
@@ -39,4 +38,20 @@ h4 {
     height: 15%;
     width: 15%;
     object-fit: contain;
+}
+
+input[id^="cat_"] {
+    display: inline-block;
+}
+
+label[for^="cat_"] {
+    display: inline-block;
+    width: 80%;
+    margin-left: 2%;
+}
+
+@media screen and (min-width: 820px) {
+    label[for^="cat_"] {
+        margin-left: 1%;
+    }
 }

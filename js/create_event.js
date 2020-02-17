@@ -2,17 +2,6 @@ let currentTab = 0;
 let currentMods = 0;
 let currentTickets = 1;
 
-$(document).ready(function() {
-    showTab(currentTab);
-    const ticketCreators = document.getElementsByClassName("ticket_creator");
-    currentMods = document.getElementsByClassName("moderator_adder").length;
-    currentTickets = ticketCreators.length;
-    if(currentTickets <= 1 && !isCreateForm() && ticketCreators[0].children.length > 7) {
-        ticketCreators[0].children[5].style.display = "none";
-        ticketCreators[0].children[6].style.display = "none";
-    }
-});
-
 function showTab(n) {
     const tabs = document.getElementsByClassName("tab");
     tabs[n].style.display = "block";
@@ -59,52 +48,56 @@ function removeTicket(i) {
     currentTickets--;
 
     for(let i = 0; i < currentTickets; i++) {
-        let numChildren = ticketCreators[i].children.length; //At least 7 children are present (if more, then the delete button is present)
+        let numChildren = ticketCreators[i].children.length; //At least 8 children are present (if more, then the delete button is present)
         ticketCreators[i].setAttribute("id", "ticket_creator_" + i.toString());
-        ticketCreators[i].children[1].setAttribute("for", "ticket_cost_" + i.toString());
-        ticketCreators[i].children[2].setAttribute("id", "ticket_cost_" + i.toString());
-        ticketCreators[i].children[3].setAttribute("for", "num_tickets_" + i.toString());
-        ticketCreators[i].children[4].setAttribute("id", "num_tickets_" + i.toString());
+        ticketCreators[i].children[0].setAttribute("for", "ticket_type_" + i.toString());
+        ticketCreators[i].children[1].setAttribute("id", "ticket_type_" + i.toString());
+        ticketCreators[i].children[2].setAttribute("for", "ticket_cost_" + i.toString());
+        ticketCreators[i].children[3].setAttribute("id", "ticket_cost_" + i.toString());
+        ticketCreators[i].children[4].setAttribute("for", "num_tickets_" + i.toString());
+        ticketCreators[i].children[5].setAttribute("id", "num_tickets_" + i.toString());
+        ticketCreators[i].children[5].setAttribute("onkeyup", "checkTickets("+i.toString()+")");
+        ticketCreators[i].children[5].setAttribute("oninput", "checkTickets("+i.toString()+")");
 
-        if(numChildren > 7) {
-            ticketCreators[i].children[5].setAttribute("for", "rm_ticket_" + i.toString());
-            ticketCreators[i].children[6].setAttribute("id", "rm_ticket_" + i.toString());
-            ticketCreators[i].children[6].setAttribute("onclick", "removeTicket(" + i.toString() + ")");
-            ticketCreators[i].children[7].setAttribute("for", "add_ticket_" + i.toString());
-            ticketCreators[i].children[8].setAttribute("id", "add_ticket_" + i.toString());
+        if(numChildren > 8) {
+            ticketCreators[i].children[6].setAttribute("for", "rm_ticket_" + i.toString());
+            ticketCreators[i].children[7].setAttribute("id", "rm_ticket_" + i.toString());
+            ticketCreators[i].children[7].setAttribute("onclick", "removeTicket(" + i.toString() + ")");
+            ticketCreators[i].children[8].setAttribute("for", "add_ticket_" + i.toString());
+            ticketCreators[i].children[9].setAttribute("id", "add_ticket_" + i.toString());
         } else {
-            ticketCreators[i].children[5].setAttribute("for", "add_ticket_" + i.toString());
-            ticketCreators[i].children[6].setAttribute("id", "add_ticket_" + i.toString());
+            ticketCreators[i].children[6].setAttribute("for", "add_ticket_" + i.toString());
+            ticketCreators[i].children[7].setAttribute("id", "add_ticket_" + i.toString());
         }
         ticketCreators[i].children[numChildren-1].style.display = i == currentTickets -1 ? "inline-block" : "none";
         ticketCreators[i].children[numChildren-2].style.display = i == currentTickets -1 ? "inline-block" : "none";
     }
 
-    if(currentTickets <= 1 && ticketCreators[0].children.length > 7) {
-        ticketCreators[0].children[5].style.display = "none";
+    if(currentTickets <= 1 && ticketCreators[0].children.length > 8) {
         ticketCreators[0].children[6].style.display = "none";
+        ticketCreators[0].children[7].style.display = "none";
     }
 }
 
 function addNewTicket() {
-    if(getSumOfTickets() < Number($("#maxCapacity").attr("max-capacity"))) {
+    if(getSumOfTickets() < Number($("#maxCapacity").attr("data-max-capacity"))) {
         const ticketCreators = document.getElementsByClassName("ticket_creator");
         addButtons = document.querySelectorAll('[id^="add_ticket"]');
         seatOptions = document.querySelectorAll('.ticket_creator:first-of-type option');
         for(let i = 0; i < currentTickets; i++) {
             addButtons[i].style.display = "none";
-            if(ticketCreators[i].children.length > 7) {
+            if(ticketCreators[i].children.length > 8) {
                 ticketCreators[i].children[5].style.display = "inline-block";
                 ticketCreators[i].children[6].style.display = "inline-block";
             }
         }
         let itemString = '<div class="ticket_creator" id="ticket_creator_' + currentTickets + '">   \
-        <label>Tipo biglietto: *     \
-        <select name="ticket_type[]" required class="required">';
+        <label for="ticket_type_'+currentTickets+'">Tipo biglietto: *</label>     \
+        <select id="ticket_type_'+currentTickets+'" name="ticket_type[]" required class="required">';
         for(let i = 0; i < seatOptions.length; i++) {
             itemString += '<option value="' + seatOptions[i].value + '">' + seatOptions[i].innerHTML + '</option>';
         }
-        itemString += '</select></label>   \
+        itemString += '</select>   \
         <label for="ticket_cost_' + currentTickets + '">Costo unitario del biglietto: *</label><input id="ticket_cost_' + currentTickets + '" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/> \
         <label for="num_tickets_' + currentTickets + '"> Numero biglietti: *</label><input type="number" min="1" name="num_tickets[]" id="num_tickets_' + currentTickets + '" required class="required" oninput="checkTickets('+currentTickets+')" onkeyup="checkTickets('+currentTickets+')"/>  \
         <label for="rm_ticket_' + currentTickets + '" class="visuallyhidden">Rimuovi tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_' + currentTickets + '" class="rm_ticket_btn" type="button" onclick=removeTicket(' + currentTickets + ')> - </button>    \
@@ -171,13 +164,14 @@ function getSumOfTickets() {
     return sum;
 }
 
-function setMaxCapacityOf() {
+function setMaxCapacityOf(callback) {
     let codLuogo = $("select#luogo").val();
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
             $("#maxCapacity").html("Capacità massima del luogo: "+xhttp.responseText);
-            $("#maxCapacity").attr("max-capacity", xhttp.responseText);
+            $("#maxCapacity").attr("data-max-capacity", xhttp.responseText);
+            callback();
         }
     };
     xhttp.open("POST", "php/ajax_response/place_capacity.php");
@@ -187,12 +181,12 @@ function setMaxCapacityOf() {
 
 //Called when place changed
 function recheckTickets() {
-    let maxCapacity = Number($("#maxCapacity").attr("max-capacity"));
+    let maxCapacity = Number($("#maxCapacity").attr("data-max-capacity"));
     let oldSum = getSumOfTickets();
     if(oldSum > maxCapacity) {
         $('[id^="num_tickets_"]').each(function(index, element) {
             let num = Number($(this).val());
-            $(this).val(floor(num/oldSum*maxCapacity));
+            $(this).val(Math.floor(num/oldSum*maxCapacity));
         });
         alert("La somma dei biglietti era maggiore della capacità massima. Il numero di ciascuna tipologia di biglietto è stata rivalutata in proporzione alla vecchia somma.");
     }
@@ -200,7 +194,7 @@ function recheckTickets() {
 
 //Called when ticket num changed
 function checkTickets(modifiedIndex) {
-    let maxCapacity = Number($("#maxCapacity").attr("max-capacity"));
+    let maxCapacity = Number($("#maxCapacity").attr("data-max-capacity"));
     let sum = getSumOfTickets();
     if (sum > maxCapacity) {
         let overVal = Number($("#num_tickets_"+modifiedIndex).val());
@@ -209,14 +203,22 @@ function checkTickets(modifiedIndex) {
     }
 }
 
+function isCreateForm() {
+    return document.getElementById("createForm") !== null;
+}
 
-$(document).ready(function () {
-    $("select#luogo").bind("input keyup", function() {setMaxCapacityOf(); recheckTickets();});
+$(document).ready(function() {
+    showTab(currentTab);
+    const ticketCreators = document.getElementsByClassName("ticket_creator");
+    currentMods = document.getElementsByClassName("moderator_adder").length;
+    currentTickets = ticketCreators.length;
+    if(currentTickets <= 1 && !isCreateForm() && ticketCreators[0].children.length > 8) {
+        ticketCreators[0].children[6].style.display = "none";
+        ticketCreators[0].children[7].style.display = "none";
+    }
+    $("select#luogo").bind("input keyup", function() {setMaxCapacityOf(recheckTickets);});
     $('[id^="num_tickets_"]').each(function(index, element){
         $(this).attr("oninput", "checkTickets("+index+")");
         $(this).attr("onkeyup", "checkTickets("+index+")");
     });
 });
-function isCreateForm() {
-    return document.getElementById("createForm") !== null;
-}
