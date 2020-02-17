@@ -61,7 +61,6 @@
             <img src="img/logo.png" alt="home" class="logo"/>
           </a>
       </header>
-        <p><?php echo isset($_SESSION["sessUser"]["email"]) ? $_SESSION["sessUser"]["email"] : "";?></p>
         <ul>
           <li><a href="user_area.php">Profilo</a></li>
           <li><a href="shopping_cart.php">Carrello</a></li>
