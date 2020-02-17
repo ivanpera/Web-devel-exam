@@ -15,7 +15,8 @@
             
             <label for="data">Data di inizio: *<input name="data" id="data" type="date" required class="required"/></label>
             <label for="ora">Ora di inizio: *<input id="ora" name="ora" type="time" required class="required"/></label>
-            <label for="description">Descrizione evento: <textarea id="description" name="description" form="createForm" placeholder="Descrizione dell'evento..."></textarea></label>
+            <label for="description">Descrizione evento: <textarea maxlength="150" id="description" oninput="checkRemainingCharacters()" name="description" form="createForm" placeholder="Descrizione dell'evento..."></textarea></label>
+            <p id="remainingChars"></p>
         </section>
 
         <section class="tab"> 

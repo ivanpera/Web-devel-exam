@@ -15,7 +15,8 @@
             </select></label>
             <label for="data">Data di inizio: *<input name="data" id="data" type="date" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("Y-m-d")?>"/></label>
             <label for="ora">Ora di inizio: *<input id="ora" name="ora" type="time" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("H:i")?>"/></label>
-            <label for="description">Descrizione evento: <textarea id="description" name="description" form="editForm" placeholder="Descrizione dell'evento..."> <?php echo $templateParams["evento"]["descrizione"];?> </textarea></label>
+            <label for="description">Descrizione evento: <textarea maxlength="150" id="description" oninput="checkRemainingCharacters()" name="description" form="editForm" placeholder="Descrizione dell'evento..."> <?php echo $templateParams["evento"]["descrizione"];?> </textarea></label>
+            <p id="remainingChars"></p>
         </section>
 
         <section class="tab">
