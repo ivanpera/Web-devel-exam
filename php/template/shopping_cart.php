@@ -11,7 +11,7 @@
               <?php $arrTipoCosto = explode("/",$tipoCosto); ?>
               <ul>
                 <li class="list-item">
-                  <h2>Tipologia: <?php echo $dbh->getSeatType($arrTipoCosto[0])["nomeTipologia"]; ?></h2><p class="right-aligned"><?php echo ($numero." x ".intval($arrTipoCosto[1])/100)."€ = ".(intval($arrTipoCosto[1]) / 100 * intval($numero))."€";?></p><p class="cartRemover" onclick='removeFromCart(<?php echo $evento["codEvento"].",".$arrTipoCosto[0].",".$arrTipoCosto[1].",".$numero;?>)'>Rimuovi voce</p>
+                  <h2>Tipologia: <?php echo $dbh->getSeatType($arrTipoCosto[0])["nomeTipologia"]; ?></h2><p class="right-aligned"><?php echo ($numero." x ".intval($arrTipoCosto[1])/100)."€ = ".(intval($arrTipoCosto[1]) / 100 * intval($numero))."€";?></p><p class="cartRemover"><span onclick='removeFromCart(<?php echo $evento["codEvento"].",".$arrTipoCosto[0].",".$arrTipoCosto[1].",".$numero;?>)'>Rimuovi voce</span></p>
                 </li>
               </ul>
             </div>
