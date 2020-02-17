@@ -23,7 +23,7 @@ function getNumOfNotification() {
     xhttp.onreadystatechange = function() {
         if(this.readyState == 4 && this.status == 200) {
             $(".notification-container > span").html(xhttp.responseText == "0" ? "" : xhttp.responseText);
-            const isHidden = document.getElementById("notif_span") == null ? document.getElementById("notif_span").className.includes("hidden") : 1;
+            const isHidden = document.getElementById("notif_span") != null ? document.getElementById("notif_span").className.includes("hidden") : true;
             if((xhttp.responseText === "0" && !isHidden) || (xhttp.responseText !== "0" && isHidden)) {
                 $(".notification-container > span").toggleClass("hidden");
             }
