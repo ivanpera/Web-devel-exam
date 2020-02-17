@@ -1,7 +1,7 @@
 <div class="main-content">
     <?php
         if (isset($_GET["loginFailed"]) ) {
-            echo "<p>Email or password not correct.</p>";
+            echo "<p class='error'>Email or password not correct.</p>";
         }
     ?>
     <form action="php/login_process.php" method="POST">
