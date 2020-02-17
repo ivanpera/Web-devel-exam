@@ -16,10 +16,6 @@ h4 {
     margin-bottom: 3%;
 }
 
-/* .ticket_creator:first-of-type #rm_ticket_btn {
-    display: none;
-} */
-
 /* Mark input boxes that gets an error on validation: */
 .invalid {
     background-color: #ffdddd;
