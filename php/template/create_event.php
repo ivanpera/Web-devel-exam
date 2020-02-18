@@ -1,5 +1,8 @@
 <!-- Template taken from https://www.w3schools.com/howto/howto_js_form_steps.asp -->
 <div class="main-content">
+    <?php if(isset($_GET["error"])): ?>
+        <p class="error">Si è verificato un errore nella creazione dell'evento.</p>
+    <?php endif;?>
     <form id="createForm" action="php/create_event_process.php" method="post" enctype="multipart/form-data">
         <h3>Crea un evento: </h3>
 

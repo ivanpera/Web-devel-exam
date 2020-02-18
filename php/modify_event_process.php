@@ -28,6 +28,19 @@
     foreach ($biglietti["cost"] as &$costo) {$costo = intval($costo) * 100;}
     $biglietti["num"] = $_POST["num_tickets"];
 
+    if(empty(trim($eventName)) || empty(trim($dataEOra)) || empty(trim($codLuogo))) {
+        safeHeader("Location: ../modify_event.php?codEvento=".$codEvento."&error=1");
+    }
+    if ((empty($biglietti["type"]) || empty($biglietti["cost"]) || empty($biglietti["num"])) ||
+         (count($biglietti["type"]) != count($biglietti["cost"]) || count($biglietti["num"]) != count($biglietti["cost"]))) {
+            safeHeader("Location: ../modify_event.php?codEvento=".$codEvento."&error=1");
+    }
+    for ($i = 0; $i < count($biglietti["type"]); $i++) {
+        if((empty(trim($biglietti["type"][$i])) || empty(trim($biglietti["cost"][$i])) || empty(trim($biglietti["num"][$i])))) {
+            safeHeader("Location: ../modify_event.php?codEvento=".$codEvento."&error=1");
+        }
+    }
+
     //Mette assieme le categorie con i costi uguali
     for ($i=0; $i < count($biglietti["type"]); $i++) { 
         $prevOccurrence = array_search($biglietti["type"][$i], $biglietti["type"]);

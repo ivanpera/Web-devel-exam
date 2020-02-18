@@ -1,4 +1,7 @@
 <div class="main-content">
+    <?php if(isset($_GET["error"])): ?>
+        <p class="error">Si è verificato un errore nella modifica dell'evento.</p>
+    <?php endif;?>
     <form id="editForm" action="php/modify_event_process.php" method="post" enctype="multipart/form-data">
         <h3>Modifica un evento: </h3>
         <section class="tab"> 

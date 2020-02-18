@@ -19,6 +19,18 @@
     $biglietti["num"] = $_POST["num_tickets"];
     $emailOrganizzatore = $_SESSION["sessUser"]["email"];
     $emailModeratori = empty($_POST["mod_mail"]) ? array() : $_POST["mod_mail"];
+    if(empty(trim($newEventName)) || empty(trim($dataEOra)) || empty(trim($codLuogo))) {
+        safeHeader("Location: ../create_event.php?error=1");
+    }
+    if ((empty($biglietti["type"]) || empty($biglietti["cost"]) || empty($biglietti["num"])) ||
+         (count($biglietti["type"]) != count($biglietti["cost"]) || count($biglietti["num"]) != count($biglietti["cost"]))) {
+            safeHeader("Location: ../create_event.php?error=1");
+    }
+    for ($i = 0; $i < count($biglietti["type"]); $i++) {
+        if((empty(trim($biglietti["type"][$i])) || empty(trim($biglietti["cost"][$i])) || empty(trim($biglietti["num"][$i])))) {
+            safeHeader("Location: ../create_event.php?error=1");
+        }
+    }
     $newCodEvento = $dbh->insertEvent($newEventName, $dataEOra, $NSFC, $descrizione, $imageName, $codLuogo, $emailOrganizzatore, $categories, $biglietti, $emailModeratori);
     safeHeader("Location: ../event_details.php?codEvento=".$newCodEvento.($imageArray["uploadError"] ? "&uploadError=".$imageArray["uploadError"] : ""));
     

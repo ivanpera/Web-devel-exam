@@ -23,7 +23,7 @@ class DatabaseHelper{
 
     public function registerNewUser($email, $password, $name, $surname, $birthdate, $gender) {
         if( $this->checkUsername($email) != 0) {
-            return 1;
+            return 2;
         }
         $storedPassword = $this->getHashedPassword($email, $password);
         $registrationDate = date("Y-m-d");
@@ -33,7 +33,7 @@ class DatabaseHelper{
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('sssssss', $email, $storedPassword, $name, $surname, $birthdate, $gender, $registrationDate);
         $stmt->execute();
-        return $stmt->insert_id != 0;
+        return $stmt->insert_id == 0;
     }
 
     public function getPopularEvents( $NSFC = 0) {
