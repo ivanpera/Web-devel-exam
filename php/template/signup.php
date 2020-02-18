@@ -1,7 +1,7 @@
 <div class="main-content">
     <?php
         if(isset($_GET["registrationFailed"])) {
-            echo '<p class="error"<>The registration process has encountered a problem.</p>';
+            echo '<p class="error">La registrazione ha riscontrato un problema.</p>';
         }
 
     ?>

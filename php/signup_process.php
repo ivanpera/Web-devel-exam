@@ -1,6 +1,6 @@
 <?php
     require_once('../bootstrap.php');
-    if($dbh->registerNewUser($_POST["email"], $_POST["password"], $_POST["name"], $_POST["surname"], $_POST["birthdate"], $_POST["gender"])) {
+    if($_POST["password"] != $_POST["password_confirmation"] || $dbh->registerNewUser($_POST["email"], $_POST["password"], $_POST["name"], $_POST["surname"], $_POST["birthdate"], $_POST["gender"])) {
         safeHeader("Location: ../signup.php?registrationFailed=1");
     } else {
         $_SESSION["sessUser"]["email"] = $_POST["email"];
