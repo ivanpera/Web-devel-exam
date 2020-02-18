@@ -15,7 +15,7 @@
             </select></label>
             <label for="data">Data di inizio: *<input name="data" id="data" type="date" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("Y-m-d")?>"/></label>
             <label for="ora">Ora di inizio: *<input id="ora" name="ora" type="time" required class="required" value="<?php echo (new DateTime($templateParams["evento"]["dataEOra"]))->format("H:i")?>"/></label>
-            <label for="description">Descrizione evento: <textarea maxlength="150" id="description" oninput="checkRemainingCharacters()" name="description" form="editForm" placeholder="Descrizione dell'evento..."> <?php echo $templateParams["evento"]["descrizione"];?> </textarea></label>
+            <label for="description">Descrizione evento: <textarea maxlength="600" id="description" oninput="checkRemainingCharacters()" name="description" form="editForm" placeholder="Descrizione dell'evento..."> <?php echo $templateParams["evento"]["descrizione"];?> </textarea></label>
             <p id="remainingChars"></p>
         </section>
 
@@ -45,7 +45,7 @@
                             <option value="<?php echo $tipoPosto["codTipologia"]; ?>" <?php if($biglietto["codTipologia"] == $tipoPosto["codTipologia"]) { echo "selected";} elseif ($biglietto["postiPrenotati"] > 0) {echo "disabled";}?>><?php echo $tipoPosto["nomeTipologia"];?></option>
                         <?php endforeach; ?>
                     </select>
-                    <label for="<?php echo "ticket_cost_".$numTickets ?>">Costo unitario del biglietto: <?php echo $numTickets == 0 ? "*" : "" ;?></label><input id="<?php echo "ticket_cost_".$numTickets ?>" name="ticket_cost[]" type="number" min="0" step="1" required class="required" value="<?php printf("%.2f", $biglietto["costo"]/100); ?>" <?php echo ($biglietto["postiPrenotati"] > 0 ? "readonly" : "")?>/>
+                    <label for="<?php echo "ticket_cost_".$numTickets ?>">Costo unitario del biglietto (€): <?php echo $numTickets == 0 ? "*" : "" ;?></label><input id="<?php echo "ticket_cost_".$numTickets ?>" name="ticket_cost[]" type="number" min="0" step="1" required class="required" value="<?php printf("%.2f", $biglietto["costo"]/100); ?>" <?php echo ($biglietto["postiPrenotati"] > 0 ? "readonly" : "")?>/>
                     <label for="<?php echo "num_tickets_".$numTickets ?>"> Numero biglietti: <?php echo $numTickets == 0 ? "*" : "" ;?></label><input type="number" min="<?php echo $biglietto["postiPrenotati"];?>" name="num_tickets[]" id="<?php echo "num_tickets_".$numTickets?>" required class="required" value="<?php echo $biglietto["numTotPosti"]?>"/>
                     <?php
                         if($biglietto["postiPrenotati"] == 0) {

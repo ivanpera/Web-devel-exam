@@ -16,7 +16,7 @@
             
             <label for="data">Data di inizio: *<input name="data" id="data" type="date" required class="required"/></label>
             <label for="ora">Ora di inizio: *<input id="ora" name="ora" type="time" required class="required"/></label>
-            <label for="description">Descrizione evento: <textarea maxlength="150" id="description" oninput="checkRemainingCharacters()" name="description" form="createForm" placeholder="Descrizione dell'evento..."></textarea></label>
+            <label for="description">Descrizione evento: <textarea maxlength="600" id="description" oninput="checkRemainingCharacters()" name="description" form="createForm" placeholder="Descrizione dell'evento..."></textarea></label>
             <p id="remainingChars"></p>
         </section>
 
@@ -40,7 +40,7 @@
                         <option value="<?php echo $tipoPosto["codTipologia"]; ?>"><?php echo $tipoPosto["nomeTipologia"];?></option>
                     <?php endforeach; ?>
                 </select>
-                <label for="ticket_cost_0">Costo unitario del biglietto: *</label><input id="ticket_cost_0" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/>
+                <label for="ticket_cost_0">Costo unitario del biglietto (€): *</label><input id="ticket_cost_0" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/>
                 <label for="num_tickets_0"> Numero biglietti: *</label><input type="number" min="1" name="num_tickets[]"  value="1" id="num_tickets_0" required class="required"/>
                 <label for="rm_ticket_0" style="display: none" class="visuallyhidden">Rimuovi tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_0" class="rm_ticket_btn" style="display: none" type="button" onclick=removeTicket(0)> - </button><label for="add_ticket_0" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" id="add_ticket_0" class="add_ticket_btn" type="button" onclick=addNewTicket()> + </button>
             </div>

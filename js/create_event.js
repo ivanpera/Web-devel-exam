@@ -1,7 +1,7 @@
 let currentTab = 0;
 let currentMods = 0;
 let currentTickets = 1;
-const descriptionMaxLength = 150;
+const descriptionMaxLength = 600;
 
 function showTab(n) {
     const tabs = document.getElementsByClassName("tab");
@@ -99,7 +99,7 @@ function addNewTicket() {
             itemString += '<option value="' + seatOptions[i].value + '">' + seatOptions[i].innerHTML + '</option>';
         }
         itemString += '</select>   \
-        <label for="ticket_cost_' + currentTickets + '">Costo unitario del biglietto: *</label><input id="ticket_cost_' + currentTickets + '" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/> \
+        <label for="ticket_cost_' + currentTickets + '">Costo unitario del biglietto (€): *</label><input id="ticket_cost_' + currentTickets + '" name="ticket_cost[]" type="number" min="0" step="1" required class="required"/> \
         <label for="num_tickets_' + currentTickets + '"> Numero biglietti: *</label><input type="number" min="1" name="num_tickets[]" id="num_tickets_' + currentTickets + '" required class="required" oninput="checkTickets('+currentTickets+')" onkeyup="checkTickets('+currentTickets+')"/>  \
         <label for="rm_ticket_' + currentTickets + '" class="visuallyhidden">Rimuovi tipologia di biglietto</label><button title="Rimuovi biglietto" id="rm_ticket_' + currentTickets + '" class="rm_ticket_btn" type="button" onclick=removeTicket(' + currentTickets + ')> - </button>    \
         <label for="add_ticket_' + currentTickets + '" class="visuallyhidden">Aggiungi una tipologia di biglietto</label><button title="Aggiungi biglietto" class=add_ticket_btn id="add_ticket_' + currentTickets + '" type="button" onclick=addNewTicket()> + </button>   \

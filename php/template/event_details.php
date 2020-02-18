@@ -22,7 +22,7 @@
         <?php foreach ($templateParams["tickets"] as $biglietto):?>
         <div class="list-item">
             <p>Tipo: <?php echo $biglietto["nomeTipologia"];?></p>
-            <p>Prezzo: <?php printf("%.2f", $biglietto["costo"]/100)?></p>
+            <p>Prezzo: <?php printf("%.2f", $biglietto["costo"]/100)?>€</p>
             <p>Disponibili: <?php echo $biglietto["numTotPosti"] - $biglietto["postiPrenotati"];?></p>
             <?php
             if (isset($_SESSION["sessUser"])) {
