@@ -195,10 +195,12 @@ class DatabaseHelper{
         $queryCategorie .= " GROUP BY EHC.codEvento";
 
         $queryCompleta = "SELECT *
-                          FROM (".$queryEvento.") AS tabEventi,
+                          FROM (".$queryEvento.") AS tabEventi";
+        if(!empty($searchParameters["categories"])) {
+                    $queryCompleta.=                          ",
                                (".$queryCategorie.") AS tabCategorie
                           WHERE tabEventi.codEvento = tabCategorie.codEvento";
-
+        }
         $stmt = $this->db->prepare($queryCompleta);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
